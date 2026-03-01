@@ -120,8 +120,7 @@ function OrbitCarousel() {
         initial={{ opacity: 0, scale: 0.85 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ type: "spring", stiffness: 50, damping: 18, delay: 0.3 }}
-        className="relative z-30 pointer-events-none"
-        style={{ width: "85%", maxWidth: "640px" }}
+        className="relative z-30 pointer-events-none w-[70%] sm:w-[80%] md:w-[90%] lg:w-[95%] max-w-[780px]"
       >
         <motion.div
           animate={{ y: [0, -10, 0] }}
