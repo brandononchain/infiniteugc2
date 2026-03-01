@@ -74,8 +74,8 @@ function OrbitCarousel() {
 
         const dn = (depth + 1) / 2; // 0 (far) → 1 (near)
         const scale = 0.7 + dn * 0.3;
-        const opacity = 0.85 + dn * 0.15;
-        const blur = (1 - dn) * 0.5;
+        const opacity = 1;
+        const blur = 0;
         /* Front cards above infinity loop (z-30), back cards behind */
         const zIndex = depth > 0 ? 50 + zi : zi;
 
@@ -145,7 +145,7 @@ function OrbitCarousel() {
           ref={(el) => {
             cardEls.current[i] = el;
           }}
-          className={`absolute top-1/2 left-1/2 -ml-[80px] -mt-[112px] w-[160px] h-[225px] transition-opacity duration-700 ${
+          className={`absolute top-1/2 left-1/2 -ml-[54px] -mt-[96px] w-[108px] h-[192px] transition-opacity duration-700 ${
             visible ? "opacity-100" : "opacity-0"
           }`}
           style={{ willChange: "transform, opacity, filter" }}
@@ -165,13 +165,6 @@ function OrbitCarousel() {
               preload="none"
               className="w-full h-full object-cover"
             />
-
-            {/* Play icon */}
-            <div className="absolute inset-0 flex items-center justify-center z-10 pointer-events-none">
-              <div className="w-7 h-7 bg-white/60 rounded-full flex items-center justify-center backdrop-blur-sm shadow-md">
-                <Play size={10} weight="fill" className="text-zinc-700 ml-0.5" />
-              </div>
-            </div>
 
             {/* Progress bar */}
             <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-black/20 z-10">
