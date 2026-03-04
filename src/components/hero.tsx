@@ -245,7 +245,7 @@ function AnimatedHeadline() {
               animate="visible"
               className={`inline-block mr-[0.25em] origin-bottom ${
                 isAccent
-                  ? \"bg-linear-to-r from-accent-500 to-accent-400 bg-clip-text text-transparent\"
+                  ? "bg-linear-to-r from-accent-500 to-accent-400 bg-clip-text text-transparent"
                   : ""
               }`}
             >
