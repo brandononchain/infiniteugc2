@@ -95,7 +95,7 @@ export default function DashboardHome() {
             <p className="text-xs text-zinc-500">Ready to create something amazing?</p>
           </div>
           <div className="flex items-center gap-3">
-            <div className="flex items-center gap-1.5 bg-accent-50 border-2 border-accent-300 text-accent-700 text-xs font-semibold px-3.5 py-1.5 rounded-full">
+            <div className="flex items-center gap-1.5 bg-accent-50 border border-accent-200 text-accent-700 text-xs font-semibold px-3.5 py-1.5 rounded-full">
               <Coin size={14} weight="fill" />
               <span>30 credits</span>
             </div>
@@ -267,7 +267,7 @@ export default function DashboardHome() {
                 }`} />
 
                 {/* Score badge */}
-                <div className="absolute top-2 left-2 z-10 flex items-center gap-1 bg-white text-[10px] font-bold text-zinc-700 px-2 py-0.5 rounded-full border-2 border-zinc-900 shadow-[2px_2px_0_#18181b]">
+                <div className="absolute top-2 left-2 z-10 flex items-center gap-1 bg-white text-[10px] font-bold text-zinc-700 px-2 py-0.5 rounded-full border border-zinc-200 shadow-sm">
                   <Fire size={10} weight="fill" className="text-orange-500" />
                   {item.score}
                 </div>

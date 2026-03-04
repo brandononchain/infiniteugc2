@@ -21,7 +21,7 @@ export default function RunningQueue() {
 
       <div className="max-w-5xl mx-auto px-6 lg:px-10 py-8">
         {/* Tabs */}
-        <div className="flex border-b-2 border-zinc-300 mb-6">
+        <div className="flex border-b border-zinc-200 mb-6">
           <button
             onClick={() => setTab("active")}
             className={`px-5 py-2.5 text-sm font-semibold border-b-2 transition-all ${

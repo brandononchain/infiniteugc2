@@ -13,7 +13,7 @@ export default function Scripts() {
             <p className="text-xs text-zinc-500">Write and manage your video scripts</p>
           </div>
           <div className="flex items-center gap-2">
-            <button className="flex items-center gap-2 text-xs font-semibold text-zinc-700 border-2 border-zinc-900 px-4 py-2 rounded-full shadow-[2px_2px_0_#18181b] hover:shadow-[3px_3px_0_#18181b] hover:-translate-y-px transition-all">
+            <button className="flex items-center gap-2 text-xs font-semibold text-zinc-700 border border-zinc-200 px-4 py-2 rounded-full shadow-sm hover:shadow-md hover:-translate-y-px transition-all">
               <FolderOpen size={14} weight="bold" />
               New Group
             </button>

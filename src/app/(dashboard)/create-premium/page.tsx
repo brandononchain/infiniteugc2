@@ -35,7 +35,7 @@ export default function CreatePremium() {
               <h1 className="text-sm font-bold text-zinc-950 tracking-tight">Create Premium</h1>
             </div>
           </div>
-          <div className="flex items-center gap-1.5 bg-accent-50 border-2 border-accent-300 text-accent-700 text-[11px] font-semibold px-3 py-1 rounded-full">
+          <div className="flex items-center gap-1.5 bg-accent-50 border border-accent-200 text-accent-700 text-[11px] font-semibold px-3 py-1 rounded-full">
             <Coin size={12} weight="fill" />
             <span className="text-accent-800 font-bold">30</span> credits
           </div>
@@ -98,8 +98,8 @@ export default function CreatePremium() {
                     onClick={() => setSelectedModel(model.name)}
                     className={`text-left rounded-lg p-3 transition-all brutal-card ${
                       selectedModel === model.name
-                        ? "!border-accent-400 bg-accent-50/40 !shadow-[4px_4px_0_#075985]"
-                        : "hover:border-zinc-400"
+                        ? "!border-accent-400 bg-accent-50/40 ring-2 ring-accent-200"
+                        : "hover:border-zinc-300"
                     }`}
                   >
                     <span className="text-xs font-bold text-zinc-900">{model.name}</span>

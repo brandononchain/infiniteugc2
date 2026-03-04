@@ -13,10 +13,10 @@ export default function Hooks() {
             <p className="text-xs text-zinc-500">Select a completed video and generate an AI-powered hook</p>
           </div>
           <div className="flex items-center gap-3">
-            <span className="text-xs font-semibold text-zinc-600 border-2 border-zinc-900 px-3.5 py-1.5 rounded-full shadow-[2px_2px_0_#18181b]">
+            <span className="text-xs font-semibold text-zinc-600 border border-zinc-200 px-3.5 py-1.5 rounded-full shadow-sm">
               10 credits
             </span>
-            <button className="w-8 h-8 flex items-center justify-center rounded-lg border-2 border-zinc-900 shadow-[2px_2px_0_#18181b] hover:shadow-[3px_3px_0_#18181b] hover:-translate-y-px text-zinc-500 transition-all">
+            <button className="w-8 h-8 flex items-center justify-center rounded-lg border border-zinc-200 shadow-sm hover:shadow-md hover:-translate-y-px text-zinc-500 transition-all">
               <ArrowClockwise size={14} weight="bold" />
             </button>
           </div>

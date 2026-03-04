@@ -58,7 +58,7 @@ export default function ScriptGeneration() {
             </div>
           </div>
           <div className="flex items-center gap-2">
-            <span className="text-xs font-semibold text-zinc-600 border-2 border-zinc-900 px-3.5 py-1.5 rounded-full shadow-[2px_2px_0_#18181b]">
+            <span className="text-xs font-semibold text-zinc-600 border border-zinc-200 px-3.5 py-1.5 rounded-full shadow-sm">
               5 credits per script
             </span>
           </div>
@@ -176,14 +176,14 @@ export default function ScriptGeneration() {
                   <div className="flex items-center gap-2">
                     <button
                       onClick={() => setGenerated(true)}
-                      className="flex items-center gap-1.5 text-[11px] font-semibold text-zinc-600 border-2 border-zinc-900 px-3 py-1.5 rounded-lg shadow-[2px_2px_0_#18181b] hover:shadow-[3px_3px_0_#18181b] hover:-translate-y-px transition-all"
+                      className="flex items-center gap-1.5 text-[11px] font-semibold text-zinc-600 border border-zinc-200 px-3 py-1.5 rounded-lg shadow-sm hover:shadow-md hover:-translate-y-px transition-all"
                     >
                       <ArrowClockwise size={12} weight="bold" />
                       Regenerate
                     </button>
                     <button
                       onClick={handleCopy}
-                      className="flex items-center gap-1.5 text-[11px] font-semibold text-zinc-600 border-2 border-zinc-900 px-3 py-1.5 rounded-lg shadow-[2px_2px_0_#18181b] hover:shadow-[3px_3px_0_#18181b] hover:-translate-y-px transition-all"
+                      className="flex items-center gap-1.5 text-[11px] font-semibold text-zinc-600 border border-zinc-200 px-3 py-1.5 rounded-lg shadow-sm hover:shadow-md hover:-translate-y-px transition-all"
                     >
                       {copied ? <Check size={12} weight="bold" className="text-emerald-500" /> : <Copy size={12} weight="bold" />}
                       {copied ? "Copied" : "Copy"}
@@ -192,7 +192,7 @@ export default function ScriptGeneration() {
                 </div>
 
                 {/* Script output */}
-                <div className="bg-zinc-50 border-2 border-zinc-900 rounded-lg p-4 mb-4 shadow-[3px_3px_0_#18181b]">
+                <div className="bg-zinc-50 border border-zinc-200 rounded-lg p-4 mb-4 shadow-sm">
                   <pre className="text-xs text-zinc-700 font-mono whitespace-pre-wrap leading-relaxed">
                     {SAMPLE_SCRIPT}
                   </pre>
@@ -207,11 +207,11 @@ export default function ScriptGeneration() {
 
                 {/* Actions */}
                 <div className="flex items-center gap-3 mt-5 pt-4 border-t border-zinc-300">
-                  <button className="flex items-center gap-2 text-xs font-semibold text-white bg-zinc-900 px-5 py-2.5 rounded-xl border-2 border-zinc-900 shadow-[3px_3px_0_#18181b] hover:shadow-[4px_4px_0_#18181b] hover:-translate-y-px transition-all">
+                  <button className="flex items-center gap-2 text-xs font-semibold text-white btn-brutal px-5 py-2.5 rounded-xl">
                     <Plus size={14} weight="bold" />
                     Save to Scripts
                   </button>
-                  <button className="flex items-center gap-2 text-xs font-semibold text-zinc-700 border-2 border-zinc-900 px-5 py-2.5 rounded-xl shadow-[3px_3px_0_#18181b] hover:shadow-[4px_4px_0_#18181b] hover:-translate-y-px transition-all">
+                  <button className="flex items-center gap-2 text-xs font-semibold text-zinc-700 border border-zinc-200 px-5 py-2.5 rounded-xl shadow-sm hover:shadow-md hover:-translate-y-px transition-all">
                     <FileText size={14} weight="bold" />
                     Use in Campaign
                   </button>
@@ -219,7 +219,7 @@ export default function ScriptGeneration() {
               </div>
             ) : (
               <div className="bg-white rounded-xl p-16 text-center brutal-empty">
-                <div className="w-14 h-14 rounded-xl bg-zinc-50 border-2 border-zinc-900 flex items-center justify-center mx-auto mb-4 shadow-[3px_3px_0_#18181b]">
+                <div className="w-14 h-14 rounded-xl bg-zinc-50 border border-zinc-200 flex items-center justify-center mx-auto mb-4 shadow-sm">
                   <FileText size={24} weight="duotone" className="text-zinc-300" />
                 </div>
                 <h3 className="text-sm font-bold text-zinc-900 mb-1">No script generated yet</h3>

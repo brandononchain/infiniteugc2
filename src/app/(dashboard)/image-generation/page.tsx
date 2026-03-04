@@ -24,7 +24,7 @@ export default function ImageGeneration() {
     <div className="min-h-full flex flex-col">
       {/* Main area */}
       <div className="flex-1 flex flex-col items-center justify-center px-6 py-16">
-        <div className="w-14 h-14 rounded-2xl bg-zinc-50 border-2 border-zinc-900 shadow-[3px_3px_0_#18181b] flex items-center justify-center mx-auto mb-5">
+        <div className="w-14 h-14 rounded-2xl bg-zinc-50 border border-zinc-200 shadow-sm flex items-center justify-center mx-auto mb-5">
           <ImageSquare size={24} weight="duotone" className="text-zinc-400" />
         </div>
         <h2 className="text-sm font-bold text-zinc-900 mb-1">Your generations will appear here</h2>
@@ -45,7 +45,7 @@ export default function ImageGeneration() {
       </div>
 
       {/* Bottom prompt bar */}
-      <div className="sticky bottom-0 brutal-header px-6 lg:px-10 py-4" style={{ borderBottom: 'none', borderTop: '2.5px solid #27272a', boxShadow: 'none' }}>
+      <div className="sticky bottom-0 brutal-header px-6 lg:px-10 py-4" style={{ borderBottom: 'none', borderTop: '1px solid #e4e4e7', boxShadow: 'none' }}>
         <div className="max-w-3xl mx-auto">
           <div className="bg-white rounded-xl px-4 py-3 flex items-center gap-3 brutal-card focus-within:ring-2 focus-within:ring-accent-200 focus-within:border-accent-300 transition-all">
             <Plus size={16} className="text-zinc-400 shrink-0" />
@@ -61,18 +61,18 @@ export default function ImageGeneration() {
           {/* Options row */}
           <div className="flex items-center justify-between mt-3">
             <div className="flex items-center gap-3">
-              <button className="flex items-center gap-1.5 text-xs font-medium text-zinc-600 bg-zinc-50 border-2 border-zinc-900 px-3 py-1.5 rounded-lg shadow-[2px_2px_0_#18181b] hover:shadow-[3px_3px_0_#18181b] hover:-translate-y-px transition-all">
+              <button className="flex items-center gap-1.5 text-xs font-medium text-zinc-600 bg-zinc-50 border border-zinc-200 px-3 py-1.5 rounded-lg shadow-sm hover:shadow-md hover:-translate-y-px transition-all">
                 <Sparkle size={12} weight="fill" className="text-zinc-500" />
                 Nano Banana Pro
                 <CaretDown size={10} className="text-zinc-500" />
               </button>
-              <button className="flex items-center gap-1.5 text-xs font-medium text-zinc-600 bg-zinc-50 border-2 border-zinc-900 px-3 py-1.5 rounded-lg shadow-[2px_2px_0_#18181b] hover:shadow-[3px_3px_0_#18181b] hover:-translate-y-px transition-all">
+              <button className="flex items-center gap-1.5 text-xs font-medium text-zinc-600 bg-zinc-50 border border-zinc-200 px-3 py-1.5 rounded-lg shadow-sm hover:shadow-md hover:-translate-y-px transition-all">
                 9:16 <CaretDown size={10} className="text-zinc-500" />
               </button>
-              <button className="flex items-center gap-1.5 text-xs font-medium text-zinc-600 bg-zinc-50 border-2 border-zinc-900 px-3 py-1.5 rounded-lg shadow-[2px_2px_0_#18181b] hover:shadow-[3px_3px_0_#18181b] hover:-translate-y-px transition-all">
+              <button className="flex items-center gap-1.5 text-xs font-medium text-zinc-600 bg-zinc-50 border border-zinc-200 px-3 py-1.5 rounded-lg shadow-sm hover:shadow-md hover:-translate-y-px transition-all">
                 2K <CaretDown size={10} className="text-zinc-500" />
               </button>
-              <div className="flex items-center gap-1.5 bg-zinc-50 border-2 border-zinc-900 rounded-lg overflow-hidden shadow-[2px_2px_0_#18181b]">
+              <div className="flex items-center gap-1.5 bg-zinc-50 border border-zinc-200 rounded-lg overflow-hidden shadow-sm">
                 <button
                   onClick={() => setCount(Math.max(1, count - 1))}
                   className="px-2 py-1.5 text-zinc-500 hover:text-zinc-700 transition-colors"

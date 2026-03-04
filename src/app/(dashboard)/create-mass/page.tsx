@@ -131,14 +131,14 @@ export default function CreateMass() {
                   <div className="w-6 h-6 rounded-full bg-accent-500 text-white flex items-center justify-center text-[10px] font-bold">2</div>
                   <h2 className="text-sm font-bold text-zinc-950">Select Avatar</h2>
                 </div>
-                <div className="flex border-2 border-zinc-900 rounded-lg overflow-hidden">
+                <div className="flex border border-zinc-200 rounded-lg overflow-hidden shadow-sm">
                   <button
                     onClick={() => setAvatarMode("single")}
-                    className={`text-[11px] font-semibold px-3 py-1 transition-colors ${avatarMode === "single" ? "bg-zinc-900 text-white" : "text-zinc-600 hover:bg-zinc-100"}`}
+                    className={`text-[11px] font-semibold px-3 py-1 transition-colors ${avatarMode === "single" ? "bg-zinc-900 text-white" : "text-zinc-600 hover:bg-zinc-50"}`}
                   >Single</button>
                   <button
                     onClick={() => setAvatarMode("group")}
-                    className={`text-[11px] font-semibold px-3 py-1 transition-colors ${avatarMode === "group" ? "bg-zinc-900 text-white" : "text-zinc-600 hover:bg-zinc-100"}`}
+                    className={`text-[11px] font-semibold px-3 py-1 transition-colors ${avatarMode === "group" ? "bg-zinc-900 text-white" : "text-zinc-600 hover:bg-zinc-50"}`}
                   >Group</button>
                 </div>
               </div>
@@ -157,14 +157,14 @@ export default function CreateMass() {
                   <div className="w-6 h-6 rounded-full bg-accent-500 text-white flex items-center justify-center text-[10px] font-bold">3</div>
                   <h2 className="text-sm font-bold text-zinc-950">Select Script</h2>
                 </div>
-                <div className="flex border-2 border-zinc-900 rounded-lg overflow-hidden">
+                <div className="flex border border-zinc-200 rounded-lg overflow-hidden shadow-sm">
                   <button
                     onClick={() => setScriptMode("single")}
-                    className={`text-[11px] font-semibold px-3 py-1 transition-colors ${scriptMode === "single" ? "bg-zinc-900 text-white" : "text-zinc-600 hover:bg-zinc-100"}`}
+                    className={`text-[11px] font-semibold px-3 py-1 transition-colors ${scriptMode === "single" ? "bg-zinc-900 text-white" : "text-zinc-600 hover:bg-zinc-50"}`}
                   >Single</button>
                   <button
                     onClick={() => setScriptMode("group")}
-                    className={`text-[11px] font-semibold px-3 py-1 transition-colors ${scriptMode === "group" ? "bg-zinc-900 text-white" : "text-zinc-600 hover:bg-zinc-100"}`}
+                    className={`text-[11px] font-semibold px-3 py-1 transition-colors ${scriptMode === "group" ? "bg-zinc-900 text-white" : "text-zinc-600 hover:bg-zinc-50"}`}
                   >Group</button>
                 </div>
               </div>

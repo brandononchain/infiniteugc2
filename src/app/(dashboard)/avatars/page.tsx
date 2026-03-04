@@ -12,7 +12,7 @@ export default function Avatars() {
             <h1 className="text-lg font-bold text-zinc-950 tracking-tight">Avatars</h1>
             <p className="text-xs text-zinc-500">Manage your AI avatars and voice profiles</p>
           </div>
-          <button className="flex items-center gap-2 text-xs font-semibold text-white bg-zinc-900 px-4 py-2 rounded-full border-2 border-zinc-900 shadow-[3px_3px_0_#18181b] hover:shadow-[4px_4px_0_#18181b] hover:-translate-y-px transition-all">
+          <button className="flex items-center gap-2 text-xs font-semibold text-white btn-brutal px-4 py-2 rounded-full">
             <DownloadSimple size={14} weight="bold" />
             Upload Avatar
           </button>

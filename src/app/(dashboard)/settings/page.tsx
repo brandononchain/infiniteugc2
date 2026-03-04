@@ -44,7 +44,7 @@ export default function Settings() {
 
       <div className="max-w-4xl mx-auto px-6 lg:px-10 py-8">
         {/* Tabs */}
-        <div className="flex gap-1 bg-zinc-50 border-2 border-zinc-900 rounded-xl p-1 mb-8 w-fit shadow-[3px_3px_0_#18181b]">
+        <div className="flex gap-1 bg-zinc-50 border border-zinc-200 rounded-xl p-1 mb-8 w-fit shadow-sm">
           {tabs.map((tab) => {
             const Icon = tab.icon;
             return (
@@ -98,7 +98,7 @@ export default function Settings() {
                 </div>
               </div>
               <div className="mt-4 flex justify-end">
-                <button className="text-xs font-semibold text-white bg-zinc-900 px-5 py-2 rounded-full border-2 border-zinc-900 shadow-[3px_3px_0_#18181b] hover:shadow-[4px_4px_0_#18181b] hover:-translate-y-px transition-all">
+                <button className="text-xs font-semibold text-white btn-brutal px-5 py-2 rounded-full">
                   Save Changes
                 </button>
               </div>
@@ -126,17 +126,17 @@ export default function Settings() {
                 </div>
               </div>
               <div className="mt-4 flex justify-end">
-                <button className="text-xs font-semibold text-white bg-zinc-900 px-5 py-2 rounded-full border-2 border-zinc-900 shadow-[3px_3px_0_#18181b] hover:shadow-[4px_4px_0_#18181b] hover:-translate-y-px transition-all">
+                <button className="text-xs font-semibold text-white btn-brutal px-5 py-2 rounded-full">
                   Update Password
                 </button>
               </div>
             </div>
 
             {/* Danger Zone */}
-            <div className="bg-white rounded-xl border-2 border-red-300 p-6 shadow-[4px_4px_0_#991b1b] rounded-xl">
+            <div className="bg-white rounded-xl border border-red-200 p-6 shadow-sm rounded-xl">
               <h3 className="text-sm font-bold text-red-600 mb-1">Danger Zone</h3>
               <p className="text-xs text-zinc-500 mb-4">Permanently delete your account and all associated data.</p>
-              <button className="text-xs font-semibold text-red-600 border-2 border-red-400 px-5 py-2 rounded-full shadow-[3px_3px_0_#991b1b] hover:shadow-[4px_4px_0_#991b1b] hover:-translate-y-px transition-all">
+              <button className="text-xs font-semibold text-red-600 border border-red-200 px-5 py-2 rounded-full shadow-sm hover:shadow-md hover:-translate-y-px transition-all hover:bg-red-50">
                 Delete Account
               </button>
             </div>
@@ -149,7 +149,7 @@ export default function Settings() {
             <div className="bg-white rounded-xl p-6 brutal-card">
               <h3 className="text-sm font-bold text-zinc-900 mb-1">API Key</h3>
               <p className="text-xs text-zinc-500 mb-4">Use this key to authenticate API requests.</p>
-              <div className="flex items-center gap-3 bg-zinc-50 rounded-xl px-4 py-3 border-2 border-zinc-900 shadow-[3px_3px_0_#18181b]">
+              <div className="flex items-center gap-3 bg-zinc-50 rounded-xl px-4 py-3 border border-zinc-200 shadow-sm">
                 <code className="flex-1 text-xs text-zinc-600 font-mono">
                   {showKey ? "sk-inf-a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6" : "sk-inf-••••••••••••••••••••••••••••••"}
                 </code>
@@ -175,7 +175,7 @@ export default function Settings() {
             <div className="bg-white rounded-xl p-6 brutal-card">
               <h3 className="text-sm font-bold text-zinc-900 mb-1">Regenerate Key</h3>
               <p className="text-xs text-zinc-500 mb-4">Generate a new key. This will invalidate your current key immediately.</p>
-              <button className="text-xs font-semibold text-white bg-zinc-900 px-5 py-2 rounded-full border-2 border-zinc-900 shadow-[3px_3px_0_#18181b] hover:shadow-[4px_4px_0_#18181b] hover:-translate-y-px transition-all">
+              <button className="text-xs font-semibold text-white btn-brutal px-5 py-2 rounded-full">
                 Regenerate API Key
               </button>
             </div>
@@ -192,32 +192,32 @@ export default function Settings() {
                   <h3 className="text-sm font-bold text-zinc-900">Current Plan</h3>
                   <p className="text-xs text-zinc-500">Manage your subscription</p>
                 </div>
-                <span className="text-[10px] font-bold text-sky-700 bg-sky-50 border-2 border-sky-400 px-3 py-1 rounded-full uppercase tracking-wider shadow-[2px_2px_0_#0369a1]">
+                <span className="text-[10px] font-bold text-sky-700 bg-sky-50 border border-sky-200 px-3 py-1 rounded-full uppercase tracking-wider shadow-sm">
                   Pro
                 </span>
               </div>
               <div className="grid grid-cols-3 gap-4 mb-4">
-                <div className="bg-zinc-50 rounded-xl p-3 border-2 border-zinc-900 shadow-[2px_2px_0_#18181b]">
+                <div className="bg-zinc-50 rounded-xl p-3 border border-zinc-200 shadow-sm">
                   <p className="text-[10px] font-medium text-zinc-500 uppercase tracking-wider mb-1">Credits</p>
                   <p className="text-lg font-bold text-zinc-900">2,450</p>
                   <p className="text-[10px] text-zinc-500">of 5,000 remaining</p>
                 </div>
-                <div className="bg-zinc-50 rounded-xl p-3 border-2 border-zinc-900 shadow-[2px_2px_0_#18181b]">
+                <div className="bg-zinc-50 rounded-xl p-3 border border-zinc-200 shadow-sm">
                   <p className="text-[10px] font-medium text-zinc-500 uppercase tracking-wider mb-1">Renewal</p>
                   <p className="text-lg font-bold text-zinc-900">Jul 15</p>
                   <p className="text-[10px] text-zinc-500">2025</p>
                 </div>
-                <div className="bg-zinc-50 rounded-xl p-3 border-2 border-zinc-900 shadow-[2px_2px_0_#18181b]">
+                <div className="bg-zinc-50 rounded-xl p-3 border border-zinc-200 shadow-sm">
                   <p className="text-[10px] font-medium text-zinc-500 uppercase tracking-wider mb-1">Monthly</p>
                   <p className="text-lg font-bold text-zinc-900">$99</p>
                   <p className="text-[10px] text-zinc-500">per month</p>
                 </div>
               </div>
               <div className="flex gap-3">
-                <button className="text-xs font-semibold text-white bg-zinc-900 px-5 py-2 rounded-full border-2 border-zinc-900 shadow-[3px_3px_0_#18181b] hover:shadow-[4px_4px_0_#18181b] hover:-translate-y-px transition-all">
+                <button className="text-xs font-semibold text-white btn-brutal px-5 py-2 rounded-full">
                   Upgrade Plan
                 </button>
-                <button className="text-xs font-semibold text-zinc-700 border-2 border-zinc-900 px-5 py-2 rounded-full shadow-[3px_3px_0_#18181b] hover:shadow-[4px_4px_0_#18181b] hover:-translate-y-px transition-all">
+                <button className="text-xs font-semibold text-zinc-700 border border-zinc-200 px-5 py-2 rounded-full shadow-sm hover:shadow-md hover:-translate-y-px transition-all">
                   Cancel Subscription
                 </button>
               </div>
@@ -226,7 +226,7 @@ export default function Settings() {
             {/* Payment Method */}
             <div className="bg-white rounded-xl p-6 brutal-card">
               <h3 className="text-sm font-bold text-zinc-900 mb-4">Payment Method</h3>
-              <div className="flex items-center justify-between bg-zinc-50 rounded-xl px-4 py-3 border-2 border-zinc-900 shadow-[2px_2px_0_#18181b]">
+              <div className="flex items-center justify-between bg-zinc-50 rounded-xl px-4 py-3 border border-zinc-200 shadow-sm">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-7 bg-linear-to-br from-zinc-800 to-zinc-950 rounded-md flex items-center justify-center">
                     <span className="text-[8px] text-white font-bold">VISA</span>
