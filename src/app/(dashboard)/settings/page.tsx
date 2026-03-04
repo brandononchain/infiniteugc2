@@ -33,7 +33,7 @@ export default function Settings() {
   return (
     <div className="min-h-full">
       {/* Header */}
-      <div className="sticky top-0 z-30 bg-white/80 backdrop-blur-xl border-b border-zinc-100">
+      <div className="sticky top-0 z-30 glass-header">
         <div className="max-w-4xl mx-auto px-6 lg:px-10 h-16 flex items-center">
           <div>
             <h1 className="text-lg font-bold text-zinc-950 tracking-tight">Settings</h1>
@@ -68,7 +68,7 @@ export default function Settings() {
         {activeTab === "account" && (
           <div className="space-y-6">
             {/* Profile */}
-            <div className="bg-white rounded-2xl border border-zinc-200/60 p-6">
+            <div className="bg-white rounded-2xl border border-zinc-200/50 p-6 card-elevated">
               <h3 className="text-sm font-bold text-zinc-900 mb-4">Profile</h3>
               <div className="flex items-center gap-4 mb-6">
                 <div className="w-16 h-16 rounded-2xl bg-linear-to-br from-sky-400 to-blue-500 flex items-center justify-center text-white text-xl font-bold">
@@ -105,7 +105,7 @@ export default function Settings() {
             </div>
 
             {/* Password */}
-            <div className="bg-white rounded-2xl border border-zinc-200/60 p-6">
+            <div className="bg-white rounded-2xl border border-zinc-200/50 p-6 card-elevated">
               <h3 className="text-sm font-bold text-zinc-900 mb-4">Password</h3>
               <div className="grid grid-cols-2 gap-4">
                 <div>
@@ -133,7 +133,7 @@ export default function Settings() {
             </div>
 
             {/* Danger Zone */}
-            <div className="bg-white rounded-2xl border border-red-200/60 p-6">
+            <div className="bg-white rounded-2xl border border-red-200/50 p-6 card-elevated">
               <h3 className="text-sm font-bold text-red-600 mb-1">Danger Zone</h3>
               <p className="text-xs text-zinc-400 mb-4">Permanently delete your account and all associated data.</p>
               <button className="text-xs font-semibold text-red-600 border border-red-200 px-5 py-2 rounded-full hover:bg-red-50 transition-colors">
@@ -146,7 +146,7 @@ export default function Settings() {
         {/* API Keys Tab */}
         {activeTab === "api" && (
           <div className="space-y-6">
-            <div className="bg-white rounded-2xl border border-zinc-200/60 p-6">
+            <div className="bg-white rounded-2xl border border-zinc-200/50 p-6 card-elevated">
               <h3 className="text-sm font-bold text-zinc-900 mb-1">API Key</h3>
               <p className="text-xs text-zinc-400 mb-4">Use this key to authenticate API requests.</p>
               <div className="flex items-center gap-3 bg-zinc-50 rounded-xl px-4 py-3 border border-zinc-200/60">
@@ -172,7 +172,7 @@ export default function Settings() {
               </div>
             </div>
 
-            <div className="bg-white rounded-2xl border border-zinc-200/60 p-6">
+            <div className="bg-white rounded-2xl border border-zinc-200/50 p-6 card-elevated">
               <h3 className="text-sm font-bold text-zinc-900 mb-1">Regenerate Key</h3>
               <p className="text-xs text-zinc-400 mb-4">Generate a new key. This will invalidate your current key immediately.</p>
               <button className="text-xs font-semibold text-white bg-zinc-900 px-5 py-2 rounded-full hover:bg-zinc-800 transition-colors">
@@ -186,7 +186,7 @@ export default function Settings() {
         {activeTab === "billing" && (
           <div className="space-y-6">
             {/* Current Plan */}
-            <div className="bg-white rounded-2xl border border-zinc-200/60 p-6">
+            <div className="bg-white rounded-2xl border border-zinc-200/50 p-6 card-elevated">
               <div className="flex items-center justify-between mb-4">
                 <div>
                   <h3 className="text-sm font-bold text-zinc-900">Current Plan</h3>
@@ -224,7 +224,7 @@ export default function Settings() {
             </div>
 
             {/* Payment Method */}
-            <div className="bg-white rounded-2xl border border-zinc-200/60 p-6">
+            <div className="bg-white rounded-2xl border border-zinc-200/50 p-6 card-elevated">
               <h3 className="text-sm font-bold text-zinc-900 mb-4">Payment Method</h3>
               <div className="flex items-center justify-between bg-zinc-50 rounded-xl px-4 py-3 border border-zinc-200/60">
                 <div className="flex items-center gap-3">
@@ -245,7 +245,7 @@ export default function Settings() {
         {/* Notifications Tab */}
         {activeTab === "notifications" && (
           <div className="space-y-6">
-            <div className="bg-white rounded-2xl border border-zinc-200/60 p-6">
+            <div className="bg-white rounded-2xl border border-zinc-200/50 p-6 card-elevated">
               <h3 className="text-sm font-bold text-zinc-900 mb-4">Email Notifications</h3>
               <div className="space-y-4">
                 {[

@@ -86,14 +86,14 @@ export default function DashboardLayout({
       <aside
         className={`
           fixed z-50 lg:static inset-y-0 left-0
-          flex flex-col border-r border-zinc-200/60 bg-white
+          flex flex-col glass-sidebar
           transition-all duration-300 ease-out
           ${collapsed ? "w-17" : "w-60"}
           ${mobileOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}
         `}
       >
         {/* Brand */}
-        <div className={`flex items-center h-16 border-b border-zinc-100 shrink-0 ${collapsed ? "justify-center px-0" : "gap-2.5 px-4"}`}>
+        <div className={`flex items-center h-16 border-b border-zinc-200/40 shrink-0 ${collapsed ? "justify-center px-0" : "gap-2.5 px-4"}`}>
           {collapsed ? (
             <button
               onClick={() => setCollapsed(false)}
@@ -166,7 +166,7 @@ export default function DashboardLayout({
         </nav>
 
         {/* Bottom */}
-        <div className="border-t border-zinc-100 px-2 py-3 space-y-0.5">
+        <div className="border-t border-zinc-200/40 px-2 py-3 space-y-0.5">
           <NavItem
             href="/settings"
             icon={Gear}
@@ -197,7 +197,7 @@ export default function DashboardLayout({
       {/* ─── Main Content ─── */}
       <main className="flex-1 flex flex-col min-w-0 overflow-hidden">
         {/* Mobile top bar */}
-        <div className="lg:hidden flex items-center h-14 px-4 border-b border-zinc-200/60 bg-white shrink-0">
+        <div className="lg:hidden flex items-center h-14 px-4 glass-header shrink-0">
           <button
             onClick={() => setMobileOpen(true)}
             className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-zinc-100 text-zinc-600"
@@ -245,10 +245,10 @@ function NavItem({
         ${collapsed ? "justify-center px-0" : ""}
         ${
           active
-            ? "bg-accent-50 text-accent-700"
+            ? "nav-active text-accent-700"
             : accent
             ? "text-rose-500 hover:bg-rose-50/60"
-            : "text-zinc-500 hover:bg-zinc-100/70 hover:text-zinc-900"
+            : "text-zinc-500 hover:bg-zinc-50/80 hover:text-zinc-900"
         }
       `}
       title={collapsed ? label : undefined}

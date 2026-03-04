@@ -78,7 +78,7 @@ export default function DashboardHome() {
   return (
     <div className="min-h-full">
       {/* ─── Top Bar ─── */}
-      <div className="sticky top-0 z-30 bg-white/80 backdrop-blur-xl border-b border-zinc-100">
+      <div className="sticky top-0 z-30 glass-header">
         <div className="max-w-7xl mx-auto px-6 lg:px-10 h-16 flex items-center justify-between">
           <div>
             <h1 className="text-lg font-bold text-zinc-950 tracking-tight">
@@ -111,7 +111,7 @@ export default function DashboardHome() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.06, type: "spring", stiffness: 120, damping: 20 }}
-              className="bg-white rounded-2xl border border-zinc-200/60 p-5 group hover:border-accent-200/60 hover:shadow-sm transition-all"
+              className="bg-white rounded-2xl border border-zinc-200/50 p-5 group hover:border-accent-200/60 card-elevated"
             >
               <div className="flex items-center justify-between mb-3">
                 <div className="w-9 h-9 rounded-xl bg-zinc-50 flex items-center justify-center group-hover:bg-accent-50 transition-colors">
@@ -182,7 +182,7 @@ export default function DashboardHome() {
               >
                 <Link
                   href={tool.href}
-                  className="flex items-center gap-3 bg-white border border-zinc-200/60 rounded-xl px-5 py-4 hover:border-accent-200/60 hover:shadow-sm group transition-all"
+                  className="flex items-center gap-3 bg-white border border-zinc-200/50 rounded-xl px-5 py-4 hover:border-accent-200/60 group card-elevated"
                 >
                   <div className="w-8 h-8 rounded-lg bg-zinc-50 flex items-center justify-center group-hover:bg-accent-50 transition-colors">
                     <tool.icon size={16} weight="duotone" className="text-zinc-500 group-hover:text-accent-600 transition-colors" />
@@ -245,7 +245,7 @@ export default function DashboardHome() {
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 0.4 + i * 0.03, type: "spring", stiffness: 120, damping: 20 }}
-                className="group relative aspect-9/16 bg-zinc-100 rounded-xl overflow-hidden cursor-pointer border border-zinc-200/40 hover:border-accent-200/60 hover:shadow-md transition-all"
+                className="group relative aspect-9/16 bg-zinc-100 rounded-xl overflow-hidden cursor-pointer border border-zinc-200/40 hover:border-accent-200/50 card-elevated"
               >
                 {/* Placeholder gradient */}
                 <div className={`absolute inset-0 bg-linear-to-br ${
@@ -259,7 +259,7 @@ export default function DashboardHome() {
                 }`} />
 
                 {/* Score badge */}
-                <div className="absolute top-2 left-2 z-10 flex items-center gap-1 bg-white/90 backdrop-blur-sm text-[10px] font-bold text-zinc-700 px-2 py-0.5 rounded-full">
+                <div className="absolute top-2 left-2 z-10 flex items-center gap-1 glass-surface text-[10px] font-bold text-zinc-700 px-2 py-0.5 rounded-full border border-white/40">
                   <Fire size={10} weight="fill" className="text-orange-500" />
                   {item.score}
                 </div>

@@ -45,9 +45,9 @@ export default function ImageGeneration() {
       </div>
 
       {/* Bottom prompt bar */}
-      <div className="sticky bottom-0 bg-white border-t border-zinc-200/60 px-6 lg:px-10 py-4">
+      <div className="sticky bottom-0 glass-header px-6 lg:px-10 py-4" style={{ borderBottom: 'none', borderTop: '1px solid rgba(228, 228, 231, 0.45)', boxShadow: '0 -1px 3px rgba(0, 0, 0, 0.03)' }}>
         <div className="max-w-3xl mx-auto">
-          <div className="bg-white border border-zinc-200 rounded-2xl px-4 py-3 flex items-center gap-3 shadow-sm focus-within:ring-2 focus-within:ring-accent-200 focus-within:border-accent-300 transition-all">
+          <div className="bg-white border border-zinc-200/50 rounded-2xl px-4 py-3 flex items-center gap-3 card-elevated focus-within:ring-2 focus-within:ring-accent-200 focus-within:border-accent-300 transition-all">
             <Plus size={16} className="text-zinc-300 shrink-0" />
             <input
               type="text"

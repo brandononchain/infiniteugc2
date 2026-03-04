@@ -6,7 +6,7 @@ export default function Voices() {
   return (
     <div className="min-h-full">
       {/* Header */}
-      <div className="sticky top-0 z-30 bg-white/80 backdrop-blur-xl border-b border-zinc-100">
+      <div className="sticky top-0 z-30 glass-header">
         <div className="max-w-5xl mx-auto px-6 lg:px-10 h-16 flex items-center justify-between">
           <div>
             <h1 className="text-lg font-bold text-zinc-950 tracking-tight">Voices</h1>
@@ -20,7 +20,7 @@ export default function Voices() {
       </div>
 
       <div className="max-w-5xl mx-auto px-6 lg:px-10 py-8">
-        <div className="bg-white rounded-2xl border border-zinc-200/60 p-16 text-center">
+        <div className="bg-white rounded-2xl border border-zinc-200/50 p-16 text-center glass-empty">
           <div className="w-14 h-14 rounded-full bg-zinc-50 flex items-center justify-center mx-auto mb-4">
             <Microphone size={24} weight="duotone" className="text-zinc-300" />
           </div>
