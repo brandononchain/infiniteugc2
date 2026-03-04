@@ -362,9 +362,8 @@ export default function Hero() {
               }}
               className="text-lg md:text-xl text-zinc-500 leading-relaxed max-w-[50ch] mt-6"
             >
-              One brief. Thousands of studio-quality videos. Powered by AI
-              avatars and voice cloning so you can focus on strategy, not
-              production.
+              Create thousands of studio quality content with AI, so you can
+              focus on strategy, not production.
             </motion.p>
 
             {/* CTAs */}
