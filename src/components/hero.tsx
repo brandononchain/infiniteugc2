@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useMotionValue, AnimatePresence } from "framer-motion";
+import { motion, useMotionValue, AnimatePresence, type Variants } from "framer-motion";
 import { ArrowRight, Lightning, Play, TiktokLogo, InstagramLogo, YoutubeLogo, XLogo, FacebookLogo } from "@phosphor-icons/react";
 import { useRef, useState, useEffect } from "react";
 import Image from "next/image";
@@ -190,7 +190,7 @@ function AnimatedHeadline() {
   const line1 = ["Your", "Content."];
   const line2 = ["Infinite", "Possibilities."];
 
-  const wordVariant = {
+  const wordVariant: Variants = {
     hidden: { opacity: 0, y: 40, rotateX: 40, filter: "blur(10px)" },
     visible: (i: number) => ({
       opacity: 1,
@@ -198,7 +198,7 @@ function AnimatedHeadline() {
       rotateX: 0,
       filter: "blur(0px)",
       transition: {
-        type: "spring",
+        type: "spring" as const,
         stiffness: 90,
         damping: 18,
         delay: 0.2 + i * 0.1,
