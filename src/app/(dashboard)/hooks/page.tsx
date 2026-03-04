@@ -1,7 +1,6 @@
 "use client";
 
-import { Lightning, Coin, ArrowClockwise, VideoCamera } from "@phosphor-icons/react";
-import Link from "next/link";
+import { ArrowClockwise, VideoCamera } from "@phosphor-icons/react";
 
 export default function Hooks() {
   return (

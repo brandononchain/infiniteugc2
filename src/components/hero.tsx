@@ -107,7 +107,7 @@ function OrbitCarousel() {
     >
       {/* Subtle orbit track */}
       <div
-        className="absolute top-1/2 left-1/2 border border-accent-300/[0.08] rounded-[50%] pointer-events-none"
+        className="absolute top-1/2 left-1/2 border border-accent-300/8 rounded-[50%] pointer-events-none"
         style={{ width: "104%", height: "30%", transform: "translate(-50%, -50%)" }}
       />
 
@@ -120,7 +120,7 @@ function OrbitCarousel() {
         initial={{ opacity: 0, scale: 0.85 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ type: "spring", stiffness: 50, damping: 18, delay: 0.3 }}
-        className="relative z-30 pointer-events-none w-[70%] sm:w-[80%] md:w-[90%] lg:w-[95%] max-w-[780px]"
+        className="relative z-30 pointer-events-none w-[70%] sm:w-[80%] md:w-[90%] lg:w-[95%] max-w-195"
       >
         <motion.div
           animate={{ y: [0, -10, 0] }}
@@ -144,14 +144,14 @@ function OrbitCarousel() {
           ref={(el) => {
             cardEls.current[i] = el;
           }}
-          className={`absolute top-1/2 left-1/2 -ml-[54px] -mt-[96px] w-[108px] h-[192px] transition-opacity duration-700 ${
+          className={`absolute top-1/2 left-1/2 -ml-13.5 -mt-24 w-27 h-48 transition-opacity duration-700 ${
             visible ? "opacity-100" : "opacity-0"
           }`}
           style={{ willChange: "transform, opacity, filter" }}
         >
           <div className="relative w-full h-full rounded-2xl overflow-hidden border border-white/25 shadow-[0_8px_32px_rgba(0,0,0,0.15),0_2px_8px_rgba(0,0,0,0.08)] bg-white/5">
             {/* Glass reflection */}
-            <div className="absolute inset-0 z-20 bg-gradient-to-br from-white/25 via-transparent to-transparent pointer-events-none" />
+            <div className="absolute inset-0 z-20 bg-linear-to-br from-white/25 via-transparent to-transparent pointer-events-none" />
 
             <video
               ref={(el) => {
@@ -323,7 +323,7 @@ export default function Hero() {
       <GradientBackground className="-z-20" />
 
       {/* Bottom fade into page background */}
-      <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-background to-transparent -z-10 pointer-events-none" />
+      <div className="absolute inset-x-0 bottom-0 h-40 bg-linear-to-t from-background to-transparent -z-10 pointer-events-none" />
 
       {/* ── Main Content ── */}
       <div className="relative z-20 max-w-350 mx-auto w-full px-6 lg:px-12 pt-24 pb-16 lg:pb-0">

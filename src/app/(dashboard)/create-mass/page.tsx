@@ -5,7 +5,6 @@ import {
   Coin,
   CaretDown,
   Eye,
-  Sparkle,
   ToggleLeft,
   ToggleRight,
   Plus,
@@ -65,7 +64,7 @@ export default function CreateMass() {
                   </span>
                 </div>
               </div>
-              <div className="aspect-[9/16] bg-linear-to-br from-rose-100 via-pink-50 to-rose-50 flex items-center justify-center">
+              <div className="aspect-9/16 bg-linear-to-br from-rose-100 via-pink-50 to-rose-50 flex items-center justify-center">
                 <p className="text-sm text-zinc-300">Preview will appear here</p>
               </div>
               <div className="px-5 py-2.5 border-t border-zinc-100 text-center">

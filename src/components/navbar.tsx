@@ -54,7 +54,7 @@ export default function Navbar() {
                 <a
                   key={link.href}
                   href={link.href}
-                  className="text-[13px] font-medium text-zinc-500 hover:text-zinc-950 transition-colors px-3.5 py-1.5 rounded-lg hover:bg-zinc-950/[0.04]"
+                  className="text-[13px] font-medium text-zinc-500 hover:text-zinc-950 transition-colors px-3.5 py-1.5 rounded-lg hover:bg-zinc-950/4"
                 >
                   {link.label}
                 </a>
@@ -109,7 +109,7 @@ export default function Navbar() {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: -8, scale: 0.98 }}
               transition={{ type: "spring", stiffness: 400, damping: 30 }}
-              className="fixed left-4 right-4 top-[5.5rem] z-40 bg-white/90 backdrop-blur-2xl backdrop-saturate-150 border border-white/60 shadow-[0_8px_40px_rgba(0,0,0,0.08)] rounded-2xl overflow-hidden md:hidden"
+              className="fixed left-4 right-4 top-22 z-40 bg-white/90 backdrop-blur-2xl backdrop-saturate-150 border border-white/60 shadow-[0_8px_40px_rgba(0,0,0,0.08)] rounded-2xl overflow-hidden md:hidden"
             >
               <div className="flex flex-col p-4 gap-1">
                 {navLinks.map((link) => (
@@ -117,7 +117,7 @@ export default function Navbar() {
                     key={link.href}
                     href={link.href}
                     onClick={() => setMobileOpen(false)}
-                    className="text-[15px] font-medium text-zinc-700 hover:text-zinc-950 hover:bg-zinc-950/[0.04] transition-colors py-2.5 px-3 rounded-xl"
+                    className="text-[15px] font-medium text-zinc-700 hover:text-zinc-950 hover:bg-zinc-950/4 transition-colors py-2.5 px-3 rounded-xl"
                   >
                     {link.label}
                   </a>

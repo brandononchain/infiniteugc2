@@ -4,12 +4,9 @@ import { useState } from "react";
 import Link from "next/link";
 import {
   ArrowLeft,
-  Coin,
   Sparkle,
   Upload,
   Eye,
-  CaretDown,
-  CaretUp,
 } from "@phosphor-icons/react";
 
 const VIDEO_MODELS = [

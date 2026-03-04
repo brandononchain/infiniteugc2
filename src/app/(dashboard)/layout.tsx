@@ -19,9 +19,9 @@ import {
   FilmSlate,
   Gear,
   CaretLeft,
-  SignOut,
   List,
 } from "@phosphor-icons/react";
+import type { Icon as PhosphorIcon } from "@phosphor-icons/react";
 
 /* ─── Nav Structure ─── */
 const NAV_GROUPS = [
@@ -83,7 +83,7 @@ export default function DashboardLayout({
           fixed z-50 lg:static inset-y-0 left-0
           flex flex-col border-r border-zinc-200/60 bg-white
           transition-all duration-300 ease-out
-          ${collapsed ? "w-[68px]" : "w-60"}
+          ${collapsed ? "w-17" : "w-60"}
           ${mobileOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}
         `}
       >
@@ -218,7 +218,7 @@ function NavItem({
   accent,
 }: {
   href: string;
-  icon: React.ComponentType<{ size?: number; weight?: string; className?: string }>;
+  icon: PhosphorIcon;
   label: string;
   active: boolean;
   collapsed: boolean;

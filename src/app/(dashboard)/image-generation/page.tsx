@@ -4,7 +4,6 @@ import { useState } from "react";
 import {
   ImageSquare,
   Plus,
-  PaperPlaneRight,
   CaretDown,
   ArrowUp,
   Sparkle,
@@ -80,7 +79,7 @@ export default function ImageGeneration() {
                 >
                   <Minus size={12} weight="bold" />
                 </button>
-                <span className="text-xs font-semibold text-zinc-700 min-w-[1rem] text-center">{count}</span>
+                <span className="text-xs font-semibold text-zinc-700 min-w-4 text-center">{count}</span>
                 <button
                   onClick={() => setCount(Math.min(12, count + 1))}
                   className="px-2 py-1.5 text-zinc-400 hover:text-zinc-600 transition-colors"

@@ -1,12 +1,9 @@
 "use client";
 
 import { motion } from "framer-motion";
-import Image from "next/image";
 import Link from "next/link";
 import {
   Plus,
-  Stack,
-  Sparkle,
   ArrowRight,
   Play,
   FilmSlate,
@@ -248,7 +245,7 @@ export default function DashboardHome() {
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 0.4 + i * 0.03, type: "spring", stiffness: 120, damping: 20 }}
-                className="group relative aspect-[9/16] bg-zinc-100 rounded-xl overflow-hidden cursor-pointer border border-zinc-200/40 hover:border-accent-200/60 hover:shadow-md transition-all"
+                className="group relative aspect-9/16 bg-zinc-100 rounded-xl overflow-hidden cursor-pointer border border-zinc-200/40 hover:border-accent-200/60 hover:shadow-md transition-all"
               >
                 {/* Placeholder gradient */}
                 <div className={`absolute inset-0 bg-linear-to-br ${

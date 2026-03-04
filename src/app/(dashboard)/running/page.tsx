@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Play, X, WarningCircle, ArrowClockwise, VideoCamera } from "@phosphor-icons/react";
+import { VideoCamera } from "@phosphor-icons/react";
 import Link from "next/link";
 
 export default function RunningQueue() {
