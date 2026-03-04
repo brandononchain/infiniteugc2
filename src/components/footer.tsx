@@ -12,7 +12,7 @@ const footerLinks = {
     { label: "About", href: "#" },
     { label: "Blog", href: "#" },
     { label: "Careers", href: "#" },
-    { label: "Contact", href: "mailto:hello@openugc.com" },
+    { label: "Contact", href: "mailto:hello@infiniteugc.com" },
   ],
   Legal: [
     { label: "Terms of Service", href: "#" },
@@ -40,7 +40,7 @@ export default function Footer() {
                 <Infinity size={18} weight="bold" className="text-white" />
               </div>
               <span className="text-base font-bold tracking-tight text-zinc-950">
-                OpenUGC
+                InfiniteUGC
               </span>
             </a>
             <p className="text-sm text-zinc-500 leading-relaxed max-w-[28ch]">
@@ -73,7 +73,7 @@ export default function Footer() {
         {/* Bottom bar */}
         <div className="mt-16 pt-6 border-t border-zinc-200/50 flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-xs text-zinc-400">
-            &copy; {new Date().getFullYear()} OpenUGC. All rights reserved.
+            &copy; {new Date().getFullYear()} InfiniteUGC. All rights reserved.
           </p>
           <div className="flex items-center gap-6">
             <a

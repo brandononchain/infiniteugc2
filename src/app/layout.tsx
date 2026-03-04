@@ -14,19 +14,19 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "OpenUGC | AI Video Content at Scale",
+  title: "InfiniteUGC | AI Video Content at Scale",
   description:
     "Mass-produce studio-quality UGC videos with AI avatars, voice cloning, custom campaigns, and an intelligent AI agent. Built for brands that move fast.",
   openGraph: {
-    title: "OpenUGC | AI Video Content at Scale",
+    title: "InfiniteUGC | AI Video Content at Scale",
     description:
       "Generate thousands of AI avatar videos, custom campaigns, and ad creatives, from script to export.",
     type: "website",
-    url: "https://openugc.com",
+    url: "https://infiniteugc.com",
   },
   twitter: {
     card: "summary_large_image",
-    title: "OpenUGC | AI Video Content at Scale",
+    title: "InfiniteUGC | AI Video Content at Scale",
     description:
       "Mass-produce studio-quality UGC videos with AI avatars, voice cloning, and an intelligent AI agent.",
   },

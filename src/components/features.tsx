@@ -438,7 +438,7 @@ const features = [
   },
   {
     title: "Built-in Video Editor",
-    desc: "Trim, cut, layer, and polish, all inside OpenUGC. No external tools needed.",
+    desc: "Trim, cut, layer, and polish, all inside InfiniteUGC. No external tools needed.",
     icon: Scissors,
     span: "",
     content: "editor",

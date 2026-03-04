@@ -44,7 +44,7 @@ export default function Navbar() {
                 <Infinity size={17} weight="bold" className="text-white" />
               </div>
               <span className="text-base font-bold tracking-tight text-zinc-950">
-                OpenUGC
+                InfiniteUGC
               </span>
             </a>
 

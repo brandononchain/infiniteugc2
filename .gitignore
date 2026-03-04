@@ -43,3 +43,5 @@ yarn-error.log*
 public/videos/originals/
 public/avatars/originals/
 next-env.d.ts
+
+.vercel

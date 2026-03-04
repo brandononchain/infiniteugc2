@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useInView, useScroll, useTransform } from "framer-motion";
+import { motion, useInView } from "framer-motion";
 import { useRef, useState, useEffect, memo } from "react";
 import Image from "next/image";
 import {
@@ -242,11 +242,17 @@ export default function HowItWorks() {
   const sectionRef = useRef<HTMLDivElement>(null);
   const inView = useInView(sectionRef, { once: true, margin: "-100px" });
 
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start end", "end start"],
-  });
-  const lineHeight = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
+  /* Step-based line progress — advances as each step enters the viewport */
+  const step0Ref = useRef<HTMLDivElement>(null);
+  const step1Ref = useRef<HTMLDivElement>(null);
+  const step2Ref = useRef<HTMLDivElement>(null);
+  const stepRefs = [step0Ref, step1Ref, step2Ref];
+
+  const step0Visible = useInView(step0Ref, { once: true, margin: "-20% 0px -20% 0px" });
+  const step1Visible = useInView(step1Ref, { once: true, margin: "-20% 0px -20% 0px" });
+  const step2Visible = useInView(step2Ref, { once: true, margin: "-20% 0px -20% 0px" });
+
+  const lineProgress = step2Visible ? 100 : step1Visible ? 55 : step0Visible ? 15 : 0;
 
   return (
     <section
@@ -274,9 +280,9 @@ export default function HowItWorks() {
         <div className="space-y-20 md:space-y-32 relative">
           {/* Connecting Line */}
           <div className="hidden md:block absolute left-1/2 top-0 bottom-0 w-px bg-zinc-100 -translate-x-1/2">
-            <motion.div
-              className="w-full bg-accent-300/40 origin-top"
-              style={{ height: lineHeight }}
+            <div
+              className="w-full bg-accent-300/40 origin-top transition-[height] duration-700 ease-out"
+              style={{ height: `${lineProgress}%` }}
             />
           </div>
 
@@ -285,6 +291,7 @@ export default function HowItWorks() {
             return (
               <motion.div
                 key={step.num}
+                ref={stepRefs[i]}
                 initial={{ opacity: 0, y: 50 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-80px" }}

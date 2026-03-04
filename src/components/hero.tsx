@@ -1,7 +1,7 @@
 "use client";
 
-import { motion, useMotionValue } from "framer-motion";
-import { ArrowRight, Lightning, Play } from "@phosphor-icons/react";
+import { motion, useMotionValue, AnimatePresence } from "framer-motion";
+import { ArrowRight, Lightning, Play, TiktokLogo, InstagramLogo, YoutubeLogo, XLogo, FacebookLogo } from "@phosphor-icons/react";
 import { useRef, useState, useEffect } from "react";
 import Image from "next/image";
 import GradientBackground from "./gradient-background";
@@ -128,7 +128,7 @@ function OrbitCarousel() {
         >
           <Image
             src="/hero/infinityloop.png"
-            alt="OpenUGC"
+            alt="InfiniteUGC"
             width={900}
             height={900}
             priority
@@ -187,25 +187,73 @@ function OrbitCarousel() {
 
 /* ─── Animated Word Reveal ─── */
 function AnimatedHeadline() {
-  const words = ["Mass-Produce", "Studio-Quality", "UGC", "in", "Minutes"];
+  const line1 = ["Your", "Content."];
+  const line2 = ["Infinite", "Possibilities."];
+
+  const wordVariant = {
+    hidden: { opacity: 0, y: 40, rotateX: 40, filter: "blur(10px)" },
+    visible: (i: number) => ({
+      opacity: 1,
+      y: 0,
+      rotateX: 0,
+      filter: "blur(0px)",
+      transition: {
+        type: "spring",
+        stiffness: 90,
+        damping: 18,
+        delay: 0.2 + i * 0.1,
+      },
+    }),
+  };
+
+  let wordIndex = 0;
+
   return (
-    <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl tracking-tighter leading-[0.95] font-extrabold text-zinc-950">
-      {words.map((word, i) => (
-        <motion.span
-          key={i}
-          initial={{ opacity: 0, y: 30, filter: "blur(8px)" }}
-          animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-          transition={{
-            type: "spring",
-            stiffness: 100,
-            damping: 20,
-            delay: 0.15 + i * 0.08,
-          }}
-          className="inline-block mr-[0.25em]"
-        >
-          {word}
-        </motion.span>
-      ))}
+    <h1
+      className="text-5xl sm:text-6xl md:text-7xl lg:text-[5.5rem] tracking-tighter leading-[0.92] font-extrabold text-zinc-950"
+      style={{ perspective: "600px" }}
+    >
+      {/* Line 1 */}
+      <span className="block">
+        {line1.map((word) => {
+          const i = wordIndex++;
+          return (
+            <motion.span
+              key={`l1-${i}`}
+              custom={i}
+              variants={wordVariant}
+              initial="hidden"
+              animate="visible"
+              className="inline-block mr-[0.25em] origin-bottom"
+            >
+              {word}
+            </motion.span>
+          );
+        })}
+      </span>
+      {/* Line 2 — branded accent */}
+      <span className="block mt-1">
+        {line2.map((word, wi) => {
+          const i = wordIndex++;
+          const isAccent = wi === 0;
+          return (
+            <motion.span
+              key={`l2-${i}`}
+              custom={i}
+              variants={wordVariant}
+              initial="hidden"
+              animate="visible"
+              className={`inline-block mr-[0.25em] origin-bottom ${
+                isAccent
+                  ? \"bg-linear-to-r from-accent-500 to-accent-400 bg-clip-text text-transparent\"
+                  : ""
+              }`}
+            >
+              {word}
+            </motion.span>
+          );
+        })}
+      </span>
     </h1>
   );
 }
@@ -310,13 +358,13 @@ export default function Hero() {
                 type: "spring",
                 stiffness: 100,
                 damping: 20,
-                delay: 0.55,
+                delay: 0.65,
               }}
-              className="text-lg text-zinc-500 leading-relaxed max-w-[55ch] mt-6"
+              className="text-lg md:text-xl text-zinc-500 leading-relaxed max-w-[50ch] mt-6"
             >
-              Generate thousands of AI avatar videos, custom campaigns, and ad
-              creatives, from script to export. Built for brands that move fast
-              and need content yesterday.
+              One brief. Thousands of studio-quality videos. Powered by AI
+              avatars and voice cloning so you can focus on strategy, not
+              production.
             </motion.p>
 
             {/* CTAs */}
@@ -351,12 +399,21 @@ export default function Hero() {
               <span className="text-xs text-zinc-400 font-medium uppercase tracking-wider">
                 Trusted by 500+ brands
               </span>
-              <div className="flex gap-6 items-center opacity-40">
-                {[1, 2, 3, 4, 5].map((i) => (
+              <div className="flex gap-5 items-center">
+                {[
+                  { icon: TiktokLogo, label: "TikTok" },
+                  { icon: InstagramLogo, label: "Instagram" },
+                  { icon: YoutubeLogo, label: "YouTube" },
+                  { icon: XLogo, label: "X" },
+                  { icon: FacebookLogo, label: "Facebook" },
+                ].map(({ icon: Icon, label }) => (
                   <div
-                    key={i}
-                    className="w-16 h-5 bg-zinc-300 rounded"
-                  />
+                    key={label}
+                    className="flex items-center gap-1.5 text-zinc-400"
+                  >
+                    <Icon size={18} weight="fill" />
+                    <span className="text-xs font-medium hidden sm:inline">{label}</span>
+                  </div>
                 ))}
               </div>
             </motion.div>

@@ -116,11 +116,11 @@ export default function FAQ() {
               Common Questions
             </h2>
             <p className="text-base text-zinc-500 leading-relaxed mt-4 max-w-[40ch]">
-              Everything you need to know about OpenUGC. Can&apos;t find
+              Everything you need to know about InfiniteUGC. Can&apos;t find
               your answer? Reach out to our team.
             </p>
             <a
-              href="mailto:hello@openugc.com"
+              href="mailto:hello@infiniteugc.com"
               className="inline-flex items-center gap-2 text-sm font-semibold text-accent-600 hover:text-accent-700 mt-6 transition-colors"
             >
               Contact Support
