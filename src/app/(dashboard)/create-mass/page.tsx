@@ -134,11 +134,11 @@ export default function CreateMass() {
                 <div className="flex border border-zinc-200 rounded-lg overflow-hidden shadow-sm">
                   <button
                     onClick={() => setAvatarMode("single")}
-                    className={`text-[11px] font-semibold px-3 py-1 transition-colors ${avatarMode === "single" ? "bg-zinc-900 text-white" : "text-zinc-600 hover:bg-zinc-50"}`}
+                    className={`text-[11px] font-semibold px-3 py-1 transition-colors ${avatarMode === "single" ? "bg-linear-to-br from-zinc-700 via-zinc-800 to-zinc-950 text-white" : "text-zinc-600 hover:bg-zinc-50"}`}
                   >Single</button>
                   <button
                     onClick={() => setAvatarMode("group")}
-                    className={`text-[11px] font-semibold px-3 py-1 transition-colors ${avatarMode === "group" ? "bg-zinc-900 text-white" : "text-zinc-600 hover:bg-zinc-50"}`}
+                    className={`text-[11px] font-semibold px-3 py-1 transition-colors ${avatarMode === "group" ? "bg-linear-to-br from-zinc-700 via-zinc-800 to-zinc-950 text-white" : "text-zinc-600 hover:bg-zinc-50"}`}
                   >Group</button>
                 </div>
               </div>
@@ -160,11 +160,11 @@ export default function CreateMass() {
                 <div className="flex border border-zinc-200 rounded-lg overflow-hidden shadow-sm">
                   <button
                     onClick={() => setScriptMode("single")}
-                    className={`text-[11px] font-semibold px-3 py-1 transition-colors ${scriptMode === "single" ? "bg-zinc-900 text-white" : "text-zinc-600 hover:bg-zinc-50"}`}
+                    className={`text-[11px] font-semibold px-3 py-1 transition-colors ${scriptMode === "single" ? "bg-linear-to-br from-zinc-700 via-zinc-800 to-zinc-950 text-white" : "text-zinc-600 hover:bg-zinc-50"}`}
                   >Single</button>
                   <button
                     onClick={() => setScriptMode("group")}
-                    className={`text-[11px] font-semibold px-3 py-1 transition-colors ${scriptMode === "group" ? "bg-zinc-900 text-white" : "text-zinc-600 hover:bg-zinc-50"}`}
+                    className={`text-[11px] font-semibold px-3 py-1 transition-colors ${scriptMode === "group" ? "bg-linear-to-br from-zinc-700 via-zinc-800 to-zinc-950 text-white" : "text-zinc-600 hover:bg-zinc-50"}`}
                   >Group</button>
                 </div>
               </div>

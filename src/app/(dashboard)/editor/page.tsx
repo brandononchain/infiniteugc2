@@ -27,7 +27,7 @@ export default function Editor() {
           <h3 className="text-sm font-bold text-zinc-900 mb-1">No projects yet</h3>
           <p className="text-xs text-zinc-500 mb-1">Create your first video editing project to combine,</p>
           <p className="text-xs text-zinc-500 mb-6">trim, and enhance your AI-generated videos.</p>
-          <button className="inline-flex items-center gap-2 bg-zinc-900 text-white text-xs font-semibold px-6 py-2.5 rounded-full hover:bg-zinc-800 transition-colors">
+          <button className="inline-flex items-center gap-2 btn-brutal text-xs font-semibold px-6 py-2.5 rounded-full">
             <Plus size={14} weight="bold" />
             Create Your First Project
           </button>
