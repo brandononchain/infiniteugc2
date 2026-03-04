@@ -93,30 +93,38 @@ export default function DashboardLayout({
         `}
       >
         {/* Brand */}
-        <div className="flex items-center gap-2.5 px-4 h-16 border-b border-zinc-100 shrink-0">
-          <Link
-            href="/dashboard"
-            className="flex items-center gap-2.5 min-w-0"
-          >
-            <div className="w-8 h-8 bg-zinc-950 rounded-xl flex items-center justify-center shrink-0">
-              <Infinity size={17} weight="bold" className="text-white" />
-            </div>
-            {!collapsed && (
-              <span className="text-sm font-bold tracking-tight text-zinc-950 truncate">
-                InfiniteUGC
-              </span>
-            )}
-          </Link>
-          <button
-            onClick={() => setCollapsed(!collapsed)}
-            className="ml-auto hidden lg:flex w-6 h-6 items-center justify-center rounded-md hover:bg-zinc-100 transition-colors text-zinc-400 hover:text-zinc-600"
-          >
-            <CaretLeft
-              size={14}
-              weight="bold"
-              className={`transition-transform duration-300 ${collapsed ? "rotate-180" : ""}`}
-            />
-          </button>
+        <div className={`flex items-center h-16 border-b border-zinc-100 shrink-0 ${collapsed ? "justify-center px-0" : "gap-2.5 px-4"}`}>
+          {collapsed ? (
+            <button
+              onClick={() => setCollapsed(false)}
+              className="w-10 h-10 flex items-center justify-center rounded-xl hover:bg-zinc-100 transition-colors group"
+              title="Expand sidebar"
+            >
+              <div className="w-8 h-8 bg-zinc-950 rounded-xl flex items-center justify-center group-hover:scale-105 transition-transform">
+                <Infinity size={17} weight="bold" className="text-white" />
+              </div>
+            </button>
+          ) : (
+            <>
+              <Link
+                href="/dashboard"
+                className="flex items-center gap-2.5 min-w-0"
+              >
+                <div className="w-8 h-8 bg-zinc-950 rounded-xl flex items-center justify-center shrink-0">
+                  <Infinity size={17} weight="bold" className="text-white" />
+                </div>
+                <span className="text-sm font-bold tracking-tight text-zinc-950 truncate">
+                  InfiniteUGC
+                </span>
+              </Link>
+              <button
+                onClick={() => setCollapsed(true)}
+                className="ml-auto hidden lg:flex w-6 h-6 items-center justify-center rounded-md hover:bg-zinc-100 transition-colors text-zinc-400 hover:text-zinc-600"
+              >
+                <CaretLeft size={14} weight="bold" />
+              </button>
+            </>
+          )}
         </div>
 
         {/* Home link */}

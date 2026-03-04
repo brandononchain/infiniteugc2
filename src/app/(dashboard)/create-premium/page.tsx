@@ -7,126 +7,126 @@ import {
   Sparkle,
   Upload,
   Eye,
+  Coin,
 } from "@phosphor-icons/react";
 
 const VIDEO_MODELS = [
-  { name: "VEO3", desc: "Google AI video generation. 50 credits/chunk.", active: true },
-  { name: "Sora 2 Pro", desc: "Next-gen premium video generation. 75 credits/chunk.", active: false },
-  { name: "OmniHuman 1.5", desc: "Film-grade digital human. 40 credits/chunk.", active: false },
+  { name: "VEO3", desc: "Google AI. 50 cr/chunk.", active: true },
+  { name: "Sora 2 Pro", desc: "Premium gen. 75 cr/chunk.", active: false },
+  { name: "OmniHuman 1.5", desc: "Digital human. 40 cr/chunk.", active: false },
 ];
 
 export default function CreatePremium() {
   const [selectedModel, setSelectedModel] = useState("VEO3");
 
   return (
-    <div className="min-h-full bg-zinc-50">
+    <div className="flex flex-col h-full overflow-hidden">
       {/* Header */}
-      <div className="sticky top-0 z-30 bg-white/80 backdrop-blur-xl border-b border-zinc-100">
-        <div className="max-w-4xl mx-auto px-6 lg:px-10 h-16 flex items-center justify-between">
-          <Link href="/dashboard" className="flex items-center gap-2 text-xs font-medium text-zinc-500 hover:text-zinc-700 transition-colors">
-            <ArrowLeft size={14} weight="bold" />
-            Back to Dashboard
-          </Link>
+      <div className="shrink-0 z-30 bg-white/80 backdrop-blur-xl border-b border-zinc-100">
+        <div className="px-6 lg:px-8 h-14 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <Link href="/dashboard" className="flex items-center gap-1.5 text-[11px] font-medium text-zinc-500 hover:text-zinc-700 transition-colors">
+              <ArrowLeft size={12} weight="bold" />
+              Back
+            </Link>
+            <div className="w-px h-5 bg-zinc-200" />
+            <div className="flex items-center gap-2">
+              <Sparkle size={16} weight="duotone" className="text-rose-500" />
+              <h1 className="text-sm font-bold text-zinc-950 tracking-tight">Create Premium</h1>
+            </div>
+          </div>
+          <div className="flex items-center gap-1.5 bg-accent-50 border border-accent-200/40 text-accent-700 text-[11px] font-semibold px-3 py-1 rounded-full">
+            <Coin size={12} weight="fill" />
+            <span className="text-accent-800 font-bold">30</span> credits
+          </div>
         </div>
       </div>
 
-      <div className="max-w-4xl mx-auto px-6 lg:px-10 py-8 space-y-8">
-        {/* Title */}
-        <div>
-          <div className="flex items-center gap-3 mb-1">
-            <Sparkle size={28} weight="duotone" className="text-rose-500" />
-            <h1 className="text-2xl font-bold text-zinc-950 tracking-tight">Create Premium Video</h1>
-          </div>
-          <p className="text-xs text-rose-500 font-semibold ml-10">Your Credits: 30</p>
-        </div>
+      {/* Content: two-column layout */}
+      <div className="flex-1 min-h-0 flex">
+        {/* ─── Left: Form (scrollable) ─── */}
+        <div className="flex-1 overflow-y-auto">
+          <div className="max-w-2xl mx-auto px-6 lg:px-8 py-6 space-y-5">
+            {/* Campaign name */}
+            <div>
+              <label className="text-[11px] font-semibold text-zinc-700 mb-1 block">Campaign name</label>
+              <input
+                type="text"
+                placeholder="e.g., Product Launch, Tutorial Part 1"
+                className="w-full border border-zinc-200 rounded-lg px-3 py-2 text-sm text-zinc-800 placeholder:text-zinc-300 focus:outline-none focus:ring-2 focus:ring-accent-200 focus:border-accent-300 transition-all"
+              />
+            </div>
 
-        {/* Form Card */}
-        <div className="bg-white rounded-2xl border border-zinc-200/60 divide-y divide-zinc-100">
-          {/* Campaign name */}
-          <div className="p-6">
-            <label className="text-xs font-semibold text-zinc-700 mb-1.5 block">Campaign name</label>
-            <input
-              type="text"
-              placeholder="e.g., Product Launch, Tutorial Part 1"
-              className="w-full border border-zinc-200 rounded-xl px-4 py-2.5 text-sm text-zinc-800 placeholder:text-zinc-300 focus:outline-none focus:ring-2 focus:ring-accent-200 focus:border-accent-300 transition-all"
-            />
-            <p className="text-[10px] text-zinc-400 mt-1.5">Shown on your dashboard; optional.</p>
-          </div>
-
-          {/* Starting Keyframe */}
-          <div className="p-6 space-y-3">
-            <div className="flex items-center gap-2">
-              <div className="w-6 h-6 rounded-lg bg-zinc-100 flex items-center justify-center">
-                <Eye size={14} className="text-zinc-500" />
+            {/* Starting Keyframe */}
+            <div className="space-y-2">
+              <div className="flex items-center gap-2">
+                <div className="w-5 h-5 rounded bg-zinc-100 flex items-center justify-center">
+                  <Eye size={12} className="text-zinc-500" />
+                </div>
+                <h2 className="text-xs font-bold text-zinc-950">Starting Keyframe Image</h2>
               </div>
-              <h2 className="text-sm font-bold text-zinc-950">Starting Keyframe Image</h2>
-            </div>
-            <p className="text-xs text-zinc-500">Upload an image to use as the starting visual. All video chunks will maintain continuity from this reference.</p>
-            <div className="border-2 border-dashed border-zinc-200 rounded-xl p-8 flex flex-col items-center justify-center gap-2 hover:border-accent-300 hover:bg-accent-50/30 transition-all cursor-pointer">
-              <Upload size={24} className="text-zinc-300" />
-              <p className="text-xs font-semibold text-accent-600">Click to upload keyframe image</p>
-              <p className="text-[10px] text-zinc-400">PNG, JPG, WebP (max 10MB)</p>
-            </div>
-          </div>
-
-          {/* Visual Instructions */}
-          <div className="p-6 space-y-3">
-            <div className="flex items-center gap-2">
-              <div className="w-6 h-6 rounded-lg bg-zinc-100 flex items-center justify-center">
-                <Eye size={14} className="text-zinc-500" />
+              <div className="border-2 border-dashed border-zinc-200 rounded-lg p-5 flex flex-col items-center justify-center gap-1.5 hover:border-accent-300 hover:bg-accent-50/30 transition-all cursor-pointer">
+                <Upload size={20} className="text-zinc-300" />
+                <p className="text-[11px] font-semibold text-accent-600">Upload keyframe image</p>
+                <p className="text-[10px] text-zinc-400">PNG, JPG, WebP (max 10MB)</p>
               </div>
-              <h2 className="text-sm font-bold text-zinc-950">Visual Instructions</h2>
             </div>
-            <p className="text-xs text-zinc-500">
-              Guide the AI with plain text, or use a JSON object for precise control over: person, setting, lighting, camera, mood, style, background. Applied to every video chunk.
-            </p>
-            <textarea
-              rows={5}
-              placeholder={`Plain text: "warm golden lighting, cozy bedroom, handheld iPhone feel, excited mood"\n\nOr structured JSON:\n{\n  "person": "woman, late 20s, natural makeup",\n  "setting": "cozy bedroom, morning"\n}`}
-              className="w-full border border-zinc-200 rounded-xl px-4 py-3 text-xs text-zinc-800 placeholder:text-zinc-300 font-mono focus:outline-none focus:ring-2 focus:ring-accent-200 focus:border-accent-300 transition-all resize-y"
-            />
-            <p className="text-[10px] text-zinc-400">Optional &mdash; 0/2000 characters. Plain text or JSON object. Applied to all video chunks.</p>
-          </div>
 
-          {/* Video Model */}
-          <div className="p-6 space-y-3">
-            <h2 className="text-sm font-bold text-zinc-950">Video Model</h2>
-            <p className="text-xs text-zinc-500">Choose the AI model for generating your video chunks.</p>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-              {VIDEO_MODELS.map((model) => (
-                <button
-                  key={model.name}
-                  onClick={() => setSelectedModel(model.name)}
-                  className={`text-left border rounded-xl p-4 transition-all ${
-                    selectedModel === model.name
-                      ? "border-accent-300 bg-accent-50/40 ring-1 ring-accent-200"
-                      : "border-zinc-200/60 hover:border-zinc-300"
-                  }`}
-                >
-                  <span className="text-sm font-bold text-zinc-900">{model.name}</span>
-                  <p className="text-[10px] text-zinc-500 mt-0.5 leading-relaxed">{model.desc}</p>
-                </button>
-              ))}
+            {/* Visual Instructions */}
+            <div className="space-y-2">
+              <div className="flex items-center gap-2">
+                <div className="w-5 h-5 rounded bg-zinc-100 flex items-center justify-center">
+                  <Eye size={12} className="text-zinc-500" />
+                </div>
+                <h2 className="text-xs font-bold text-zinc-950">Visual Instructions</h2>
+              </div>
+              <textarea
+                rows={3}
+                placeholder={`"warm golden lighting, cozy bedroom, handheld iPhone feel"`}
+                className="w-full border border-zinc-200 rounded-lg px-3 py-2 text-xs text-zinc-800 placeholder:text-zinc-300 font-mono focus:outline-none focus:ring-2 focus:ring-accent-200 focus:border-accent-300 transition-all resize-none"
+              />
+              <p className="text-[10px] text-zinc-400">Optional. Plain text or JSON. Applied to all chunks.</p>
+            </div>
+
+            {/* Video Model */}
+            <div className="space-y-2">
+              <h2 className="text-xs font-bold text-zinc-950">Video Model</h2>
+              <div className="grid grid-cols-3 gap-2">
+                {VIDEO_MODELS.map((model) => (
+                  <button
+                    key={model.name}
+                    onClick={() => setSelectedModel(model.name)}
+                    className={`text-left border rounded-lg p-3 transition-all ${
+                      selectedModel === model.name
+                        ? "border-accent-300 bg-accent-50/40 ring-1 ring-accent-200"
+                        : "border-zinc-200/60 hover:border-zinc-300"
+                    }`}
+                  >
+                    <span className="text-xs font-bold text-zinc-900">{model.name}</span>
+                    <p className="text-[10px] text-zinc-500 mt-0.5 leading-snug">{model.desc}</p>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Script Content */}
+            <div className="space-y-2">
+              <h2 className="text-xs font-bold text-zinc-950">Script Content</h2>
+              <textarea
+                rows={5}
+                placeholder="Enter your video script here..."
+                className="w-full border border-zinc-200 rounded-lg px-3 py-2 text-sm text-zinc-800 placeholder:text-zinc-300 focus:outline-none focus:ring-2 focus:ring-accent-200 focus:border-accent-300 transition-all resize-none"
+              />
+            </div>
+
+            {/* Generate */}
+            <div className="flex justify-end pt-2">
+              <button className="btn-ice flex items-center gap-2 text-xs font-semibold px-6 py-2.5 rounded-full shadow-lg">
+                <Sparkle size={14} weight="fill" />
+                Generate Premium Video
+              </button>
             </div>
           </div>
-
-          {/* Script Content */}
-          <div className="p-6 space-y-3">
-            <h2 className="text-sm font-bold text-zinc-950">Script Content</h2>
-            <textarea
-              rows={8}
-              placeholder="Enter your video script here... AI will analyze your script and determine the optimal number of video chunks."
-              className="w-full border border-zinc-200 rounded-xl px-4 py-3 text-sm text-zinc-800 placeholder:text-zinc-300 focus:outline-none focus:ring-2 focus:ring-accent-200 focus:border-accent-300 transition-all resize-y"
-            />
-          </div>
-        </div>
-
-        {/* Generate Button */}
-        <div className="flex justify-end">
-          <button className="btn-ice flex items-center gap-2 text-sm font-semibold px-8 py-3 rounded-full shadow-lg">
-            <Sparkle size={16} weight="fill" />
-            Generate Premium Video
-          </button>
         </div>
       </div>
     </div>
