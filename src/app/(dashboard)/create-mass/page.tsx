@@ -31,7 +31,7 @@ export default function CreateMass() {
             </div>
             <div>
               <h1 className="text-sm font-bold text-zinc-950 tracking-tight">Create Mass</h1>
-              <p className="text-[10px] text-zinc-400">Batch AI videos with captions & overlays</p>
+              <p className="text-[10px] text-zinc-500">Batch AI videos with captions & overlays</p>
             </div>
           </div>
           <div className="flex items-center gap-2">
@@ -109,20 +109,20 @@ export default function CreateMass() {
                   <input
                     type="text"
                     placeholder="e.g., Product Launch Video"
-                    className="w-full border border-zinc-200 rounded-lg px-3 py-2 text-sm text-zinc-800 placeholder:text-zinc-300 focus:outline-none focus:ring-2 focus:ring-accent-200 focus:border-accent-300 transition-all"
+                    className="w-full brutal-input bg-white px-3 py-2 text-sm text-zinc-900 placeholder:text-zinc-400 transition-all"
                   />
                 </div>
                 <div>
                   <label className="text-[11px] font-semibold text-zinc-700 mb-1 block">Video engine</label>
-                  <button className="w-full flex items-center justify-between border border-zinc-200 rounded-lg px-3 py-2 text-sm text-zinc-800 hover:border-zinc-300 transition-colors">
+                  <button className="w-full flex items-center justify-between brutal-select bg-white px-3 py-2 text-sm text-zinc-900">
                     <span>Hedra Avatar</span>
-                    <CaretDown size={14} className="text-zinc-400" />
+                    <CaretDown size={14} className="text-zinc-500" />
                   </button>
                 </div>
               </div>
             </section>
 
-            <div className="border-t border-zinc-100" />
+            <div className="border-t border-zinc-300" />
 
             {/* Step 2: Select Avatar */}
             <section className="space-y-3">
@@ -131,24 +131,24 @@ export default function CreateMass() {
                   <div className="w-6 h-6 rounded-full bg-accent-500 text-white flex items-center justify-center text-[10px] font-bold">2</div>
                   <h2 className="text-sm font-bold text-zinc-950">Select Avatar</h2>
                 </div>
-                <div className="flex border border-zinc-200 rounded-lg overflow-hidden">
+                <div className="flex border-2 border-zinc-900 rounded-lg overflow-hidden">
                   <button
                     onClick={() => setAvatarMode("single")}
-                    className={`text-[11px] font-semibold px-3 py-1 transition-colors ${avatarMode === "single" ? "bg-zinc-900 text-white" : "text-zinc-500 hover:bg-zinc-50"}`}
+                    className={`text-[11px] font-semibold px-3 py-1 transition-colors ${avatarMode === "single" ? "bg-zinc-900 text-white" : "text-zinc-600 hover:bg-zinc-100"}`}
                   >Single</button>
                   <button
                     onClick={() => setAvatarMode("group")}
-                    className={`text-[11px] font-semibold px-3 py-1 transition-colors ${avatarMode === "group" ? "bg-zinc-900 text-white" : "text-zinc-500 hover:bg-zinc-50"}`}
+                    className={`text-[11px] font-semibold px-3 py-1 transition-colors ${avatarMode === "group" ? "bg-zinc-900 text-white" : "text-zinc-600 hover:bg-zinc-100"}`}
                   >Group</button>
                 </div>
               </div>
-              <div className="bg-amber-50/60 border border-amber-200/40 rounded-lg p-3 flex items-start gap-2.5">
-                <Info size={14} className="text-amber-500 mt-0.5 shrink-0" />
-                <p className="text-[11px] text-zinc-600">No avatars yet. <a href="/avatars" className="text-accent-600 font-semibold hover:underline">Create an avatar</a></p>
+              <div className="brutal-info p-3 flex items-start gap-2.5">
+                <Info size={14} className="text-amber-600 mt-0.5 shrink-0" />
+                <p className="text-[11px] text-zinc-700 font-medium">No avatars yet. <a href="/avatars" className="text-accent-600 font-semibold hover:underline">Create an avatar</a></p>
               </div>
             </section>
 
-            <div className="border-t border-zinc-100" />
+            <div className="border-t border-zinc-300" />
 
             {/* Step 3: Select Script */}
             <section className="space-y-3">
@@ -157,37 +157,37 @@ export default function CreateMass() {
                   <div className="w-6 h-6 rounded-full bg-accent-500 text-white flex items-center justify-center text-[10px] font-bold">3</div>
                   <h2 className="text-sm font-bold text-zinc-950">Select Script</h2>
                 </div>
-                <div className="flex border border-zinc-200 rounded-lg overflow-hidden">
+                <div className="flex border-2 border-zinc-900 rounded-lg overflow-hidden">
                   <button
                     onClick={() => setScriptMode("single")}
-                    className={`text-[11px] font-semibold px-3 py-1 transition-colors ${scriptMode === "single" ? "bg-zinc-900 text-white" : "text-zinc-500 hover:bg-zinc-50"}`}
+                    className={`text-[11px] font-semibold px-3 py-1 transition-colors ${scriptMode === "single" ? "bg-zinc-900 text-white" : "text-zinc-600 hover:bg-zinc-100"}`}
                   >Single</button>
                   <button
                     onClick={() => setScriptMode("group")}
-                    className={`text-[11px] font-semibold px-3 py-1 transition-colors ${scriptMode === "group" ? "bg-zinc-900 text-white" : "text-zinc-500 hover:bg-zinc-50"}`}
+                    className={`text-[11px] font-semibold px-3 py-1 transition-colors ${scriptMode === "group" ? "bg-zinc-900 text-white" : "text-zinc-600 hover:bg-zinc-100"}`}
                   >Group</button>
                 </div>
               </div>
               {scriptMode === "group" ? (
                 <div>
                   <label className="text-[11px] font-semibold text-zinc-700 mb-1 block">Script Group</label>
-                  <button className="w-full flex items-center gap-2 border border-zinc-200 rounded-lg px-3 py-2 text-sm text-zinc-400 hover:border-zinc-300 transition-colors">
-                    <FolderOpen size={14} className="text-zinc-300" />
+                  <button className="w-full flex items-center gap-2 brutal-select bg-white px-3 py-2 text-sm text-zinc-500">
+                    <FolderOpen size={14} className="text-zinc-400" />
                     Select a script group
-                    <CaretDown size={14} className="text-zinc-300 ml-auto" />
+                    <CaretDown size={14} className="text-zinc-400 ml-auto" />
                   </button>
                 </div>
               ) : (
-                <div className="bg-amber-50/60 border border-amber-200/40 rounded-lg p-3 flex items-start gap-2.5">
-                  <Info size={14} className="text-amber-500 mt-0.5 shrink-0" />
-                  <p className="text-[11px] text-zinc-600">
+                <div className="brutal-info p-3 flex items-start gap-2.5">
+                  <Info size={14} className="text-amber-600 mt-0.5 shrink-0" />
+                  <p className="text-[11px] text-zinc-700 font-medium">
                     No scripts found. <a href="/scripts" className="text-accent-600 font-semibold hover:underline">Write a script</a> or <a href="/scripts" className="text-accent-600 font-semibold hover:underline">manage scripts</a>
                   </p>
                 </div>
               )}
             </section>
 
-            <div className="border-t border-zinc-100" />
+            <div className="border-t border-zinc-300" />
 
             {/* Step 4: Customization */}
             <section className="space-y-3">
@@ -196,16 +196,16 @@ export default function CreateMass() {
                 <h2 className="text-sm font-bold text-zinc-950">Customization</h2>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                <div className="bg-white border border-zinc-200 rounded-lg p-3 brutal-card">
+                <div className="bg-white rounded-lg p-3 brutal-card">
                   <div className="flex items-center justify-between mb-0.5">
                     <span className="text-xs font-semibold text-zinc-900">Auto-Captions</span>
-                    <button onClick={() => setCaptionsEnabled(!captionsEnabled)} className="flex items-center gap-1 text-[10px] font-medium text-zinc-500">
-                      {captionsEnabled ? <ToggleRight size={20} weight="fill" className="text-accent-500" /> : <ToggleLeft size={20} className="text-zinc-300" />}
+                    <button onClick={() => setCaptionsEnabled(!captionsEnabled)} className="flex items-center gap-1 text-[10px] font-medium text-zinc-600">
+                      {captionsEnabled ? <ToggleRight size={20} weight="fill" className="text-accent-500" /> : <ToggleLeft size={20} className="text-zinc-400" />}
                     </button>
                   </div>
-                  <p className="text-[10px] text-zinc-400">TikTok-style synced captions</p>
+                  <p className="text-[10px] text-zinc-500">TikTok-style synced captions</p>
                 </div>
-                <div className="bg-white border border-zinc-200 rounded-lg p-3 brutal-card">
+                <div className="bg-white rounded-lg p-3 brutal-card">
                   <div className="flex items-center justify-between mb-0.5">
                     <span className="text-xs font-semibold text-zinc-900">Text overlays</span>
                     <button className="flex items-center gap-1 text-[10px] font-semibold text-zinc-700 bg-zinc-100 px-2 py-1 rounded hover:bg-zinc-200/70 transition-colors">
@@ -213,14 +213,14 @@ export default function CreateMass() {
                       Add
                     </button>
                   </div>
-                  <p className="text-[10px] text-zinc-400">No overlays yet</p>
+                  <p className="text-[10px] text-zinc-500">No overlays yet</p>
                 </div>
               </div>
-              <div className="bg-white border border-zinc-200 rounded-lg p-3">
+              <div className="bg-white rounded-lg p-3 brutal-card">
                 <div className="flex items-center justify-between">
                   <div>
                     <span className="text-xs font-semibold text-zinc-900">Reply Comment</span>
-                    <p className="text-[10px] text-zinc-400">TikTok style pinned reply</p>
+                    <p className="text-[10px] text-zinc-500">TikTok style pinned reply</p>
                   </div>
                   <button onClick={() => setReplyEnabled(!replyEnabled)} className="flex items-center gap-1 text-[10px] font-medium text-zinc-500">
                     {replyEnabled ? <ToggleRight size={20} weight="fill" className="text-accent-500" /> : <ToggleLeft size={20} className="text-zinc-300" />}

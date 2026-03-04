@@ -54,11 +54,11 @@ export default function ScriptGeneration() {
             </div>
             <div>
               <h1 className="text-lg font-bold text-zinc-950 tracking-tight">Script Generation</h1>
-              <p className="text-xs text-zinc-400">AI-powered video scripts in seconds</p>
+              <p className="text-xs text-zinc-500">AI-powered video scripts in seconds</p>
             </div>
           </div>
           <div className="flex items-center gap-2">
-            <span className="text-xs font-semibold text-zinc-500 border border-zinc-200 px-3.5 py-1.5 rounded-full">
+            <span className="text-xs font-semibold text-zinc-600 border-2 border-zinc-900 px-3.5 py-1.5 rounded-full shadow-[2px_2px_0_#18181b]">
               5 credits per script
             </span>
           </div>
@@ -69,7 +69,7 @@ export default function ScriptGeneration() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* ─── Left: Input Form ─── */}
           <div className="space-y-5">
-            <div className="bg-white rounded-xl border border-zinc-200 p-6 brutal-card">
+            <div className="bg-white rounded-xl p-6 brutal-card">
               <h2 className="text-sm font-bold text-zinc-950 mb-4">Script Parameters</h2>
 
               {/* Product/Service */}
@@ -80,7 +80,7 @@ export default function ScriptGeneration() {
                   value={product}
                   onChange={(e) => setProduct(e.target.value)}
                   placeholder="e.g., AI video generation tool for marketers"
-                  className="w-full border border-zinc-200 rounded-lg px-3 py-2.5 text-sm text-zinc-800 placeholder:text-zinc-300 focus:outline-none focus:ring-2 focus:ring-accent-200 focus:border-accent-300 transition-all"
+                  className="w-full brutal-input bg-white px-3 py-2.5 text-sm text-zinc-900 placeholder:text-zinc-400 transition-all"
                 />
               </div>
 
@@ -92,10 +92,10 @@ export default function ScriptGeneration() {
                     <button
                       key={t}
                       onClick={() => setTone(t)}
-                      className={`text-xs font-medium px-3 py-1.5 rounded-lg border transition-all ${
+                      className={`text-xs font-medium px-3 py-1.5 rounded-lg transition-all ${
                         tone === t
-                          ? "bg-zinc-900 text-white border-zinc-900"
-                          : "bg-white text-zinc-500 border-zinc-200 hover:border-zinc-300"
+                          ? "brutal-pill-active"
+                          : "brutal-pill"
                       }`}
                     >
                       {t}
@@ -112,10 +112,10 @@ export default function ScriptGeneration() {
                     <button
                       key={f}
                       onClick={() => setFormat(f)}
-                      className={`text-xs font-medium px-3 py-1.5 rounded-lg border transition-all ${
+                      className={`text-xs font-medium px-3 py-1.5 rounded-lg transition-all ${
                         format === f
-                          ? "bg-zinc-900 text-white border-zinc-900"
-                          : "bg-white text-zinc-500 border-zinc-200 hover:border-zinc-300"
+                          ? "brutal-pill-active"
+                          : "brutal-pill"
                       }`}
                     >
                       {f}
@@ -132,10 +132,10 @@ export default function ScriptGeneration() {
                     <button
                       key={d}
                       onClick={() => setDuration(d)}
-                      className={`text-xs font-semibold px-4 py-2 rounded-lg border transition-all ${
+                      className={`text-xs font-semibold px-4 py-2 rounded-lg transition-all ${
                         duration === d
-                          ? "bg-zinc-900 text-white border-zinc-900"
-                          : "bg-white text-zinc-500 border-zinc-200 hover:border-zinc-300"
+                          ? "brutal-pill-active"
+                          : "brutal-pill"
                       }`}
                     >
                       {d}s
@@ -152,7 +152,7 @@ export default function ScriptGeneration() {
                   onChange={(e) => setExtra(e.target.value)}
                   rows={3}
                   placeholder="e.g., Include a question hook, mention free trial, target Gen Z audience"
-                  className="w-full border border-zinc-200 rounded-lg px-3 py-2.5 text-sm text-zinc-800 placeholder:text-zinc-300 focus:outline-none focus:ring-2 focus:ring-accent-200 focus:border-accent-300 transition-all resize-none"
+                  className="w-full brutal-input bg-white px-3 py-2.5 text-sm text-zinc-900 placeholder:text-zinc-400 transition-all resize-none"
                 />
               </div>
 
@@ -170,20 +170,20 @@ export default function ScriptGeneration() {
           {/* ─── Right: Output ─── */}
           <div className="space-y-5">
             {generated ? (
-              <div className="bg-white rounded-xl border border-zinc-200 p-6 brutal-card">
+              <div className="bg-white rounded-xl p-6 brutal-card">
                 <div className="flex items-center justify-between mb-4">
                   <h2 className="text-sm font-bold text-zinc-950">Generated Script</h2>
                   <div className="flex items-center gap-2">
                     <button
                       onClick={() => setGenerated(true)}
-                      className="flex items-center gap-1.5 text-[11px] font-semibold text-zinc-500 border border-zinc-200 px-3 py-1.5 rounded-lg hover:bg-zinc-50 transition-colors"
+                      className="flex items-center gap-1.5 text-[11px] font-semibold text-zinc-600 border-2 border-zinc-900 px-3 py-1.5 rounded-lg shadow-[2px_2px_0_#18181b] hover:shadow-[3px_3px_0_#18181b] hover:-translate-y-px transition-all"
                     >
                       <ArrowClockwise size={12} weight="bold" />
                       Regenerate
                     </button>
                     <button
                       onClick={handleCopy}
-                      className="flex items-center gap-1.5 text-[11px] font-semibold text-zinc-500 border border-zinc-200 px-3 py-1.5 rounded-lg hover:bg-zinc-50 transition-colors"
+                      className="flex items-center gap-1.5 text-[11px] font-semibold text-zinc-600 border-2 border-zinc-900 px-3 py-1.5 rounded-lg shadow-[2px_2px_0_#18181b] hover:shadow-[3px_3px_0_#18181b] hover:-translate-y-px transition-all"
                     >
                       {copied ? <Check size={12} weight="bold" className="text-emerald-500" /> : <Copy size={12} weight="bold" />}
                       {copied ? "Copied" : "Copy"}
@@ -192,39 +192,39 @@ export default function ScriptGeneration() {
                 </div>
 
                 {/* Script output */}
-                <div className="bg-zinc-50 border border-zinc-200 rounded-lg p-4 mb-4">
+                <div className="bg-zinc-50 border-2 border-zinc-900 rounded-lg p-4 mb-4 shadow-[3px_3px_0_#18181b]">
                   <pre className="text-xs text-zinc-700 font-mono whitespace-pre-wrap leading-relaxed">
                     {SAMPLE_SCRIPT}
                   </pre>
                 </div>
 
                 {/* Meta info */}
-                <div className="flex items-center gap-4 text-[11px] text-zinc-400">
+                <div className="flex items-center gap-4 text-[11px] text-zinc-500">
                   <span>Tone: <strong className="text-zinc-600">{tone}</strong></span>
                   <span>Format: <strong className="text-zinc-600">{format}</strong></span>
                   <span>Duration: <strong className="text-zinc-600">{duration}s</strong></span>
                 </div>
 
                 {/* Actions */}
-                <div className="flex items-center gap-3 mt-5 pt-4 border-t border-zinc-100">
-                  <button className="flex items-center gap-2 text-xs font-semibold text-white bg-zinc-900 px-5 py-2.5 rounded-xl hover:bg-zinc-800 transition-colors">
+                <div className="flex items-center gap-3 mt-5 pt-4 border-t border-zinc-300">
+                  <button className="flex items-center gap-2 text-xs font-semibold text-white bg-zinc-900 px-5 py-2.5 rounded-xl border-2 border-zinc-900 shadow-[3px_3px_0_#18181b] hover:shadow-[4px_4px_0_#18181b] hover:-translate-y-px transition-all">
                     <Plus size={14} weight="bold" />
                     Save to Scripts
                   </button>
-                  <button className="flex items-center gap-2 text-xs font-semibold text-zinc-600 border border-zinc-200 px-5 py-2.5 rounded-xl hover:bg-zinc-50 transition-colors">
+                  <button className="flex items-center gap-2 text-xs font-semibold text-zinc-700 border-2 border-zinc-900 px-5 py-2.5 rounded-xl shadow-[3px_3px_0_#18181b] hover:shadow-[4px_4px_0_#18181b] hover:-translate-y-px transition-all">
                     <FileText size={14} weight="bold" />
                     Use in Campaign
                   </button>
                 </div>
               </div>
             ) : (
-              <div className="bg-white rounded-xl border border-zinc-200 p-16 text-center brutal-empty">
-                <div className="w-14 h-14 rounded-xl bg-zinc-50 border border-zinc-200 flex items-center justify-center mx-auto mb-4">
+              <div className="bg-white rounded-xl p-16 text-center brutal-empty">
+                <div className="w-14 h-14 rounded-xl bg-zinc-50 border-2 border-zinc-900 flex items-center justify-center mx-auto mb-4 shadow-[3px_3px_0_#18181b]">
                   <FileText size={24} weight="duotone" className="text-zinc-300" />
                 </div>
                 <h3 className="text-sm font-bold text-zinc-900 mb-1">No script generated yet</h3>
-                <p className="text-xs text-zinc-400 mb-1">Fill in the parameters and click Generate</p>
-                <p className="text-xs text-zinc-400">to create an AI-powered video script.</p>
+                <p className="text-xs text-zinc-500 mb-1">Fill in the parameters and click Generate</p>
+                <p className="text-xs text-zinc-500">to create an AI-powered video script.</p>
               </div>
             )}
           </div>

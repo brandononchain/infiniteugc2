@@ -35,7 +35,7 @@ export default function CreatePremium() {
               <h1 className="text-sm font-bold text-zinc-950 tracking-tight">Create Premium</h1>
             </div>
           </div>
-          <div className="flex items-center gap-1.5 bg-accent-50 border border-accent-200/40 text-accent-700 text-[11px] font-semibold px-3 py-1 rounded-full">
+          <div className="flex items-center gap-1.5 bg-accent-50 border-2 border-accent-300 text-accent-700 text-[11px] font-semibold px-3 py-1 rounded-full">
             <Coin size={12} weight="fill" />
             <span className="text-accent-800 font-bold">30</span> credits
           </div>
@@ -53,7 +53,7 @@ export default function CreatePremium() {
               <input
                 type="text"
                 placeholder="e.g., Product Launch, Tutorial Part 1"
-                className="w-full border border-zinc-200 rounded-lg px-3 py-2 text-sm text-zinc-800 placeholder:text-zinc-300 focus:outline-none focus:ring-2 focus:ring-accent-200 focus:border-accent-300 transition-all"
+                className="w-full brutal-input bg-white px-3 py-2 text-sm text-zinc-900 placeholder:text-zinc-400 transition-all"
               />
             </div>
 
@@ -65,10 +65,10 @@ export default function CreatePremium() {
                 </div>
                 <h2 className="text-xs font-bold text-zinc-950">Starting Keyframe Image</h2>
               </div>
-              <div className="border-2 border-dashed border-zinc-200 rounded-lg p-5 flex flex-col items-center justify-center gap-1.5 hover:border-accent-300 hover:bg-accent-50/30 transition-all cursor-pointer">
-                <Upload size={20} className="text-zinc-300" />
+              <div className="brutal-empty p-5 flex flex-col items-center justify-center gap-1.5 hover:border-accent-300 hover:bg-accent-50/30 transition-all cursor-pointer">
+                <Upload size={20} className="text-zinc-400" />
                 <p className="text-[11px] font-semibold text-accent-600">Upload keyframe image</p>
-                <p className="text-[10px] text-zinc-400">PNG, JPG, WebP (max 10MB)</p>
+                <p className="text-[10px] text-zinc-500">PNG, JPG, WebP (max 10MB)</p>
               </div>
             </div>
 
@@ -83,9 +83,9 @@ export default function CreatePremium() {
               <textarea
                 rows={3}
                 placeholder={`"warm golden lighting, cozy bedroom, handheld iPhone feel"`}
-                className="w-full border border-zinc-200 rounded-lg px-3 py-2 text-xs text-zinc-800 placeholder:text-zinc-300 font-mono focus:outline-none focus:ring-2 focus:ring-accent-200 focus:border-accent-300 transition-all resize-none"
+                className="w-full brutal-input bg-white px-3 py-2 text-xs text-zinc-900 placeholder:text-zinc-400 font-mono transition-all resize-none"
               />
-              <p className="text-[10px] text-zinc-400">Optional. Plain text or JSON. Applied to all chunks.</p>
+              <p className="text-[10px] text-zinc-500">Optional. Plain text or JSON. Applied to all chunks.</p>
             </div>
 
             {/* Video Model */}
@@ -96,10 +96,10 @@ export default function CreatePremium() {
                   <button
                     key={model.name}
                     onClick={() => setSelectedModel(model.name)}
-                    className={`text-left border rounded-lg p-3 transition-all ${
+                    className={`text-left rounded-lg p-3 transition-all brutal-card ${
                       selectedModel === model.name
-                        ? "border-accent-300 bg-accent-50/40 ring-1 ring-accent-200 brutal-card"
-                        : "border-zinc-200 hover:border-zinc-300 brutal-card"
+                        ? "!border-accent-400 bg-accent-50/40 ring-1 ring-accent-200"
+                        : "hover:border-zinc-400"
                     }`}
                   >
                     <span className="text-xs font-bold text-zinc-900">{model.name}</span>
@@ -115,7 +115,7 @@ export default function CreatePremium() {
               <textarea
                 rows={5}
                 placeholder="Enter your video script here..."
-                className="w-full border border-zinc-200 rounded-lg px-3 py-2 text-sm text-zinc-800 placeholder:text-zinc-300 focus:outline-none focus:ring-2 focus:ring-accent-200 focus:border-accent-300 transition-all resize-none"
+                className="w-full brutal-input bg-white px-3 py-2 text-sm text-zinc-900 placeholder:text-zinc-400 transition-all resize-none"
               />
             </div>
 

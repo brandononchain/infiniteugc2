@@ -37,14 +37,14 @@ export default function Settings() {
         <div className="max-w-4xl mx-auto px-6 lg:px-10 h-16 flex items-center">
           <div>
             <h1 className="text-lg font-bold text-zinc-950 tracking-tight">Settings</h1>
-            <p className="text-xs text-zinc-400">Manage your account and preferences</p>
+            <p className="text-xs text-zinc-500">Manage your account and preferences</p>
           </div>
         </div>
       </div>
 
       <div className="max-w-4xl mx-auto px-6 lg:px-10 py-8">
         {/* Tabs */}
-        <div className="flex gap-1 bg-zinc-50 rounded-xl p-1 mb-8 w-fit">
+        <div className="flex gap-1 bg-zinc-50 border-2 border-zinc-900 rounded-xl p-1 mb-8 w-fit shadow-[3px_3px_0_#18181b]">
           {tabs.map((tab) => {
             const Icon = tab.icon;
             return (
@@ -68,7 +68,7 @@ export default function Settings() {
         {activeTab === "account" && (
           <div className="space-y-6">
             {/* Profile */}
-            <div className="bg-white rounded-xl border border-zinc-200 p-6 brutal-card">
+            <div className="bg-white rounded-xl p-6 brutal-card">
               <h3 className="text-sm font-bold text-zinc-900 mb-4">Profile</h3>
               <div className="flex items-center gap-4 mb-6">
                 <div className="w-16 h-16 rounded-2xl bg-linear-to-br from-sky-400 to-blue-500 flex items-center justify-center text-white text-xl font-bold">
@@ -76,7 +76,7 @@ export default function Settings() {
                 </div>
                 <div>
                   <p className="text-sm font-semibold text-zinc-900">Brandon Chen</p>
-                  <p className="text-xs text-zinc-400">brandon@infiniteugc.com</p>
+                  <p className="text-xs text-zinc-500">brandon@infiniteugc.com</p>
                 </div>
               </div>
               <div className="grid grid-cols-2 gap-4">
@@ -85,7 +85,7 @@ export default function Settings() {
                   <input
                     type="text"
                     defaultValue="Brandon Chen"
-                    className="w-full px-3 py-2 text-sm bg-zinc-50 border border-zinc-200/60 rounded-xl focus:outline-none focus:ring-2 focus:ring-sky-500/20 focus:border-sky-400 transition-all"
+                    className="w-full brutal-input bg-white px-3 py-2 text-sm transition-all"
                   />
                 </div>
                 <div>
@@ -93,19 +93,19 @@ export default function Settings() {
                   <input
                     type="email"
                     defaultValue="brandon@infiniteugc.com"
-                    className="w-full px-3 py-2 text-sm bg-zinc-50 border border-zinc-200/60 rounded-xl focus:outline-none focus:ring-2 focus:ring-sky-500/20 focus:border-sky-400 transition-all"
+                    className="w-full brutal-input bg-white px-3 py-2 text-sm transition-all"
                   />
                 </div>
               </div>
               <div className="mt-4 flex justify-end">
-                <button className="text-xs font-semibold text-white bg-zinc-900 px-5 py-2 rounded-full hover:bg-zinc-800 transition-colors">
+                <button className="text-xs font-semibold text-white bg-zinc-900 px-5 py-2 rounded-full border-2 border-zinc-900 shadow-[3px_3px_0_#18181b] hover:shadow-[4px_4px_0_#18181b] hover:-translate-y-px transition-all">
                   Save Changes
                 </button>
               </div>
             </div>
 
             {/* Password */}
-            <div className="bg-white rounded-xl border border-zinc-200 p-6 brutal-card">
+            <div className="bg-white rounded-xl p-6 brutal-card">
               <h3 className="text-sm font-bold text-zinc-900 mb-4">Password</h3>
               <div className="grid grid-cols-2 gap-4">
                 <div>
@@ -113,7 +113,7 @@ export default function Settings() {
                   <input
                     type="password"
                     placeholder="Enter current password"
-                    className="w-full px-3 py-2 text-sm bg-zinc-50 border border-zinc-200/60 rounded-xl focus:outline-none focus:ring-2 focus:ring-sky-500/20 focus:border-sky-400 transition-all"
+                    className="w-full brutal-input bg-white px-3 py-2 text-sm transition-all"
                   />
                 </div>
                 <div>
@@ -121,22 +121,22 @@ export default function Settings() {
                   <input
                     type="password"
                     placeholder="Enter new password"
-                    className="w-full px-3 py-2 text-sm bg-zinc-50 border border-zinc-200/60 rounded-xl focus:outline-none focus:ring-2 focus:ring-sky-500/20 focus:border-sky-400 transition-all"
+                    className="w-full brutal-input bg-white px-3 py-2 text-sm transition-all"
                   />
                 </div>
               </div>
               <div className="mt-4 flex justify-end">
-                <button className="text-xs font-semibold text-white bg-zinc-900 px-5 py-2 rounded-full hover:bg-zinc-800 transition-colors">
+                <button className="text-xs font-semibold text-white bg-zinc-900 px-5 py-2 rounded-full border-2 border-zinc-900 shadow-[3px_3px_0_#18181b] hover:shadow-[4px_4px_0_#18181b] hover:-translate-y-px transition-all">
                   Update Password
                 </button>
               </div>
             </div>
 
             {/* Danger Zone */}
-            <div className="bg-white rounded-xl border border-red-200 p-6 brutal-card">
+            <div className="bg-white rounded-xl border-2 border-red-300 p-6 shadow-[4px_4px_0_#991b1b] rounded-xl">
               <h3 className="text-sm font-bold text-red-600 mb-1">Danger Zone</h3>
-              <p className="text-xs text-zinc-400 mb-4">Permanently delete your account and all associated data.</p>
-              <button className="text-xs font-semibold text-red-600 border border-red-200 px-5 py-2 rounded-full hover:bg-red-50 transition-colors">
+              <p className="text-xs text-zinc-500 mb-4">Permanently delete your account and all associated data.</p>
+              <button className="text-xs font-semibold text-red-600 border-2 border-red-400 px-5 py-2 rounded-full shadow-[3px_3px_0_#991b1b] hover:shadow-[4px_4px_0_#991b1b] hover:-translate-y-px transition-all">
                 Delete Account
               </button>
             </div>
@@ -146,36 +146,36 @@ export default function Settings() {
         {/* API Keys Tab */}
         {activeTab === "api" && (
           <div className="space-y-6">
-            <div className="bg-white rounded-xl border border-zinc-200 p-6 brutal-card">
+            <div className="bg-white rounded-xl p-6 brutal-card">
               <h3 className="text-sm font-bold text-zinc-900 mb-1">API Key</h3>
-              <p className="text-xs text-zinc-400 mb-4">Use this key to authenticate API requests.</p>
-              <div className="flex items-center gap-3 bg-zinc-50 rounded-xl px-4 py-3 border border-zinc-200/60">
+              <p className="text-xs text-zinc-500 mb-4">Use this key to authenticate API requests.</p>
+              <div className="flex items-center gap-3 bg-zinc-50 rounded-xl px-4 py-3 border-2 border-zinc-900 shadow-[3px_3px_0_#18181b]">
                 <code className="flex-1 text-xs text-zinc-600 font-mono">
                   {showKey ? "sk-inf-a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6" : "sk-inf-••••••••••••••••••••••••••••••"}
                 </code>
                 <button
                   onClick={() => setShowKey(!showKey)}
-                  className="text-zinc-400 hover:text-zinc-600 transition-colors"
+                  className="text-zinc-500 hover:text-zinc-700 transition-colors"
                 >
                   {showKey ? <EyeSlash size={16} /> : <Eye size={16} />}
                 </button>
                 <button
                   onClick={handleCopy}
-                  className="text-zinc-400 hover:text-zinc-600 transition-colors"
+                  className="text-zinc-500 hover:text-zinc-700 transition-colors"
                 >
                   {copied ? <Check size={16} className="text-emerald-500" /> : <Copy size={16} />}
                 </button>
               </div>
-              <div className="mt-4 flex items-start gap-2 text-xs text-amber-600 bg-amber-50 rounded-xl p-3">
+              <div className="mt-4 brutal-info flex items-start gap-2 text-xs text-amber-700 p-3">
                 <Info size={14} className="mt-0.5 shrink-0" />
                 <span>Keep your API key secret. Do not share it or expose it in client-side code.</span>
               </div>
             </div>
 
-            <div className="bg-white rounded-xl border border-zinc-200 p-6 brutal-card">
+            <div className="bg-white rounded-xl p-6 brutal-card">
               <h3 className="text-sm font-bold text-zinc-900 mb-1">Regenerate Key</h3>
-              <p className="text-xs text-zinc-400 mb-4">Generate a new key. This will invalidate your current key immediately.</p>
-              <button className="text-xs font-semibold text-white bg-zinc-900 px-5 py-2 rounded-full hover:bg-zinc-800 transition-colors">
+              <p className="text-xs text-zinc-500 mb-4">Generate a new key. This will invalidate your current key immediately.</p>
+              <button className="text-xs font-semibold text-white bg-zinc-900 px-5 py-2 rounded-full border-2 border-zinc-900 shadow-[3px_3px_0_#18181b] hover:shadow-[4px_4px_0_#18181b] hover:-translate-y-px transition-all">
                 Regenerate API Key
               </button>
             </div>
@@ -186,54 +186,54 @@ export default function Settings() {
         {activeTab === "billing" && (
           <div className="space-y-6">
             {/* Current Plan */}
-            <div className="bg-white rounded-xl border border-zinc-200 p-6 brutal-card">
+            <div className="bg-white rounded-xl p-6 brutal-card">
               <div className="flex items-center justify-between mb-4">
                 <div>
                   <h3 className="text-sm font-bold text-zinc-900">Current Plan</h3>
-                  <p className="text-xs text-zinc-400">Manage your subscription</p>
+                  <p className="text-xs text-zinc-500">Manage your subscription</p>
                 </div>
-                <span className="text-[10px] font-bold text-sky-600 bg-sky-50 px-3 py-1 rounded-full uppercase tracking-wider">
+                <span className="text-[10px] font-bold text-sky-700 bg-sky-50 border-2 border-sky-400 px-3 py-1 rounded-full uppercase tracking-wider shadow-[2px_2px_0_#0369a1]">
                   Pro
                 </span>
               </div>
               <div className="grid grid-cols-3 gap-4 mb-4">
-                <div className="bg-zinc-50 rounded-xl p-3">
-                  <p className="text-[10px] font-medium text-zinc-400 uppercase tracking-wider mb-1">Credits</p>
+                <div className="bg-zinc-50 rounded-xl p-3 border-2 border-zinc-900 shadow-[2px_2px_0_#18181b]">
+                  <p className="text-[10px] font-medium text-zinc-500 uppercase tracking-wider mb-1">Credits</p>
                   <p className="text-lg font-bold text-zinc-900">2,450</p>
-                  <p className="text-[10px] text-zinc-400">of 5,000 remaining</p>
+                  <p className="text-[10px] text-zinc-500">of 5,000 remaining</p>
                 </div>
-                <div className="bg-zinc-50 rounded-xl p-3">
-                  <p className="text-[10px] font-medium text-zinc-400 uppercase tracking-wider mb-1">Renewal</p>
+                <div className="bg-zinc-50 rounded-xl p-3 border-2 border-zinc-900 shadow-[2px_2px_0_#18181b]">
+                  <p className="text-[10px] font-medium text-zinc-500 uppercase tracking-wider mb-1">Renewal</p>
                   <p className="text-lg font-bold text-zinc-900">Jul 15</p>
-                  <p className="text-[10px] text-zinc-400">2025</p>
+                  <p className="text-[10px] text-zinc-500">2025</p>
                 </div>
-                <div className="bg-zinc-50 rounded-xl p-3">
-                  <p className="text-[10px] font-medium text-zinc-400 uppercase tracking-wider mb-1">Monthly</p>
+                <div className="bg-zinc-50 rounded-xl p-3 border-2 border-zinc-900 shadow-[2px_2px_0_#18181b]">
+                  <p className="text-[10px] font-medium text-zinc-500 uppercase tracking-wider mb-1">Monthly</p>
                   <p className="text-lg font-bold text-zinc-900">$99</p>
-                  <p className="text-[10px] text-zinc-400">per month</p>
+                  <p className="text-[10px] text-zinc-500">per month</p>
                 </div>
               </div>
               <div className="flex gap-3">
-                <button className="text-xs font-semibold text-white bg-zinc-900 px-5 py-2 rounded-full hover:bg-zinc-800 transition-colors">
+                <button className="text-xs font-semibold text-white bg-zinc-900 px-5 py-2 rounded-full border-2 border-zinc-900 shadow-[3px_3px_0_#18181b] hover:shadow-[4px_4px_0_#18181b] hover:-translate-y-px transition-all">
                   Upgrade Plan
                 </button>
-                <button className="text-xs font-semibold text-zinc-600 border border-zinc-200 px-5 py-2 rounded-full hover:bg-zinc-50 transition-colors">
+                <button className="text-xs font-semibold text-zinc-700 border-2 border-zinc-900 px-5 py-2 rounded-full shadow-[3px_3px_0_#18181b] hover:shadow-[4px_4px_0_#18181b] hover:-translate-y-px transition-all">
                   Cancel Subscription
                 </button>
               </div>
             </div>
 
             {/* Payment Method */}
-            <div className="bg-white rounded-xl border border-zinc-200 p-6 brutal-card">
+            <div className="bg-white rounded-xl p-6 brutal-card">
               <h3 className="text-sm font-bold text-zinc-900 mb-4">Payment Method</h3>
-              <div className="flex items-center justify-between bg-zinc-50 rounded-xl px-4 py-3 border border-zinc-200/60">
+              <div className="flex items-center justify-between bg-zinc-50 rounded-xl px-4 py-3 border-2 border-zinc-900 shadow-[2px_2px_0_#18181b]">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-7 bg-linear-to-br from-zinc-800 to-zinc-950 rounded-md flex items-center justify-center">
                     <span className="text-[8px] text-white font-bold">VISA</span>
                   </div>
                   <div>
                     <p className="text-xs font-semibold text-zinc-900">•••• •••• •••• 4242</p>
-                    <p className="text-[10px] text-zinc-400">Expires 12/26</p>
+                    <p className="text-[10px] text-zinc-500">Expires 12/26</p>
                   </div>
                 </div>
                 <button className="text-xs font-medium text-sky-600 hover:text-sky-700">Change</button>
@@ -245,7 +245,7 @@ export default function Settings() {
         {/* Notifications Tab */}
         {activeTab === "notifications" && (
           <div className="space-y-6">
-            <div className="bg-white rounded-xl border border-zinc-200 p-6 brutal-card">
+            <div className="bg-white rounded-xl p-6 brutal-card">
               <h3 className="text-sm font-bold text-zinc-900 mb-4">Email Notifications</h3>
               <div className="space-y-4">
                 {[
@@ -258,7 +258,7 @@ export default function Settings() {
                   <div key={i} className="flex items-center justify-between py-2">
                     <div>
                       <p className="text-xs font-semibold text-zinc-900">{item.label}</p>
-                      <p className="text-[11px] text-zinc-400">{item.description}</p>
+                      <p className="text-[11px] text-zinc-500">{item.description}</p>
                     </div>
                     <label className="relative inline-flex items-center cursor-pointer">
                       <input type="checkbox" defaultChecked={item.defaultOn} className="sr-only peer" />

@@ -84,10 +84,10 @@ export default function DashboardHome() {
             <h1 className="text-lg font-bold text-zinc-950 tracking-tight">
               Welcome back, Sarah
             </h1>
-            <p className="text-xs text-zinc-400">Ready to create something amazing?</p>
+            <p className="text-xs text-zinc-500">Ready to create something amazing?</p>
           </div>
           <div className="flex items-center gap-3">
-            <div className="flex items-center gap-1.5 bg-accent-50 border border-accent-200/40 text-accent-700 text-xs font-semibold px-3.5 py-1.5 rounded-full">
+            <div className="flex items-center gap-1.5 bg-accent-50 border-2 border-accent-300 text-accent-700 text-xs font-semibold px-3.5 py-1.5 rounded-full">
               <Coin size={14} weight="fill" />
               <span>30 credits</span>
             </div>
@@ -111,11 +111,11 @@ export default function DashboardHome() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.06, type: "spring", stiffness: 120, damping: 20 }}
-              className="bg-white rounded-xl border border-zinc-200 p-5 group hover:border-accent-200 brutal-card"
+              className="bg-white rounded-xl p-5 group brutal-card"
             >
               <div className="flex items-center justify-between mb-3">
                 <div className="w-9 h-9 rounded-xl bg-zinc-50 flex items-center justify-center group-hover:bg-accent-50 transition-colors">
-                  <stat.icon size={18} weight="duotone" className="text-zinc-400 group-hover:text-accent-600 transition-colors" />
+                  <stat.icon size={18} weight="duotone" className="text-zinc-500 group-hover:text-accent-600 transition-colors" />
                 </div>
                 {stat.change && (
                   <span className="text-[10px] font-semibold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full flex items-center gap-0.5">
@@ -125,7 +125,7 @@ export default function DashboardHome() {
                 )}
               </div>
               <p className="text-2xl font-bold text-zinc-950 tracking-tight">{stat.value}</p>
-              <p className="text-xs text-zinc-400 mt-0.5">{stat.label}</p>
+              <p className="text-xs text-zinc-500 mt-0.5">{stat.label}</p>
             </motion.div>
           ))}
         </div>
@@ -182,7 +182,7 @@ export default function DashboardHome() {
               >
                 <Link
                   href={tool.href}
-                  className="flex items-center gap-3 bg-white border border-zinc-200 rounded-xl px-5 py-4 hover:border-accent-200 group brutal-card"
+                  className="flex items-center gap-3 bg-white rounded-xl px-5 py-4 group brutal-card"
                 >
                   <div className="w-8 h-8 rounded-lg bg-zinc-50 flex items-center justify-center group-hover:bg-accent-50 transition-colors">
                     <tool.icon size={16} weight="duotone" className="text-zinc-500 group-hover:text-accent-600 transition-colors" />
@@ -208,7 +208,7 @@ export default function DashboardHome() {
                   AI
                 </span>
               </div>
-              <p className="text-xs text-zinc-400 mt-1">
+              <p className="text-xs text-zinc-500 mt-1">
                 Discover social-first and UGC-style ads made to feel native and authentic.
               </p>
             </div>
@@ -226,10 +226,10 @@ export default function DashboardHome() {
             {CATEGORIES.map((cat, i) => (
               <button
                 key={cat}
-                className={`text-xs font-medium px-3.5 py-1.5 rounded-full border transition-all ${
+                className={`text-xs font-medium px-3.5 py-1.5 rounded-full transition-all ${
                   i === 0
-                    ? "bg-zinc-950 text-white border-zinc-950"
-                    : "bg-white text-zinc-500 border-zinc-200/80 hover:border-zinc-300 hover:text-zinc-700"
+                    ? "brutal-pill-active"
+                    : "brutal-pill"
                 }`}
               >
                 {cat}
@@ -245,7 +245,7 @@ export default function DashboardHome() {
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 0.4 + i * 0.03, type: "spring", stiffness: 120, damping: 20 }}
-                className="group relative aspect-9/16 bg-zinc-100 rounded-xl overflow-hidden cursor-pointer border border-zinc-200 hover:border-accent-200 brutal-card"
+                className="group relative aspect-9/16 bg-zinc-100 rounded-xl overflow-hidden cursor-pointer brutal-card"
               >
                 {/* Placeholder gradient */}
                 <div className={`absolute inset-0 bg-linear-to-br ${
@@ -259,7 +259,7 @@ export default function DashboardHome() {
                 }`} />
 
                 {/* Score badge */}
-                <div className="absolute top-2 left-2 z-10 flex items-center gap-1 bg-white text-[10px] font-bold text-zinc-700 px-2 py-0.5 rounded-full border border-zinc-200">
+                <div className="absolute top-2 left-2 z-10 flex items-center gap-1 bg-white text-[10px] font-bold text-zinc-700 px-2 py-0.5 rounded-full border-2 border-zinc-900 shadow-[2px_2px_0_#18181b]">
                   <Fire size={10} weight="fill" className="text-orange-500" />
                   {item.score}
                 </div>

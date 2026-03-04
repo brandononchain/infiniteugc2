@@ -27,12 +27,12 @@
   --font-sans: var(--font-outfit), system-ui, -apple-system, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, monospace;
 
-  /* Shadows — hard offset brutalist style */
-  --shadow-brutal-sm: 2px 2px 0 rgba(0, 0, 0, 0.08);
-  --shadow-brutal: 3px 3px 0 rgba(0, 0, 0, 0.10);
-  --shadow-brutal-lg: 5px 5px 0 rgba(0, 0, 0, 0.12);
-  --shadow-brutal-hover: 4px 4px 0 rgba(0, 0, 0, 0.14);
-  --shadow-brutal-active: 1px 1px 0 rgba(0, 0, 0, 0.10);
+  /* Shadows — hard offset neo-brutalist style */
+  --shadow-brutal-sm: 3px 3px 0 #18181b;
+  --shadow-brutal: 4px 4px 0 #18181b;
+  --shadow-brutal-lg: 6px 6px 0 #18181b;
+  --shadow-brutal-hover: 5px 5px 0 #18181b;
+  --shadow-brutal-active: 2px 2px 0 #18181b;
 
   /* Border radius — tighter for brutalism */
   --radius-card: 0.75rem;
@@ -179,19 +179,19 @@ body::after {
   background: #18181b;
   color: white;
   font-weight: 600;
-  border: 1.5px solid #18181b;
-  box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.15);
+  border: 2px solid #18181b;
+  box-shadow: 3px 3px 0 #18181b;
   transition: box-shadow 0.15s ease, transform 0.15s ease;
 }
 
 .btn-brutal:hover {
-  box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.2);
+  box-shadow: 4px 4px 0 #18181b;
   transform: translate(-1px, -1px);
 }
 
 .btn-brutal:active {
-  box-shadow: 1px 1px 0 rgba(0, 0, 0, 0.1);
-  transform: translate(0, 0);
+  box-shadow: 1px 1px 0 #18181b;
+  transform: translate(1px, 1px);
 }
 
 /* Accent variant */
@@ -199,14 +199,14 @@ body::after {
   background: var(--color-accent-600);
   color: white;
   font-weight: 600;
-  border: 1.5px solid var(--color-accent-700);
-  box-shadow: 2px 2px 0 rgba(2, 132, 199, 0.25);
+  border: 2px solid #0c4a6e;
+  box-shadow: 3px 3px 0 #18181b;
   transition: box-shadow 0.15s ease, transform 0.15s ease;
 }
 
 .btn-brutal-accent:hover {
   background: var(--color-accent-500);
-  box-shadow: 3px 3px 0 rgba(2, 132, 199, 0.3);
+  box-shadow: 4px 4px 0 #18181b;
   transform: translate(-1px, -1px);
 }
 
@@ -215,20 +215,20 @@ body::after {
   background: var(--color-accent-600);
   color: white;
   font-weight: 600;
-  border: 1.5px solid var(--color-accent-700);
-  box-shadow: 2px 2px 0 rgba(2, 132, 199, 0.2);
+  border: 2px solid #0c4a6e;
+  box-shadow: 3px 3px 0 #18181b;
   transition: box-shadow 0.15s ease, transform 0.15s ease;
 }
 
 .btn-ice:hover {
   background: var(--color-accent-500);
-  box-shadow: 3px 3px 0 rgba(2, 132, 199, 0.25);
+  box-shadow: 4px 4px 0 #18181b;
   transform: translate(-1px, -1px);
 }
 
 .badge-ice {
   background: var(--color-accent-50);
-  border: 1.5px solid var(--color-accent-200);
+  border: 2px solid var(--color-accent-300);
 }
 
 .text-ice-gradient {
@@ -240,10 +240,11 @@ body::after {
 
 /* ─── MODERN BRUTALIST DESIGN SYSTEM ─── */
 
-/* Card — solid surface, strong border, offset shadow */
+/* Card — solid surface, thick dark border, solid offset shadow */
 .brutal-card {
   background: var(--color-surface);
-  border: 1.5px solid #d4d4d8;
+  border: 2px solid #27272a;
+  border-radius: var(--radius-card);
   box-shadow: var(--shadow-brutal);
   transition: box-shadow 0.15s ease, transform 0.15s ease;
 }
@@ -253,10 +254,10 @@ body::after {
   transform: translate(-1px, -1px);
 }
 
-/* Header — solid opaque, strong bottom border  */
+/* Header — solid opaque, thick bottom border  */
 .brutal-header {
   background: var(--color-surface);
-  border-bottom: 2px solid #d4d4d8;
+  border-bottom: 2.5px solid #27272a;
 }
 
 /* Sidebar — dark solid panel */
@@ -265,14 +266,70 @@ body::after {
   color: #a1a1aa;
 }
 
-/* Empty state card — inset surface, dashed border */
+/* Empty state card — inset surface, thick dashed border */
 .brutal-empty {
-  background: var(--color-surface-raised);
-  border: 1.5px dashed #a1a1aa;
+  background: var(--color-surface);
+  border: 2px dashed #52525b;
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-brutal-sm);
 }
 
 /* Active nav — accent left bar on dark surface */
 .nav-active {
   background: rgba(14, 165, 233, 0.12);
   box-shadow: inset 3px 0 0 var(--color-accent-400);
+}
+
+/* Neo-brutalist input fields */
+.brutal-input {
+  border: 2px solid #27272a;
+  border-radius: 0.5rem;
+  box-shadow: 3px 3px 0 #18181b;
+  transition: box-shadow 0.15s ease, transform 0.15s ease, border-color 0.15s ease;
+}
+
+.brutal-input:focus {
+  border-color: var(--color-accent-500);
+  box-shadow: 3px 3px 0 var(--color-accent-700);
+  outline: none;
+}
+
+/* Neo-brutalist select/dropdown button */
+.brutal-select {
+  border: 2px solid #27272a;
+  border-radius: 0.5rem;
+  box-shadow: 3px 3px 0 #18181b;
+  transition: box-shadow 0.15s ease, transform 0.15s ease;
+}
+
+.brutal-select:hover {
+  box-shadow: 4px 4px 0 #18181b;
+  transform: translate(-1px, -1px);
+}
+
+/* Neo-brutalist info/warning box */
+.brutal-info {
+  border: 2px solid #f59e0b;
+  border-radius: 0.5rem;
+  box-shadow: 3px 3px 0 #92400e;
+  background: #fffbeb;
+}
+
+/* Neo-brutalist pill/tag */
+.brutal-pill {
+  border: 2px solid #27272a;
+  box-shadow: 2px 2px 0 #18181b;
+  transition: box-shadow 0.12s ease, transform 0.12s ease;
+}
+
+.brutal-pill:hover {
+  box-shadow: 3px 3px 0 #18181b;
+  transform: translate(-1px, -1px);
+}
+
+.brutal-pill-active {
+  background: #18181b;
+  color: white;
+  border: 2px solid #18181b;
+  box-shadow: 2px 2px 0 #18181b;
 }
