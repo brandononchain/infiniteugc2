@@ -158,7 +158,6 @@ export default function DashboardLayout({
                     label={item.label}
                     active={pathname === item.href}
                     collapsed={collapsed}
-                    accent={item.href === "/create-premium"}
                   />
                 ))}
               </div>
@@ -229,14 +228,12 @@ function NavItem({
   label,
   active,
   collapsed,
-  accent,
 }: {
   href: string;
   icon: NavIcon;
   label: string;
   active: boolean;
   collapsed: boolean;
-  accent?: boolean;
 }) {
   return (
     <Link
@@ -247,8 +244,6 @@ function NavItem({
         ${
           active
             ? "nav-active text-accent-400"
-            : accent
-            ? "text-rose-400 hover:bg-rose-500/10"
             : "text-zinc-500 hover:bg-zinc-800/60 hover:text-zinc-200"
         }
       `}
@@ -258,7 +253,7 @@ function NavItem({
         size={18}
         weight={active ? "fill" : "regular"}
         className={`shrink-0 ${
-          active ? "text-accent-400" : accent ? "text-rose-400" : "text-zinc-500 group-hover:text-zinc-300"
+          active ? "text-accent-400" : "text-zinc-500 group-hover:text-zinc-300"
         }`}
       />
       {!collapsed && <span className="truncate">{label}</span>}

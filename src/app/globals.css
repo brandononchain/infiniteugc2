@@ -200,13 +200,13 @@ body::after {
   color: white;
   font-weight: 600;
   border: 2px solid #0c4a6e;
-  box-shadow: 3px 3px 0 #18181b;
+  box-shadow: 3px 3px 0 #075985;
   transition: box-shadow 0.15s ease, transform 0.15s ease;
 }
 
 .btn-brutal-accent:hover {
   background: var(--color-accent-500);
-  box-shadow: 4px 4px 0 #18181b;
+  box-shadow: 4px 4px 0 #075985;
   transform: translate(-1px, -1px);
 }
 
@@ -216,13 +216,13 @@ body::after {
   color: white;
   font-weight: 600;
   border: 2px solid #0c4a6e;
-  box-shadow: 3px 3px 0 #18181b;
+  box-shadow: 3px 3px 0 #075985;
   transition: box-shadow 0.15s ease, transform 0.15s ease;
 }
 
 .btn-ice:hover {
   background: var(--color-accent-500);
-  box-shadow: 4px 4px 0 #18181b;
+  box-shadow: 4px 4px 0 #075985;
   transform: translate(-1px, -1px);
 }
 
@@ -311,14 +311,16 @@ body::after {
 .brutal-info {
   border: 2px solid #f59e0b;
   border-radius: 0.5rem;
-  box-shadow: 3px 3px 0 #92400e;
+  box-shadow: 3px 3px 0 #d97706;
   background: #fffbeb;
 }
 
 /* Neo-brutalist pill/tag */
 .brutal-pill {
-  border: 2px solid #27272a;
+  border: 2px solid #18181b;
   box-shadow: 2px 2px 0 #18181b;
+  background: white;
+  color: #52525b;
   transition: box-shadow 0.12s ease, transform 0.12s ease;
 }
 

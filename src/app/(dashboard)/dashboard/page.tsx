@@ -13,7 +13,11 @@ import {
   Coin,
   VideoCamera,
   UserCircle,
-  MagicWand,
+  Sparkle,
+  Stack,
+  Microphone,
+  FileText,
+  DownloadSimple,
   Fire,
   Eye,
 } from "@phosphor-icons/react";
@@ -21,33 +25,37 @@ import {
 /* ─── Quick-Action Cards (Creatify-style hero) ─── */
 const HERO_CARDS = [
   {
-    title: "AI VIDEO ADS",
-    subtitle: "Turn product into video ads",
+    title: "CREATE SINGLE CAMPAIGN",
+    subtitle: "Create a single AI-powered video ad",
     href: "/create",
     gradient: "from-accent-600 via-accent-500 to-sky-400",
     icon: VideoCamera,
   },
   {
-    title: "AVATAR VIDEO",
-    subtitle: "Create talking videos with AI actors",
-    href: "/create",
+    title: "CREATE MASS CAMPAIGN",
+    subtitle: "Batch generate videos at scale",
+    href: "/create-mass",
     gradient: "from-amber-500 via-orange-400 to-rose-400",
-    icon: UserCircle,
+    icon: Stack,
   },
   {
-    title: "ASSET GENERATOR",
-    subtitle: "Generate high-quality ad assets instantly",
-    href: "/image-generation",
+    title: "CREATE PREMIUM CONTENT",
+    subtitle: "VEO3, Sora 2 Pro & OmniHuman models",
+    href: "/create-premium",
     gradient: "from-emerald-500 via-teal-400 to-cyan-400",
-    icon: MagicWand,
+    icon: Sparkle,
   },
 ];
 
 const QUICK_TOOLS = [
-  { label: "Image Ads", icon: ImageSquare, href: "/image-generation" },
-  { label: "Ad Clone", icon: Lightning, href: "/hooks" },
-  { label: "Create Your Own Avatar", icon: UserCircle, href: "/avatars" },
+  { label: "Image Generation", icon: ImageSquare, href: "/image-generation" },
+  { label: "Script Generation", icon: FileText, href: "/script-generation" },
+  { label: "Hook Generation", icon: Lightning, href: "/hooks" },
   { label: "Video Editor", icon: FilmSlate, href: "/editor" },
+  { label: "Voices", icon: Microphone, href: "/voices" },
+  { label: "Avatars", icon: UserCircle, href: "/avatars" },
+  { label: "Scripts", icon: FileText, href: "/scripts" },
+  { label: "Exports", icon: DownloadSimple, href: "/exports" },
 ];
 
 const CATEGORIES = [

@@ -98,7 +98,7 @@ export default function CreatePremium() {
                     onClick={() => setSelectedModel(model.name)}
                     className={`text-left rounded-lg p-3 transition-all brutal-card ${
                       selectedModel === model.name
-                        ? "!border-accent-400 bg-accent-50/40 ring-1 ring-accent-200"
+                        ? "!border-accent-400 bg-accent-50/40 !shadow-[4px_4px_0_#075985]"
                         : "hover:border-zinc-400"
                     }`}
                   >
@@ -121,7 +121,7 @@ export default function CreatePremium() {
 
             {/* Generate */}
             <div className="flex justify-end pt-2">
-              <button className="btn-ice flex items-center gap-2 text-xs font-semibold px-6 py-2.5 rounded-full shadow-lg">
+              <button className="btn-ice flex items-center gap-2 text-xs font-semibold px-6 py-2.5 rounded-full">
                 <Sparkle size={14} weight="fill" />
                 Generate Premium Video
               </button>
