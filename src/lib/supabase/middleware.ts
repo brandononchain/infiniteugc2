@@ -4,9 +4,16 @@ import { NextResponse, type NextRequest } from "next/server";
 export async function updateSession(request: NextRequest) {
   let supabaseResponse = NextResponse.next({ request });
 
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+  if (!url || !key) {
+    return supabaseResponse;
+  }
+
   const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    url,
+    key,
     {
       cookies: {
         getAll() {
@@ -33,6 +40,8 @@ export async function updateSession(request: NextRequest) {
   const isDashboardRoute =
     !request.nextUrl.pathname.startsWith("/login") &&
     !request.nextUrl.pathname.startsWith("/signup") &&
+    !request.nextUrl.pathname.startsWith("/sign-in") &&
+    !request.nextUrl.pathname.startsWith("/get-started") &&
     !request.nextUrl.pathname.startsWith("/auth") &&
     request.nextUrl.pathname !== "/" &&
     !request.nextUrl.pathname.startsWith("/_next") &&
@@ -46,7 +55,12 @@ export async function updateSession(request: NextRequest) {
   }
 
   // Redirect authenticated users away from auth pages
-  if (user && (request.nextUrl.pathname === "/login" || request.nextUrl.pathname === "/signup")) {
+  if (user && (
+    request.nextUrl.pathname === "/login" ||
+    request.nextUrl.pathname === "/signup" ||
+    request.nextUrl.pathname === "/sign-in" ||
+    request.nextUrl.pathname === "/get-started"
+  )) {
     const url = request.nextUrl.clone();
     url.pathname = "/dashboard";
     return NextResponse.redirect(url);
