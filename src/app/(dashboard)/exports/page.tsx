@@ -7,7 +7,7 @@ export default function Exports() {
   return (
     <div className="min-h-full">
       {/* Header */}
-      <div className="sticky top-0 z-30 glass-header">
+      <div className="sticky top-0 z-30 brutal-header">
         <div className="max-w-5xl mx-auto px-6 lg:px-10 h-16 flex items-center">
           <div>
             <h1 className="text-lg font-bold text-zinc-950 tracking-tight">Exports</h1>
@@ -17,7 +17,7 @@ export default function Exports() {
       </div>
 
       <div className="max-w-5xl mx-auto px-6 lg:px-10 py-8">
-        <div className="bg-white rounded-2xl border border-zinc-200/50 p-16 text-center glass-empty">
+        <div className="bg-white rounded-xl border border-zinc-200 p-16 text-center brutal-empty">
           <div className="w-14 h-14 rounded-2xl bg-zinc-50 flex items-center justify-center mx-auto mb-4">
             <VideoCamera size={24} weight="duotone" className="text-zinc-300" />
           </div>

@@ -20,7 +20,7 @@ export default function CreateCampaign() {
   return (
     <div className="flex flex-col h-full overflow-hidden">
       {/* Header */}
-      <div className="shrink-0 z-30 glass-header">
+      <div className="shrink-0 z-30 brutal-header">
         <div className="px-6 lg:px-8 h-14 flex items-center justify-between">
           <div className="flex items-center gap-2.5">
             <div className="w-8 h-8 rounded-xl bg-linear-to-br from-rose-500 to-pink-500 flex items-center justify-center">
@@ -47,8 +47,8 @@ export default function CreateCampaign() {
       {/* Content: fills remaining height */}
       <div className="flex-1 min-h-0 flex">
         {/* ─── Left: Preview (fixed in view) ─── */}
-        <div className="hidden lg:flex flex-col w-80 xl:w-[400px] shrink-0 border-r border-zinc-200/40 glass-sidebar">
-          <div className="flex items-center justify-between px-5 py-2.5 border-b border-zinc-200/30">
+        <div className="hidden lg:flex flex-col w-80 xl:w-[400px] shrink-0 border-r border-zinc-200 bg-white">
+          <div className="flex items-center justify-between px-5 py-2.5 border-b border-zinc-200">
             <span className="text-xs font-semibold text-zinc-900">Preview</span>
             <span className="flex items-center gap-1 text-[10px] text-rose-500 font-semibold">
               <span className="w-1.5 h-1.5 rounded-full bg-rose-500 animate-pulse" />
@@ -74,7 +74,7 @@ export default function CreateCampaign() {
               </div>
             </div>
           </div>
-          <div className="shrink-0 border-t border-zinc-200/30 px-5 py-3">
+          <div className="shrink-0 border-t border-zinc-200 px-5 py-3">
             <div className="flex items-center gap-1.5 mb-2">
               <Coin size={13} weight="duotone" className="text-amber-500" />
               <span className="text-[11px] font-semibold text-zinc-900">Cost</span>
@@ -157,7 +157,7 @@ export default function CreateCampaign() {
                 <h2 className="text-sm font-bold text-zinc-950">Customization</h2>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                <div className="bg-white border border-zinc-200/50 rounded-lg p-3 card-elevated">
+                <div className="bg-white border border-zinc-200 rounded-lg p-3 brutal-card">
                   <div className="flex items-center justify-between mb-0.5">
                     <span className="text-xs font-semibold text-zinc-900">Auto-Captions</span>
                     <button onClick={() => setCaptionsEnabled(!captionsEnabled)} className="flex items-center gap-1 text-[10px] font-medium text-zinc-500">
@@ -166,7 +166,7 @@ export default function CreateCampaign() {
                   </div>
                   <p className="text-[10px] text-zinc-400">TikTok-style synced captions</p>
                 </div>
-                <div className="bg-white border border-zinc-200/50 rounded-lg p-3 card-elevated">
+                <div className="bg-white border border-zinc-200 rounded-lg p-3 brutal-card">
                   <div className="flex items-center justify-between mb-0.5">
                     <span className="text-xs font-semibold text-zinc-900">Text overlays</span>
                     <button className="flex items-center gap-1 text-[10px] font-semibold text-zinc-700 bg-zinc-100 px-2 py-1 rounded hover:bg-zinc-200/70 transition-colors">
@@ -177,7 +177,7 @@ export default function CreateCampaign() {
                   <p className="text-[10px] text-zinc-400">No overlays yet</p>
                 </div>
               </div>
-              <div className="bg-white border border-zinc-200/60 rounded-lg p-3">
+              <div className="bg-white border border-zinc-200 rounded-lg p-3">
                 <div className="flex items-center justify-between">
                   <div>
                     <span className="text-xs font-semibold text-zinc-900">Reply Comment</span>

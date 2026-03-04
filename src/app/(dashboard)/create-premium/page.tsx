@@ -22,7 +22,7 @@ export default function CreatePremium() {
   return (
     <div className="flex flex-col h-full overflow-hidden">
       {/* Header */}
-      <div className="shrink-0 z-30 glass-header">
+      <div className="shrink-0 z-30 brutal-header">
         <div className="px-6 lg:px-8 h-14 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <Link href="/dashboard" className="flex items-center gap-1.5 text-[11px] font-medium text-zinc-500 hover:text-zinc-700 transition-colors">
@@ -98,8 +98,8 @@ export default function CreatePremium() {
                     onClick={() => setSelectedModel(model.name)}
                     className={`text-left border rounded-lg p-3 transition-all ${
                       selectedModel === model.name
-                        ? "border-accent-300 bg-accent-50/40 ring-1 ring-accent-200 card-elevated"
-                        : "border-zinc-200/50 hover:border-zinc-300 card-elevated"
+                        ? "border-accent-300 bg-accent-50/40 ring-1 ring-accent-200 brutal-card"
+                        : "border-zinc-200 hover:border-zinc-300 brutal-card"
                     }`}
                   >
                     <span className="text-xs font-bold text-zinc-900">{model.name}</span>

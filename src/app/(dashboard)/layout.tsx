@@ -57,7 +57,8 @@ const NAV_GROUPS = [
     label: "Tools",
     items: [
       { label: "Image Generation", href: "/image-generation", icon: ImageSquare },
-      { label: "Hooks", href: "/hooks", icon: Lightning },
+      { label: "Script Generation", href: "/script-generation", icon: FileText },
+      { label: "Hook Generation", href: "/hooks", icon: Lightning },
       { label: "Editor", href: "/editor", icon: FilmSlate },
     ],
   },
@@ -73,7 +74,7 @@ export default function DashboardLayout({
   const [mobileOpen, setMobileOpen] = useState(false);
 
   return (
-    <div className="flex h-dvh bg-zinc-50 overflow-hidden">
+    <div className="flex h-dvh bg-[var(--color-background)] overflow-hidden">
       {/* Mobile overlay */}
       {mobileOpen && (
         <div
@@ -86,21 +87,21 @@ export default function DashboardLayout({
       <aside
         className={`
           fixed z-50 lg:static inset-y-0 left-0
-          flex flex-col glass-sidebar
+          flex flex-col brutal-sidebar
           transition-all duration-300 ease-out
           ${collapsed ? "w-17" : "w-60"}
           ${mobileOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}
         `}
       >
         {/* Brand */}
-        <div className={`flex items-center h-16 border-b border-zinc-200/40 shrink-0 ${collapsed ? "justify-center px-0" : "gap-2.5 px-4"}`}>
+        <div className={`flex items-center h-16 border-b border-zinc-800 shrink-0 ${collapsed ? "justify-center px-0" : "gap-2.5 px-4"}`}>
           {collapsed ? (
             <button
               onClick={() => setCollapsed(false)}
-              className="w-10 h-10 flex items-center justify-center rounded-xl hover:bg-zinc-100 transition-colors group"
+              className="w-10 h-10 flex items-center justify-center rounded-xl hover:bg-zinc-800 transition-colors group"
               title="Expand sidebar"
             >
-              <div className="w-8 h-8 bg-zinc-950 rounded-xl flex items-center justify-center group-hover:scale-105 transition-transform">
+                <div className="w-8 h-8 bg-accent-500 rounded-xl flex items-center justify-center group-hover:scale-105 transition-transform">
                 <Infinity size={17} weight="bold" className="text-white" />
               </div>
             </button>
@@ -110,16 +111,16 @@ export default function DashboardLayout({
                 href="/dashboard"
                 className="flex items-center gap-2.5 min-w-0"
               >
-                <div className="w-8 h-8 bg-zinc-950 rounded-xl flex items-center justify-center shrink-0">
+                <div className="w-8 h-8 bg-accent-500 rounded-xl flex items-center justify-center shrink-0">
                   <Infinity size={17} weight="bold" className="text-white" />
                 </div>
-                <span className="text-sm font-bold tracking-tight text-zinc-950 truncate">
+                <span className="text-sm font-bold tracking-tight text-white truncate">
                   InfiniteUGC
                 </span>
               </Link>
               <button
                 onClick={() => setCollapsed(true)}
-                className="ml-auto hidden lg:flex w-6 h-6 items-center justify-center rounded-md hover:bg-zinc-100 transition-colors text-zinc-400 hover:text-zinc-600"
+                className="ml-auto hidden lg:flex w-6 h-6 items-center justify-center rounded-md hover:bg-zinc-800 transition-colors text-zinc-500 hover:text-zinc-300"
               >
                 <CaretLeft size={14} weight="bold" />
               </button>
@@ -143,11 +144,11 @@ export default function DashboardLayout({
           {NAV_GROUPS.map((group) => (
             <div key={group.label}>
               {!collapsed && (
-                <p className="text-[10px] font-semibold text-zinc-400 uppercase tracking-widest px-3 mb-1.5">
+                <p className="text-[10px] font-semibold text-zinc-600 uppercase tracking-widest px-3 mb-1.5">
                   {group.label}
                 </p>
               )}
-              {collapsed && <div className="border-t border-zinc-100 mx-2 mb-2" />}
+              {collapsed && <div className="border-t border-zinc-800 mx-2 mb-2" />}
               <div className="space-y-0.5">
                 {group.items.map((item) => (
                   <NavItem
@@ -166,7 +167,7 @@ export default function DashboardLayout({
         </nav>
 
         {/* Bottom */}
-        <div className="border-t border-zinc-200/40 px-2 py-3 space-y-0.5">
+        <div className="border-t border-zinc-800 px-2 py-3 space-y-0.5">
           <NavItem
             href="/settings"
             icon={Gear}
@@ -181,13 +182,13 @@ export default function DashboardLayout({
               collapsed ? "justify-center" : ""
             }`}
           >
-            <div className="w-7 h-7 rounded-full bg-accent-100 text-accent-700 flex items-center justify-center text-xs font-bold shrink-0">
+            <div className="w-7 h-7 rounded-full bg-accent-500/20 text-accent-400 flex items-center justify-center text-xs font-bold shrink-0">
               SC
             </div>
             {!collapsed && (
               <div className="min-w-0 flex-1">
-                <p className="text-xs font-semibold text-zinc-900 truncate">Sarah Creator</p>
-                <p className="text-[10px] text-accent-600 font-medium">Pro Member</p>
+                <p className="text-xs font-semibold text-zinc-200 truncate">Sarah Creator</p>
+                <p className="text-[10px] text-accent-400 font-medium">Pro Member</p>
               </div>
             )}
           </div>
@@ -197,7 +198,7 @@ export default function DashboardLayout({
       {/* ─── Main Content ─── */}
       <main className="flex-1 flex flex-col min-w-0 overflow-hidden">
         {/* Mobile top bar */}
-        <div className="lg:hidden flex items-center h-14 px-4 glass-header shrink-0">
+        <div className="lg:hidden flex items-center h-14 px-4 brutal-header shrink-0">
           <button
             onClick={() => setMobileOpen(true)}
             className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-zinc-100 text-zinc-600"
@@ -245,10 +246,10 @@ function NavItem({
         ${collapsed ? "justify-center px-0" : ""}
         ${
           active
-            ? "nav-active text-accent-700"
+            ? "nav-active text-accent-400"
             : accent
-            ? "text-rose-500 hover:bg-rose-50/60"
-            : "text-zinc-500 hover:bg-zinc-50/80 hover:text-zinc-900"
+            ? "text-rose-400 hover:bg-rose-500/10"
+            : "text-zinc-500 hover:bg-zinc-800/60 hover:text-zinc-200"
         }
       `}
       title={collapsed ? label : undefined}
@@ -257,7 +258,7 @@ function NavItem({
         size={18}
         weight={active ? "fill" : "regular"}
         className={`shrink-0 ${
-          active ? "text-accent-600" : accent ? "text-rose-500" : "text-zinc-400 group-hover:text-zinc-600"
+          active ? "text-accent-400" : accent ? "text-rose-400" : "text-zinc-500 group-hover:text-zinc-300"
         }`}
       />
       {!collapsed && <span className="truncate">{label}</span>}

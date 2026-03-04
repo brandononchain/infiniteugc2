@@ -2,7 +2,7 @@
 
 /* ─── THEME ─── */
 @theme inline {
-  --color-background: #fafafa;
+  --color-background: #e9e9ec;
   --color-foreground: #18181b;
 
   /* Ice Blue accent palette */
@@ -18,28 +18,25 @@
   --color-accent-900: #0c4a6e;
   --color-accent-950: #082f49;
 
-  /* Glass token colors */
-  --color-glass-white: rgba(255, 255, 255, 0.55);
-  --color-glass-white-strong: rgba(255, 255, 255, 0.72);
-  --color-glass-border: rgba(255, 255, 255, 0.35);
-  --color-glass-dark: rgba(24, 24, 27, 0.45);
-  --color-glass-accent: rgba(14, 165, 233, 0.12);
+  /* Surface token colors */
+  --color-surface: #ffffff;
+  --color-surface-raised: #f4f4f5;
+  --color-surface-inset: #ebebee;
 
   /* Fonts */
   --font-sans: var(--font-outfit), system-ui, -apple-system, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, monospace;
 
-  /* Shadows */
-  --shadow-diffusion: 0 20px 40px -15px rgba(0, 0, 0, 0.05);
-  --shadow-card-hover: 0 25px 50px -12px rgba(0, 0, 0, 0.08);
-  --shadow-glass: 0 8px 32px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.6);
-  --shadow-glass-hover: 0 12px 40px rgba(0, 0, 0, 0.08), 0 2px 4px rgba(0, 0, 0, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.7);
-  --shadow-accent-glow: 0 4px 20px rgba(14, 165, 233, 0.25), 0 1px 4px rgba(2, 132, 199, 0.15);
-  --shadow-accent-glow-lg: 0 8px 32px rgba(14, 165, 233, 0.30), 0 2px 8px rgba(2, 132, 199, 0.20);
+  /* Shadows — hard offset brutalist style */
+  --shadow-brutal-sm: 2px 2px 0 rgba(0, 0, 0, 0.08);
+  --shadow-brutal: 3px 3px 0 rgba(0, 0, 0, 0.10);
+  --shadow-brutal-lg: 5px 5px 0 rgba(0, 0, 0, 0.12);
+  --shadow-brutal-hover: 4px 4px 0 rgba(0, 0, 0, 0.14);
+  --shadow-brutal-active: 1px 1px 0 rgba(0, 0, 0, 0.10);
 
-  /* Border radius */
-  --radius-card: 1.5rem;
-  --radius-card-lg: 2rem;
+  /* Border radius — tighter for brutalism */
+  --radius-card: 0.75rem;
+  --radius-card-lg: 1rem;
 }
 
 /* ─── BASE ─── */
@@ -177,29 +174,61 @@ body::after {
   animation: subtle-rotate 12s ease-in-out infinite;
 }
 
-/* ─── ICE GRADIENT UTILITIES ─── */
-.btn-ice {
-  background: linear-gradient(135deg, #38bdf8 0%, #0ea5e9 40%, #0284c7 100%);
+/* ─── BRUTALIST BUTTON ─── */
+.btn-brutal {
+  background: #18181b;
   color: white;
-  position: relative;
-  overflow: hidden;
+  font-weight: 600;
+  border: 1.5px solid #18181b;
+  box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.15);
+  transition: box-shadow 0.15s ease, transform 0.15s ease;
 }
 
-.btn-ice::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0) 60%);
-  pointer-events: none;
+.btn-brutal:hover {
+  box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.2);
+  transform: translate(-1px, -1px);
+}
+
+.btn-brutal:active {
+  box-shadow: 1px 1px 0 rgba(0, 0, 0, 0.1);
+  transform: translate(0, 0);
+}
+
+/* Accent variant */
+.btn-brutal-accent {
+  background: var(--color-accent-600);
+  color: white;
+  font-weight: 600;
+  border: 1.5px solid var(--color-accent-700);
+  box-shadow: 2px 2px 0 rgba(2, 132, 199, 0.25);
+  transition: box-shadow 0.15s ease, transform 0.15s ease;
+}
+
+.btn-brutal-accent:hover {
+  background: var(--color-accent-500);
+  box-shadow: 3px 3px 0 rgba(2, 132, 199, 0.3);
+  transform: translate(-1px, -1px);
+}
+
+/* Legacy alias */
+.btn-ice {
+  background: var(--color-accent-600);
+  color: white;
+  font-weight: 600;
+  border: 1.5px solid var(--color-accent-700);
+  box-shadow: 2px 2px 0 rgba(2, 132, 199, 0.2);
+  transition: box-shadow 0.15s ease, transform 0.15s ease;
 }
 
 .btn-ice:hover {
-  background: linear-gradient(135deg, #7dd3fc 0%, #38bdf8 40%, #0ea5e9 100%);
+  background: var(--color-accent-500);
+  box-shadow: 3px 3px 0 rgba(2, 132, 199, 0.25);
+  transform: translate(-1px, -1px);
 }
 
 .badge-ice {
-  background: linear-gradient(135deg, rgba(56,189,248,0.12) 0%, rgba(14,165,233,0.08) 100%);
-  border: 1px solid rgba(56,189,248,0.25);
+  background: var(--color-accent-50);
+  border: 1.5px solid var(--color-accent-200);
 }
 
 .text-ice-gradient {
@@ -209,85 +238,41 @@ body::after {
   background-clip: text;
 }
 
-/* ─── LIQUID GLASS DESIGN SYSTEM ─── */
+/* ─── MODERN BRUTALIST DESIGN SYSTEM ─── */
 
-/* Glass card — primary card surface with frosted glass feel */
-.glass-card {
-  background: rgba(255, 255, 255, 0.82);
-  backdrop-filter: blur(20px) saturate(180%);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
-  border: 1px solid rgba(255, 255, 255, 0.6);
-  box-shadow:
-    0 4px 24px -4px rgba(0, 0, 0, 0.06),
-    0 1px 2px rgba(0, 0, 0, 0.03),
-    inset 0 1px 0 rgba(255, 255, 255, 0.8);
-  transition: box-shadow 0.3s ease, transform 0.3s ease, border-color 0.3s ease;
+/* Card — solid surface, strong border, offset shadow */
+.brutal-card {
+  background: var(--color-surface);
+  border: 1.5px solid #d4d4d8;
+  box-shadow: var(--shadow-brutal);
+  transition: box-shadow 0.15s ease, transform 0.15s ease;
 }
 
-.glass-card:hover {
-  box-shadow:
-    0 8px 32px -4px rgba(0, 0, 0, 0.09),
-    0 2px 4px rgba(0, 0, 0, 0.04),
-    inset 0 1px 0 rgba(255, 255, 255, 0.9);
-  border-color: rgba(255, 255, 255, 0.7);
-  transform: translateY(-1px);
+.brutal-card:hover {
+  box-shadow: var(--shadow-brutal-hover);
+  transform: translate(-1px, -1px);
 }
 
-/* Glass sidebar — heavier frosted panel for navigation */
-.glass-sidebar {
-  background: rgba(255, 255, 255, 0.88);
-  backdrop-filter: blur(24px) saturate(190%);
-  -webkit-backdrop-filter: blur(24px) saturate(190%);
-  border-right: 1px solid rgba(228, 228, 231, 0.45);
+/* Header — solid opaque, strong bottom border  */
+.brutal-header {
+  background: var(--color-surface);
+  border-bottom: 2px solid #d4d4d8;
 }
 
-/* Glass surface — lightweight frost for inner panels */
-.glass-surface {
-  background: rgba(255, 255, 255, 0.6);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  box-shadow:
-    0 1px 3px rgba(0, 0, 0, 0.04),
-    inset 0 1px 0 rgba(255, 255, 255, 0.65);
+/* Sidebar — dark solid panel */
+.brutal-sidebar {
+  background: #18181b;
+  color: #a1a1aa;
 }
 
-/* Card elevated — subtle shadow with hover lift (no glass blur) */
-.card-elevated {
-  box-shadow:
-    0 1px 3px rgba(0, 0, 0, 0.04),
-    0 4px 16px -4px rgba(0, 0, 0, 0.05);
-  transition: box-shadow 0.3s ease, transform 0.3s ease;
+/* Empty state card — inset surface, dashed border */
+.brutal-empty {
+  background: var(--color-surface-raised);
+  border: 1.5px dashed #a1a1aa;
 }
 
-.card-elevated:hover {
-  box-shadow:
-    0 2px 6px rgba(0, 0, 0, 0.06),
-    0 8px 24px -4px rgba(0, 0, 0, 0.09);
-  transform: translateY(-1px);
-}
-
-/* Glass empty state — soft inset glow for empty states */
-.glass-empty {
-  background: rgba(255, 255, 255, 0.75);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  box-shadow:
-    0 2px 12px -2px rgba(0, 0, 0, 0.04),
-    inset 0 1px 0 rgba(255, 255, 255, 0.7),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.02);
-}
-
-/* Glass header bar — sticky headers with strong blur */
-.glass-header {
-  background: rgba(255, 255, 255, 0.78);
-  backdrop-filter: blur(20px) saturate(180%);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
-  border-bottom: 1px solid rgba(228, 228, 231, 0.45);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
-}
-
-/* Active nav indicator — frosted accent background */
+/* Active nav — accent left bar on dark surface */
 .nav-active {
-  background: rgba(14, 165, 233, 0.08);
-  box-shadow: inset 3px 0 0 var(--color-accent-500);
+  background: rgba(14, 165, 233, 0.12);
+  box-shadow: inset 3px 0 0 var(--color-accent-400);
 }
