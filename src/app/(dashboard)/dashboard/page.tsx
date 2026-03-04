@@ -28,21 +28,18 @@ const HERO_CARDS = [
     title: "CREATE SINGLE CAMPAIGN",
     subtitle: "Create a single AI-powered video ad",
     href: "/create",
-    gradient: "from-accent-600 via-accent-500 to-sky-400",
     icon: VideoCamera,
   },
   {
     title: "CREATE MASS CAMPAIGN",
     subtitle: "Batch generate videos at scale",
     href: "/create-mass",
-    gradient: "from-amber-500 via-orange-400 to-rose-400",
     icon: Stack,
   },
   {
     title: "CREATE PREMIUM CONTENT",
     subtitle: "VEO3, Sora 2 Pro & OmniHuman models",
     href: "/create-premium",
-    gradient: "from-emerald-500 via-teal-400 to-cyan-400",
     icon: Sparkle,
   },
 ];
@@ -153,24 +150,23 @@ export default function DashboardHome() {
               >
                 <Link
                   href={card.href}
-                  className="group block relative overflow-hidden rounded-2xl h-48 md:h-56"
+                  className="group block relative overflow-hidden rounded-2xl h-48 md:h-56 border border-white/40 shadow-lg"
+                  style={{ background: 'rgba(255, 255, 255, 0.35)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)' }}
                 >
-                  <div className={`absolute inset-0 bg-linear-to-br ${card.gradient}`} />
-                  <div className="absolute inset-0 bg-black/10 group-hover:bg-black/5 transition-colors" />
-
-                  {/* Decorative elements */}
-                  <div className="absolute -top-8 -right-8 w-32 h-32 rounded-full bg-white/10 blur-2xl" />
-                  <div className="absolute -bottom-4 -left-4 w-24 h-24 rounded-full bg-white/10 blur-xl" />
+                  {/* Subtle shimmer on hover */}
+                  <div className="absolute inset-0 bg-linear-to-br from-white/20 via-transparent to-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
                   <div className="relative z-10 h-full flex flex-col justify-end p-6">
                     <div className="flex items-center gap-2 mb-2">
-                      <card.icon size={20} weight="bold" className="text-white/80" />
+                      <div className="w-9 h-9 rounded-xl bg-white/40 border border-white/50 flex items-center justify-center backdrop-blur-sm">
+                        <card.icon size={18} weight="bold" className="text-zinc-700" />
+                      </div>
                     </div>
-                    <h3 className="text-lg font-extrabold text-white tracking-tight uppercase">
+                    <h3 className="text-lg font-extrabold text-zinc-900 tracking-tight uppercase">
                       {card.title}
                       <ArrowRight size={16} weight="bold" className="inline-block ml-2 group-hover:translate-x-1 transition-transform" />
                     </h3>
-                    <p className="text-sm text-white/70 mt-1">{card.subtitle}</p>
+                    <p className="text-sm text-zinc-500 mt-1">{card.subtitle}</p>
                   </div>
                 </Link>
               </motion.div>
