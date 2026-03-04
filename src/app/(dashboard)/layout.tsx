@@ -21,7 +21,12 @@ import {
   CaretLeft,
   List,
 } from "@phosphor-icons/react";
-import type { Icon as PhosphorIcon } from "@phosphor-icons/react";
+
+type NavIcon = React.ComponentType<{
+  size?: number;
+  weight?: "thin" | "light" | "regular" | "bold" | "fill" | "duotone";
+  className?: string;
+}>;
 
 /* ─── Nav Structure ─── */
 const NAV_GROUPS = [
@@ -218,7 +223,7 @@ function NavItem({
   accent,
 }: {
   href: string;
-  icon: PhosphorIcon;
+  icon: NavIcon;
   label: string;
   active: boolean;
   collapsed: boolean;

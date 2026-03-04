@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import Link from "next/link";
 import { List, X, Infinity } from "@phosphor-icons/react";
 
 const navLinks = [
@@ -63,18 +64,18 @@ export default function Navbar() {
 
             {/* Desktop CTA */}
             <div className="hidden md:flex items-center gap-3 shrink-0">
-              <a
-                href="#"
+              <Link
+                href="/sign-in"
                 className="text-[13px] font-medium text-zinc-500 hover:text-zinc-950 transition-colors px-3 py-1.5"
               >
                 Sign In
-              </a>
-              <a
-                href="#"
+              </Link>
+              <Link
+                href="/get-started"
                 className="btn-ice inline-flex items-center gap-1.5 text-white text-[13px] font-semibold px-5 py-2 rounded-xl transition-all active:scale-[0.97] shadow-(--shadow-accent-glow)"
               >
                 Get Started
-              </a>
+              </Link>
             </div>
 
             {/* Mobile Toggle */}
@@ -123,18 +124,18 @@ export default function Navbar() {
                   </a>
                 ))}
                 <div className="flex flex-col gap-2 pt-3 mt-2 border-t border-zinc-200/50">
-                  <a
-                    href="#"
+                  <Link
+                    href="/sign-in"
                     className="text-[15px] font-medium text-zinc-500 text-center py-2.5 hover:text-zinc-950 transition-colors"
                   >
                     Sign In
-                  </a>
-                  <a
-                    href="#"
+                  </Link>
+                  <Link
+                    href="/get-started"
                     className="btn-ice inline-flex items-center justify-center text-white text-[15px] font-semibold px-5 py-2.5 rounded-xl transition-all active:scale-[0.97] shadow-(--shadow-accent-glow)"
                   >
                     Get Started
-                  </a>
+                  </Link>
                 </div>
               </div>
             </motion.div>
