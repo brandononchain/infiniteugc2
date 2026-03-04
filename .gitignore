@@ -45,3 +45,5 @@ public/avatars/originals/
 next-env.d.ts
 
 .vercel
+
+_backend_ref/

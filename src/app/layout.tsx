@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Outfit, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { AuthProviderClient } from "@/components/auth-provider-client";
 
 const outfit = Outfit({
   variable: "--font-outfit",
@@ -42,8 +43,15 @@ export default function RootLayout({
       <body
         className={`${outfit.variable} ${geistMono.variable} antialiased`}
       >
-        {children}
+        <AuthProviderWrapper>{children}</AuthProviderWrapper>
       </body>
     </html>
   );
+}
+
+/* Client wrapper so layout.tsx stays a Server Component for metadata */
+function AuthProviderWrapper({ children }: { children: React.ReactNode }) {
+  // AuthProvider is a client component imported dynamically
+  // to keep the root layout as a server component
+  return <AuthProviderClient>{children}</AuthProviderClient>;
 }

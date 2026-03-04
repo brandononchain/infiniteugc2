@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import {
   Envelope,
   Lock,
@@ -9,7 +10,10 @@ import {
   GoogleLogo,
   ArrowRight,
   Check,
+  CircleNotch,
 } from "@phosphor-icons/react";
+import { useAuth } from "@/lib/auth-context";
+import { getSupabaseBrowserClient } from "@/lib/supabase/client";
 
 const PLANS = [
   {
@@ -42,6 +46,30 @@ export default function GetStarted() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [selectedPlan, setSelectedPlan] = useState("pro");
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+  const { signUp } = useAuth();
+  const router = useRouter();
+
+  const handleGoogleSignUp = async () => {
+    const supabase = getSupabaseBrowserClient();
+    await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: { redirectTo: `${window.location.origin}/dashboard` },
+    });
+  };
+
+  const handleSignUp = async () => {
+    setError(null);
+    setLoading(true);
+    const { error: err } = await signUp(email, password, name);
+    setLoading(false);
+    if (err) {
+      setError(err);
+    } else {
+      router.push("/dashboard");
+    }
+  };
 
   return (
     <div className="w-full max-w-2xl">
@@ -76,7 +104,10 @@ export default function GetStarted() {
           </div>
 
           {/* Google OAuth */}
-          <button className="w-full flex items-center justify-center gap-2.5 bg-white border border-zinc-200 rounded-xl px-4 py-2.5 text-sm font-medium text-zinc-700 hover:bg-zinc-50 hover:border-zinc-300 transition-all">
+          <button
+            onClick={handleGoogleSignUp}
+            className="w-full flex items-center justify-center gap-2.5 bg-white border border-zinc-200 rounded-xl px-4 py-2.5 text-sm font-medium text-zinc-700 hover:bg-zinc-50 hover:border-zinc-300 transition-all"
+          >
             <GoogleLogo size={18} weight="bold" />
             Continue with Google
           </button>
@@ -94,6 +125,11 @@ export default function GetStarted() {
             }}
             className="space-y-3"
           >
+            {error && (
+              <div className="bg-red-50 border border-red-200 text-red-700 text-xs font-medium px-3 py-2 rounded-xl">
+                {error}
+              </div>
+            )}
             <div>
               <label className="text-[11px] font-medium text-zinc-500 mb-1.5 block">Full Name</label>
               <div className="relative">
@@ -201,11 +237,16 @@ export default function GetStarted() {
               Back
             </button>
             <Link
-              href="/dashboard"
+              href="#"
+              onClick={(e) => {
+                e.preventDefault();
+                handleSignUp();
+              }}
               className="flex items-center gap-2 bg-zinc-950 text-white text-sm font-semibold px-6 py-2.5 rounded-xl hover:bg-zinc-800 transition-colors"
             >
-              Start Free Trial
-              <ArrowRight size={14} weight="bold" />
+              {loading ? <CircleNotch size={14} weight="bold" className="animate-spin" /> : null}
+              {loading ? "Creating account..." : "Start Free Trial"}
+              {!loading && <ArrowRight size={14} weight="bold" />}
             </Link>
           </div>
         </div>

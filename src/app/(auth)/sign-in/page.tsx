@@ -2,11 +2,39 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Envelope, Lock, GoogleLogo, ArrowRight } from "@phosphor-icons/react";
+import { useRouter } from "next/navigation";
+import { Envelope, Lock, GoogleLogo, ArrowRight, CircleNotch } from "@phosphor-icons/react";
+import { useAuth } from "@/lib/auth-context";
+import { getSupabaseBrowserClient } from "@/lib/supabase/client";
 
 export default function SignIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+  const { signIn } = useAuth();
+  const router = useRouter();
+
+  const handleGoogleSignIn = async () => {
+    const supabase = getSupabaseBrowserClient();
+    await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: { redirectTo: `${window.location.origin}/dashboard` },
+    });
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError(null);
+    setLoading(true);
+    const { error: err } = await signIn(email, password);
+    setLoading(false);
+    if (err) {
+      setError(err);
+    } else {
+      router.push("/dashboard");
+    }
+  };
 
   return (
     <div className="w-full max-w-sm">
@@ -16,7 +44,10 @@ export default function SignIn() {
       </div>
 
       {/* Google OAuth */}
-      <button className="w-full flex items-center justify-center gap-2.5 bg-white border border-zinc-200 rounded-xl px-4 py-2.5 text-sm font-medium text-zinc-700 hover:bg-zinc-50 hover:border-zinc-300 transition-all">
+      <button
+        onClick={handleGoogleSignIn}
+        className="w-full flex items-center justify-center gap-2.5 bg-white border border-zinc-200 rounded-xl px-4 py-2.5 text-sm font-medium text-zinc-700 hover:bg-zinc-50 hover:border-zinc-300 transition-all"
+      >
         <GoogleLogo size={18} weight="bold" />
         Continue with Google
       </button>
@@ -30,12 +61,14 @@ export default function SignIn() {
 
       {/* Email / Password */}
       <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          window.location.href = "/dashboard";
-        }}
+        onSubmit={handleSubmit}
         className="space-y-3"
       >
+        {error && (
+          <div className="bg-red-50 border border-red-200 text-red-700 text-xs font-medium px-3 py-2 rounded-xl">
+            {error}
+          </div>
+        )}
         <div>
           <label className="text-[11px] font-medium text-zinc-500 mb-1.5 block">Email</label>
           <div className="relative">
@@ -70,10 +103,12 @@ export default function SignIn() {
 
         <button
           type="submit"
-          className="w-full flex items-center justify-center gap-2 bg-zinc-950 text-white text-sm font-semibold px-4 py-2.5 rounded-xl hover:bg-zinc-800 transition-colors mt-4"
+          disabled={loading}
+          className="w-full flex items-center justify-center gap-2 bg-zinc-950 text-white text-sm font-semibold px-4 py-2.5 rounded-xl hover:bg-zinc-800 transition-colors mt-4 disabled:opacity-50"
         >
-          Sign In
-          <ArrowRight size={14} weight="bold" />
+          {loading ? <CircleNotch size={14} weight="bold" className="animate-spin" /> : null}
+          {loading ? "Signing in..." : "Sign In"}
+          {!loading && <ArrowRight size={14} weight="bold" />}
         </button>
       </form>
 

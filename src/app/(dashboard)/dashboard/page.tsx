@@ -1,288 +1,228 @@
 "use client";
 
-import { motion } from "framer-motion";
-import Link from "next/link";
+import { useAuth } from "@/lib/auth-context";
+import { useJobStats, useCompletedJobs } from "@/hooks/use-data";
 import {
-  Plus,
-  ArrowRight,
-  Play,
-  FilmSlate,
-  ImageSquare,
-  Lightning,
-  TrendUp,
-  Coin,
   VideoCamera,
-  UserCircle,
+  Lightning,
+  CheckCircle,
+  Clock,
+  Coin,
+  Play,
   Sparkle,
-  Stack,
-  Microphone,
-  FileText,
-  DownloadSimple,
-  Fire,
-  Eye,
+  ArrowRight,
+  WarningCircle,
 } from "@phosphor-icons/react";
-
-/* ─── Quick-Action Cards (Creatify-style hero) ─── */
-const HERO_CARDS = [
-  {
-    title: "CREATE SINGLE CAMPAIGN",
-    subtitle: "Create a single AI-powered video ad",
-    href: "/create",
-    icon: VideoCamera,
-  },
-  {
-    title: "CREATE MASS CAMPAIGN",
-    subtitle: "Batch generate videos at scale",
-    href: "/create-mass",
-    icon: Stack,
-  },
-  {
-    title: "CREATE PREMIUM CONTENT",
-    subtitle: "VEO3, Sora 2 Pro & OmniHuman models",
-    href: "/create-premium",
-    icon: Sparkle,
-  },
-];
-
-const QUICK_TOOLS = [
-  { label: "Image Generation", icon: ImageSquare, href: "/image-generation" },
-  { label: "Script Generation", icon: FileText, href: "/script-generation" },
-  { label: "Hook Generation", icon: Lightning, href: "/hooks" },
-  { label: "Video Editor", icon: FilmSlate, href: "/editor" },
-  { label: "Voices", icon: Microphone, href: "/voices" },
-  { label: "Avatars", icon: UserCircle, href: "/avatars" },
-  { label: "Scripts", icon: FileText, href: "/scripts" },
-  { label: "Exports", icon: DownloadSimple, href: "/exports" },
-];
-
-const CATEGORIES = [
-  "Hook", "Viral", "SALE", "Multi-Industry", "Apparel", "Accessories",
-  "Beauty & Personal Care", "Services", "Physical Goods", "Apps",
-  "Food & Beverage", "Financial", "Health", "Tech & Electronics",
-  "Sports & Outdoor", "Household Product", "Home Improvement", "Pets",
-  "Education", "UGC", "Cinematic", "Aesthetic",
-];
-
-/* Placeholder feed items */
-const FEED_ITEMS = Array.from({ length: 12 }, (_, i) => ({
-  id: i + 1,
-  score: Math.floor(Math.random() * 30) + 40,
-  views: `${(Math.random() * 50 + 10).toFixed(1)}k`,
-  type: i % 3 === 0 ? "UGC" : i % 3 === 1 ? "Cinematic" : "Hook",
-}));
-
-/* ─── Stat item ─── */
-const STATS = [
-  { label: "Videos Created", value: "0", icon: VideoCamera, change: null },
-  { label: "Credits Left", value: "30", icon: Coin, change: null },
-  { label: "Active Campaigns", value: "0", icon: Play, change: null },
-  { label: "Total Views", value: "0", icon: Eye, change: null },
-];
+import Link from "next/link";
 
 export default function DashboardHome() {
+  const { user, profile } = useAuth();
+  const { data: stats } = useJobStats();
+  const { data: completedJobs } = useCompletedJobs();
+
+  const displayName = profile?.full_name || user?.email?.split("@")[0] || "User";
+  const credits = profile?.credits ?? 0;
+
+  const STATS = [
+    {
+      label: "Total Videos",
+      value: stats?.total ?? 0,
+      icon: VideoCamera,
+      color: "text-sky-600",
+      bg: "bg-sky-50",
+    },
+    {
+      label: "Processing",
+      value: (stats?.processing ?? 0) + (stats?.queued ?? 0),
+      icon: Lightning,
+      color: "text-amber-600",
+      bg: "bg-amber-50",
+    },
+    {
+      label: "Completed",
+      value: stats?.completed ?? 0,
+      icon: CheckCircle,
+      color: "text-emerald-600",
+      bg: "bg-emerald-50",
+    },
+    {
+      label: "Failed",
+      value: stats?.failed ?? 0,
+      icon: WarningCircle,
+      color: "text-rose-600",
+      bg: "bg-rose-50",
+    },
+  ];
+
+  const recentVideos = (completedJobs || []).slice(0, 6);
+
   return (
     <div className="min-h-full">
-      {/* ─── Top Bar ─── */}
+      {/* Header */}
       <div className="sticky top-0 z-30 brutal-header">
-        <div className="max-w-7xl mx-auto px-6 lg:px-10 h-16 flex items-center justify-between">
+        <div className="max-w-6xl mx-auto px-6 lg:px-10 h-16 flex items-center justify-between">
           <div>
             <h1 className="text-lg font-bold text-zinc-950 tracking-tight">
-              Welcome back, Sarah
+              Welcome back, {displayName}
             </h1>
-            <p className="text-xs text-zinc-500">Ready to create something amazing?</p>
+            <p className="text-xs text-zinc-500">Here&apos;s your video generation overview</p>
           </div>
           <div className="flex items-center gap-3">
-            <div className="flex items-center gap-1.5 bg-accent-50 border border-accent-200 text-accent-700 text-xs font-semibold px-3.5 py-1.5 rounded-full">
-              <Coin size={14} weight="fill" />
-              <span>30 credits</span>
+            <div className="flex items-center gap-1.5 bg-accent-50 border border-accent-200/40 text-accent-700 text-[11px] font-semibold px-3 py-1 rounded-full">
+              <Coin size={12} weight="fill" />
+              <span className="text-accent-800 font-bold">{credits.toLocaleString()}</span> credits
             </div>
             <Link
               href="/create"
-              className="btn-ice flex items-center gap-2 text-xs font-semibold px-4 py-2 rounded-full"
+              className="btn-ice flex items-center gap-1.5 text-xs font-semibold px-4 py-2 rounded-full"
             >
-              <Plus size={14} weight="bold" />
+              <Play size={12} weight="fill" />
               New Campaign
             </Link>
           </div>
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-6 lg:px-10 py-8 space-y-10">
-        {/* ─── Stats Row ─── */}
+      <div className="max-w-6xl mx-auto px-6 lg:px-10 py-8 space-y-8">
+        {/* Stats Grid */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-          {STATS.map((stat, i) => (
-            <motion.div
-              key={stat.label}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.06, type: "spring", stiffness: 120, damping: 20 }}
-              className="bg-white rounded-xl p-5 group brutal-card"
-            >
-              <div className="flex items-center justify-between mb-3">
-                <div className="w-9 h-9 rounded-xl bg-zinc-50 flex items-center justify-center group-hover:bg-accent-50 transition-colors">
-                  <stat.icon size={18} weight="duotone" className="text-zinc-500 group-hover:text-accent-600 transition-colors" />
+          {STATS.map((stat) => {
+            const Icon = stat.icon;
+            return (
+              <div key={stat.label} className="bg-white rounded-xl p-4 brutal-card">
+                <div className="flex items-center justify-between mb-3">
+                  <div className={`w-9 h-9 rounded-xl ${stat.bg} flex items-center justify-center`}>
+                    <Icon size={18} weight="duotone" className={stat.color} />
+                  </div>
                 </div>
-                {stat.change && (
-                  <span className="text-[10px] font-semibold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full flex items-center gap-0.5">
-                    <TrendUp size={10} weight="bold" />
-                    {stat.change}
-                  </span>
-                )}
+                <p className="text-2xl font-bold text-zinc-900">{stat.value}</p>
+                <p className="text-[11px] text-zinc-500 font-medium mt-0.5">{stat.label}</p>
               </div>
-              <p className="text-2xl font-bold text-zinc-950 tracking-tight">{stat.value}</p>
-              <p className="text-xs text-zinc-500 mt-0.5">{stat.label}</p>
-            </motion.div>
-          ))}
+            );
+          })}
         </div>
 
-        {/* ─── Hero Cards (Creatify-style) ─── */}
-        <section>
-          <div className="flex items-center justify-between mb-5">
-            <h2 className="text-base font-bold text-zinc-950 tracking-tight">Start Creating</h2>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {HERO_CARDS.map((card, i) => (
-              <motion.div
-                key={card.title}
-                initial={{ opacity: 0, y: 24 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.15 + i * 0.08, type: "spring", stiffness: 100, damping: 20 }}
-              >
-                <Link
-                  href={card.href}
-                  className="group block relative overflow-hidden rounded-2xl h-48 md:h-56 border border-white/40 shadow-lg"
-                  style={{ background: 'rgba(255, 255, 255, 0.35)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)' }}
-                >
-                  {/* Subtle shimmer on hover */}
-                  <div className="absolute inset-0 bg-linear-to-br from-white/20 via-transparent to-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-
-                  <div className="relative z-10 h-full flex flex-col justify-end p-6">
-                    <div className="flex items-center gap-2 mb-2">
-                      <div className="w-9 h-9 rounded-xl bg-white/40 border border-white/50 flex items-center justify-center backdrop-blur-sm">
-                        <card.icon size={18} weight="bold" className="text-zinc-700" />
-                      </div>
-                    </div>
-                    <h3 className="text-lg font-extrabold text-zinc-900 tracking-tight uppercase">
-                      {card.title}
-                      <ArrowRight size={16} weight="bold" className="inline-block ml-2 group-hover:translate-x-1 transition-transform" />
-                    </h3>
-                    <p className="text-sm text-zinc-500 mt-1">{card.subtitle}</p>
-                  </div>
-                </Link>
-              </motion.div>
-            ))}
-          </div>
-        </section>
-
-        {/* ─── Quick Tools Row ─── */}
-        <section>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-            {QUICK_TOOLS.map((tool, i) => (
-              <motion.div
-                key={tool.label}
-                initial={{ opacity: 0, y: 16 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.35 + i * 0.05, type: "spring", stiffness: 120, damping: 20 }}
-              >
-                <Link
-                  href={tool.href}
-                  className="flex items-center gap-3 bg-white rounded-xl px-5 py-4 group brutal-card"
-                >
-                  <div className="w-8 h-8 rounded-lg bg-zinc-50 flex items-center justify-center group-hover:bg-accent-50 transition-colors">
-                    <tool.icon size={16} weight="duotone" className="text-zinc-500 group-hover:text-accent-600 transition-colors" />
-                  </div>
-                  <span className="text-sm font-semibold text-zinc-700 group-hover:text-zinc-950 transition-colors">
-                    {tool.label}
-                  </span>
-                </Link>
-              </motion.div>
-            ))}
-          </div>
-        </section>
-
-        {/* ─── Social & UGC Ads Gallery ─── */}
-        <section>
-          <div className="flex items-center justify-between mb-2">
-            <div>
-              <div className="flex items-center gap-2">
-                <h2 className="text-base font-bold text-zinc-950 tracking-tight uppercase">
-                  Social & UGC Ads
-                </h2>
-                <span className="text-[10px] font-bold text-accent-600 bg-accent-50 px-2 py-0.5 rounded-full uppercase tracking-wider">
-                  AI
-                </span>
-              </div>
-              <p className="text-xs text-zinc-500 mt-1">
-                Discover social-first and UGC-style ads made to feel native and authentic.
-              </p>
-            </div>
+        {/* Quick Actions */}
+        <div>
+          <h2 className="text-sm font-bold text-zinc-950 mb-3">Quick Actions</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
             <Link
-              href="#"
-              className="text-xs font-semibold text-accent-600 hover:text-accent-700 flex items-center gap-1 transition-colors"
+              href="/create"
+              className="bg-white rounded-xl p-4 brutal-card hover:border-accent-300 hover:shadow-md transition-all group"
             >
-              See all
-              <ArrowRight size={12} weight="bold" />
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-linear-to-br from-rose-500 to-pink-500 flex items-center justify-center">
+                  <Sparkle size={18} weight="fill" className="text-white" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-bold text-zinc-900">Create Campaign</p>
+                  <p className="text-[11px] text-zinc-500">Single AI video with avatar</p>
+                </div>
+                <ArrowRight size={16} className="text-zinc-400 group-hover:text-accent-500 transition-colors" />
+              </div>
+            </Link>
+            <Link
+              href="/create-mass"
+              className="bg-white rounded-xl p-4 brutal-card hover:border-accent-300 hover:shadow-md transition-all group"
+            >
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-linear-to-br from-violet-500 to-purple-500 flex items-center justify-center">
+                  <Lightning size={18} weight="fill" className="text-white" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-bold text-zinc-900">Mass Campaign</p>
+                  <p className="text-[11px] text-zinc-500">Batch videos from script groups</p>
+                </div>
+                <ArrowRight size={16} className="text-zinc-400 group-hover:text-accent-500 transition-colors" />
+              </div>
+            </Link>
+            <Link
+              href="/create-premium"
+              className="bg-white rounded-xl p-4 brutal-card hover:border-accent-300 hover:shadow-md transition-all group"
+            >
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-linear-to-br from-amber-500 to-orange-500 flex items-center justify-center">
+                  <Sparkle size={18} weight="fill" className="text-white" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-bold text-zinc-900">Premium Video</p>
+                  <p className="text-[11px] text-zinc-500">VEO3, Sora 2, OmniHuman</p>
+                </div>
+                <ArrowRight size={16} className="text-zinc-400 group-hover:text-accent-500 transition-colors" />
+              </div>
             </Link>
           </div>
+        </div>
 
-          {/* Category pills */}
-          <div className="flex flex-wrap gap-2 mt-4 mb-6">
-            {CATEGORIES.map((cat, i) => (
-              <button
-                key={cat}
-                className={`text-xs font-medium px-3.5 py-1.5 rounded-full transition-all ${
-                  i === 0
-                    ? "brutal-pill-active"
-                    : "brutal-pill"
-                }`}
-              >
-                {cat}
-              </button>
-            ))}
+        {/* Recent Videos */}
+        <div>
+          <div className="flex items-center justify-between mb-3">
+            <h2 className="text-sm font-bold text-zinc-950">Recent Exports</h2>
+            {recentVideos.length > 0 && (
+              <Link href="/exports" className="text-xs font-medium text-accent-600 hover:text-accent-700 transition-colors">
+                View all
+              </Link>
+            )}
           </div>
 
-          {/* Video Grid (placeholders) */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
-            {FEED_ITEMS.map((item, i) => (
-              <motion.div
-                key={item.id}
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 0.4 + i * 0.03, type: "spring", stiffness: 120, damping: 20 }}
-                className="group relative aspect-9/16 bg-zinc-100 rounded-xl overflow-hidden cursor-pointer brutal-card"
-              >
-                {/* Placeholder gradient */}
-                <div className={`absolute inset-0 bg-linear-to-br ${
-                  i % 4 === 0
-                    ? "from-rose-100 via-rose-50 to-amber-50"
-                    : i % 4 === 1
-                    ? "from-sky-100 via-blue-50 to-indigo-50"
-                    : i % 4 === 2
-                    ? "from-emerald-100 via-teal-50 to-cyan-50"
-                    : "from-violet-100 via-purple-50 to-pink-50"
-                }`} />
-
-                {/* Score badge */}
-                <div className="absolute top-2 left-2 z-10 flex items-center gap-1 bg-white text-[10px] font-bold text-zinc-700 px-2 py-0.5 rounded-full border border-zinc-200 shadow-sm">
-                  <Fire size={10} weight="fill" className="text-orange-500" />
-                  {item.score}
-                </div>
-
-                {/* Play overlay on hover */}
-                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors flex items-center justify-center">
-                  <div className="w-10 h-10 rounded-full bg-white/90 flex items-center justify-center opacity-0 group-hover:opacity-100 scale-90 group-hover:scale-100 transition-all shadow-lg">
-                    <Play size={16} weight="fill" className="text-zinc-900 ml-0.5" />
+          {recentVideos.length > 0 ? (
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
+              {recentVideos.map((job) => (
+                <div
+                  key={job.id}
+                  className="bg-white rounded-xl overflow-hidden brutal-card group"
+                >
+                  {job.video_url ? (
+                    <div className="aspect-[9/16] bg-zinc-900 relative">
+                      <video
+                        src={job.video_url}
+                        className="w-full h-full object-cover"
+                        muted
+                        playsInline
+                      />
+                      <a
+                        href={job.video_url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="absolute inset-0 flex items-center justify-center bg-black/0 group-hover:bg-black/30 transition-colors"
+                      >
+                        <Play
+                          size={32}
+                          weight="fill"
+                          className="text-white opacity-0 group-hover:opacity-100 transition-opacity"
+                        />
+                      </a>
+                    </div>
+                  ) : (
+                    <div className="aspect-[9/16] bg-zinc-50 flex items-center justify-center">
+                      <VideoCamera size={24} className="text-zinc-300" />
+                    </div>
+                  )}
+                  <div className="p-2">
+                    <p className="text-[11px] font-semibold text-zinc-900 truncate">
+                      {job.campaign_name || "Untitled"}
+                    </p>
+                    <p className="text-[10px] text-zinc-500">{job.video_provider || "—"}</p>
                   </div>
                 </div>
-
-                {/* Bottom info */}
-                <div className="absolute bottom-0 inset-x-0 bg-linear-to-t from-black/50 to-transparent p-2.5 pt-8">
-                  <span className="text-[10px] font-medium text-white/80">{item.type}</span>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </section>
+              ))}
+            </div>
+          ) : (
+            <div className="bg-white rounded-xl p-12 text-center brutal-empty">
+              <div className="w-14 h-14 rounded-2xl bg-zinc-50 flex items-center justify-center mx-auto mb-4">
+                <VideoCamera size={24} weight="duotone" className="text-zinc-300" />
+              </div>
+              <h3 className="text-sm font-semibold text-zinc-500 mb-1">No videos yet</h3>
+              <p className="text-xs text-zinc-500 mb-6">Create your first campaign to start generating videos.</p>
+              <Link
+                href="/create"
+                className="inline-flex btn-ice text-xs font-semibold px-6 py-2.5 rounded-full"
+              >
+                Create Campaign
+              </Link>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

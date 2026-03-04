@@ -2,7 +2,8 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { useAuth } from "@/lib/auth-context";
 import {
   Infinity,
   House,
@@ -20,6 +21,7 @@ import {
   Gear,
   CaretLeft,
   List,
+  SignOut,
 } from "@phosphor-icons/react";
 
 type NavIcon = React.ComponentType<{
@@ -70,8 +72,23 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
+  const router = useRouter();
+  const { user, profile, loading, signOut } = useAuth();
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+
+  const displayName = profile?.full_name || user?.email?.split("@")[0] || "User";
+  const initials = displayName
+    .split(" ")
+    .map((w: string) => w[0])
+    .join("")
+    .toUpperCase()
+    .slice(0, 2);
+
+  const handleSignOut = async () => {
+    await signOut();
+    router.push("/sign-in");
+  };
 
   return (
     <div className="flex h-dvh bg-[var(--color-background)] overflow-hidden">
@@ -182,13 +199,24 @@ export default function DashboardLayout({
             }`}
           >
             <div className="w-7 h-7 rounded-full bg-accent-500/20 text-accent-400 flex items-center justify-center text-xs font-bold shrink-0">
-              SC
+              {initials}
             </div>
             {!collapsed && (
               <div className="min-w-0 flex-1">
-                <p className="text-xs font-semibold text-zinc-200 truncate">Sarah Creator</p>
-                <p className="text-[10px] text-accent-400 font-medium">Pro Member</p>
+                <p className="text-xs font-semibold text-zinc-200 truncate">{displayName}</p>
+                <p className="text-[10px] text-accent-400 font-medium truncate">
+                  {profile ? `${profile.credits} credits` : "Loading..."}
+                </p>
               </div>
+            )}
+            {!collapsed && (
+              <button
+                onClick={handleSignOut}
+                className="w-6 h-6 flex items-center justify-center rounded-md hover:bg-zinc-800 transition-colors text-zinc-500 hover:text-zinc-300"
+                title="Sign out"
+              >
+                <SignOut size={14} weight="bold" />
+              </button>
             )}
           </div>
         </div>
