@@ -266,6 +266,27 @@ body::after {
   color: #a1a1aa;
 }
 
+/* ─── macOS Dock Glass ─── */
+.dock-glass {
+  background: rgba(24, 24, 27, 0.82);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow:
+    0 0 0 0.5px rgba(255, 255, 255, 0.03),
+    0 8px 40px rgba(0, 0, 0, 0.35),
+    inset 0 0.5px 0 rgba(255, 255, 255, 0.06);
+}
+
+/* Hide scrollbar in dock items area */
+.dock-scroll::-webkit-scrollbar {
+  display: none;
+}
+.dock-scroll {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
 /* Empty state card — subtle dashed border */
 .brutal-empty {
   background: var(--color-surface);

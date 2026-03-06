@@ -4,67 +4,13 @@ import { useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useAuth } from "@/lib/auth-context";
+import { DockSidebar, NAV_GROUPS } from "@/components/dock-sidebar";
 import {
   Infinity,
-  House,
-  Plus,
-  Stack,
-  Sparkle,
-  Play,
-  Microphone,
-  UserCircle,
-  FileText,
-  ImageSquare,
-  Lightning,
-  DownloadSimple,
-  FilmSlate,
-  Gear,
-  CaretLeft,
   List,
+  X,
   SignOut,
 } from "@phosphor-icons/react";
-
-type NavIcon = React.ComponentType<{
-  size?: number;
-  weight?: "thin" | "light" | "regular" | "bold" | "fill" | "duotone";
-  className?: string;
-}>;
-
-/* ─── Nav Structure ─── */
-const NAV_GROUPS = [
-  {
-    label: "Create",
-    items: [
-      { label: "Create", href: "/create", icon: Plus },
-      { label: "Create Mass", href: "/create-mass", icon: Stack },
-      { label: "Create Premium", href: "/create-premium", icon: Sparkle },
-    ],
-  },
-  {
-    label: "Production",
-    items: [
-      { label: "Running", href: "/running", icon: Play },
-      { label: "Exports", href: "/exports", icon: DownloadSimple },
-    ],
-  },
-  {
-    label: "Assets",
-    items: [
-      { label: "Voices", href: "/voices", icon: Microphone },
-      { label: "Avatars", href: "/avatars", icon: UserCircle },
-      { label: "Scripts", href: "/scripts", icon: FileText },
-    ],
-  },
-  {
-    label: "Tools",
-    items: [
-      { label: "Image Generation", href: "/image-generation", icon: ImageSquare },
-      { label: "Script Generation", href: "/script-generation", icon: FileText },
-      { label: "Hook Generation", href: "/hooks", icon: Lightning },
-      { label: "Editor", href: "/editor", icon: FilmSlate },
-    ],
-  },
-];
 
 export default function DashboardLayout({
   children,
@@ -74,7 +20,6 @@ export default function DashboardLayout({
   const pathname = usePathname();
   const router = useRouter();
   const { user, profile, loading, signOut } = useAuth();
-  const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
 
   const displayName = profile?.full_name || user?.email?.split("@")[0] || "User";
@@ -92,132 +37,102 @@ export default function DashboardLayout({
 
   return (
     <div className="flex h-dvh bg-[var(--color-background)] overflow-hidden">
-      {/* Mobile overlay */}
+      {/* ─── Desktop: macOS Dock Side Nav ─── */}
+      <DockSidebar
+        onSignOut={handleSignOut}
+        userInitials={initials}
+        userName={displayName}
+      />
+
+      {/* ─── Mobile overlay ─── */}
       {mobileOpen && (
         <div
-          className="fixed inset-0 z-40 bg-black/20 backdrop-blur-sm lg:hidden"
+          className="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm lg:hidden"
           onClick={() => setMobileOpen(false)}
         />
       )}
 
-      {/* ─── Sidebar ─── */}
+      {/* ─── Mobile drawer ─── */}
       <aside
         className={`
-          fixed z-50 lg:static inset-y-0 left-0
-          flex flex-col brutal-sidebar
-          transition-all duration-300 ease-out
-          ${collapsed ? "w-17" : "w-60"}
-          ${mobileOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}
+          fixed z-50 inset-y-0 left-0 w-64 flex flex-col brutal-sidebar
+          transition-transform duration-300 ease-out lg:hidden
+          ${mobileOpen ? "translate-x-0" : "-translate-x-full"}
         `}
       >
-        {/* Brand */}
-        <div className={`flex items-center h-16 border-b border-zinc-800 shrink-0 ${collapsed ? "justify-center px-0" : "gap-2.5 px-4"}`}>
-          {collapsed ? (
-            <button
-              onClick={() => setCollapsed(false)}
-              className="w-10 h-10 flex items-center justify-center rounded-xl hover:bg-zinc-800 transition-colors group"
-              title="Expand sidebar"
-            >
-                <div className="w-8 h-8 bg-accent-500 rounded-xl flex items-center justify-center group-hover:scale-105 transition-transform">
-                <Infinity size={17} weight="bold" className="text-white" />
-              </div>
-            </button>
-          ) : (
-            <>
-              <Link
-                href="/dashboard"
-                className="flex items-center gap-2.5 min-w-0"
-              >
-                <div className="w-8 h-8 bg-accent-500 rounded-xl flex items-center justify-center shrink-0">
-                  <Infinity size={17} weight="bold" className="text-white" />
-                </div>
-                <span className="text-sm font-bold tracking-tight text-white truncate">
-                  InfiniteUGC
-                </span>
-              </Link>
-              <button
-                onClick={() => setCollapsed(true)}
-                className="ml-auto hidden lg:flex w-6 h-6 items-center justify-center rounded-md hover:bg-zinc-800 transition-colors text-zinc-500 hover:text-zinc-300"
-              >
-                <CaretLeft size={14} weight="bold" />
-              </button>
-            </>
-          )}
+        {/* Drawer header */}
+        <div className="flex items-center justify-between h-14 px-4 border-b border-zinc-800 shrink-0">
+          <Link href="/dashboard" className="flex items-center gap-2">
+            <div className="w-7 h-7 bg-accent-500 rounded-lg flex items-center justify-center">
+              <Infinity size={14} weight="bold" className="text-white" />
+            </div>
+            <span className="text-sm font-bold text-white">InfiniteUGC</span>
+          </Link>
+          <button
+            onClick={() => setMobileOpen(false)}
+            className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-zinc-800 text-zinc-400"
+          >
+            <X size={18} weight="bold" />
+          </button>
         </div>
 
-        {/* Home link */}
-        <div className="px-2 pt-3 pb-1">
-          <NavItem
-            href="/dashboard"
-            icon={House}
-            label="Home"
-            active={pathname === "/dashboard"}
-            collapsed={collapsed}
-          />
-        </div>
-
-        {/* Nav groups */}
-        <nav className="flex-1 overflow-y-auto px-2 pb-4 space-y-5">
+        {/* Drawer nav groups */}
+        <nav className="flex-1 overflow-y-auto px-3 py-3 space-y-4">
           {NAV_GROUPS.map((group) => (
             <div key={group.label}>
-              {!collapsed && (
-                <p className="text-[10px] font-semibold text-zinc-600 uppercase tracking-widest px-3 mb-1.5">
-                  {group.label}
-                </p>
-              )}
-              {collapsed && <div className="border-t border-zinc-800 mx-2 mb-2" />}
+              <p className="text-[10px] font-semibold text-zinc-600 uppercase tracking-widest px-2 mb-1.5">
+                {group.label}
+              </p>
               <div className="space-y-0.5">
-                {group.items.map((item) => (
-                  <NavItem
-                    key={item.href}
-                    href={item.href}
-                    icon={item.icon}
-                    label={item.label}
-                    active={pathname === item.href}
-                    collapsed={collapsed}
-                  />
-                ))}
+                {group.items.map((item) => {
+                  const Icon = item.icon;
+                  const isActive = pathname === item.href;
+                  return (
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      onClick={() => setMobileOpen(false)}
+                      className={`
+                        group flex items-center gap-2.5 px-2.5 py-2 rounded-xl text-sm font-medium transition-colors
+                        ${isActive
+                          ? "nav-active text-accent-400"
+                          : "text-zinc-500 hover:bg-zinc-800/60 hover:text-zinc-200"
+                        }
+                      `}
+                    >
+                      <Icon
+                        size={18}
+                        weight={isActive ? "fill" : "regular"}
+                        className="shrink-0"
+                      />
+                      <span>{item.label}</span>
+                    </Link>
+                  );
+                })}
               </div>
             </div>
           ))}
         </nav>
 
-        {/* Bottom */}
-        <div className="border-t border-zinc-800 px-2 py-3 space-y-0.5">
-          <NavItem
-            href="/settings"
-            icon={Gear}
-            label="Settings"
-            active={pathname === "/settings"}
-            collapsed={collapsed}
-          />
-
-          {/* User */}
-          <div
-            className={`flex items-center gap-2.5 px-3 py-2.5 rounded-xl ${
-              collapsed ? "justify-center" : ""
-            }`}
-          >
+        {/* Drawer footer */}
+        <div className="border-t border-zinc-800 px-3 py-3">
+          <div className="flex items-center gap-2.5 px-2.5 py-2">
             <div className="w-7 h-7 rounded-full bg-accent-500/20 text-accent-400 flex items-center justify-center text-xs font-bold shrink-0">
               {initials}
             </div>
-            {!collapsed && (
-              <div className="min-w-0 flex-1">
-                <p className="text-xs font-semibold text-zinc-200 truncate">{displayName}</p>
-                <p className="text-[10px] text-accent-400 font-medium truncate">
-                  {profile ? `${profile.credits} credits` : "Loading..."}
-                </p>
-              </div>
-            )}
-            {!collapsed && (
-              <button
-                onClick={handleSignOut}
-                className="w-6 h-6 flex items-center justify-center rounded-md hover:bg-zinc-800 transition-colors text-zinc-500 hover:text-zinc-300"
-                title="Sign out"
-              >
-                <SignOut size={14} weight="bold" />
-              </button>
-            )}
+            <div className="min-w-0 flex-1">
+              <p className="text-xs font-semibold text-zinc-200 truncate">{displayName}</p>
+              <p className="text-[10px] text-accent-400 font-medium">
+                {profile ? `${profile.credits} credits` : "Loading..."}
+              </p>
+            </div>
+            <button
+              onClick={handleSignOut}
+              className="w-7 h-7 flex items-center justify-center rounded-lg hover:bg-zinc-800 text-zinc-500 hover:text-zinc-300"
+              title="Sign out"
+            >
+              <SignOut size={14} weight="bold" />
+            </button>
           </div>
         </div>
       </aside>
@@ -246,45 +161,5 @@ export default function DashboardLayout({
         </div>
       </main>
     </div>
-  );
-}
-
-/* ─── Nav Item Component ─── */
-function NavItem({
-  href,
-  icon: Icon,
-  label,
-  active,
-  collapsed,
-}: {
-  href: string;
-  icon: NavIcon;
-  label: string;
-  active: boolean;
-  collapsed: boolean;
-}) {
-  return (
-    <Link
-      href={href}
-      className={`
-        group flex items-center gap-2.5 px-3 py-2 rounded-xl text-sm font-medium transition-all
-        ${collapsed ? "justify-center px-0" : ""}
-        ${
-          active
-            ? "nav-active text-accent-400"
-            : "text-zinc-500 hover:bg-zinc-800/60 hover:text-zinc-200"
-        }
-      `}
-      title={collapsed ? label : undefined}
-    >
-      <Icon
-        size={18}
-        weight={active ? "fill" : "regular"}
-        className={`shrink-0 ${
-          active ? "text-accent-400" : "text-zinc-500 group-hover:text-zinc-300"
-        }`}
-      />
-      {!collapsed && <span className="truncate">{label}</span>}
-    </Link>
   );
 }
