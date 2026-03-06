@@ -127,9 +127,9 @@ export default function CreateCampaign() {
   const completedSteps = steps.filter((s) => s.done).length;
 
   return (
-    <div className="flex h-full p-3 lg:p-4">
-      {/* ═══ Window card — full dock height ═══ */}
-      <div className="w-full rounded-2xl border border-white/[0.08] bg-[#1e1e22] shadow-2xl shadow-black/40 overflow-hidden flex flex-col">
+    <div className="flex items-center justify-center min-h-full p-4 lg:p-6">
+      {/* ═══ Mac-style window card ═══ */}
+      <div className="w-full max-w-[1120px] rounded-2xl border border-white/[0.08] bg-[#1e1e22] shadow-2xl shadow-black/40 overflow-hidden flex flex-col max-h-[calc(100dvh-100px)]">
 
         {/* ── Window title bar ── */}
         <div className="flex items-center justify-between px-5 py-3 border-b border-white/[0.06] bg-[#1e1e22] shrink-0">
