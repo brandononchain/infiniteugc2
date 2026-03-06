@@ -2,8 +2,8 @@
 
 /* ─── THEME ─── */
 @theme inline {
-  --color-background: #e9e9ec;
-  --color-foreground: #18181b;
+  --color-background: #18181b;
+  --color-foreground: #f4f4f5;
 
   /* Ice Blue accent palette */
   --color-accent-50: #f0f9ff;
