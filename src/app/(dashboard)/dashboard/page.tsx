@@ -59,7 +59,7 @@ export default function DashboardHome() {
   return (
     <div className="min-h-full">
       {/* Header */}
-      <div className="sticky top-0 z-30 brutal-header">
+      <div className="sticky top-0 z-30">
         <div className="max-w-6xl mx-auto px-6 lg:px-10 h-16 flex items-center justify-between">
           <div>
             <h1 className="text-lg font-bold text-zinc-950 tracking-tight">

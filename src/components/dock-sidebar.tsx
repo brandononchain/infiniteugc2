@@ -1,81 +1,52 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { AnimatePresence, motion } from "framer-motion";
 import {
-  motion,
-  useMotionValue,
-  useSpring,
-  useTransform,
-  AnimatePresence,
-  type MotionValue,
-} from "framer-motion";
-import {
-  Infinity as InfinityIcon,
-  House,
+  Home,
   Plus,
-  Stack,
-  Sparkle,
+  Layers,
+  Sparkles,
   Play,
-  Microphone,
+  Download,
+  Mic,
   UserCircle,
   FileText,
-  ImageSquare,
-  Lightning,
-  DownloadSimple,
-  FilmSlate,
-  Gear,
-} from "@phosphor-icons/react";
-
-/* ─── Types ─── */
-type PhosphorIcon = React.ComponentType<{
-  size?: number;
-  weight?: "thin" | "light" | "regular" | "bold" | "fill" | "duotone";
-  className?: string;
-}>;
-
-interface NavItem {
-  label: string;
-  href: string;
-  icon: PhosphorIcon;
-}
-
-interface SeparatorEntry {
-  type: "separator";
-}
-
-interface ItemEntry extends NavItem {
-  type: "item";
-}
-
-type DockEntry = ItemEntry | SeparatorEntry;
+  Image,
+  PenTool,
+  Zap,
+  Clapperboard,
+  Settings,
+  type LucideIcon,
+} from "lucide-react";
 
 /* ─── Navigation Data (exported for mobile drawer reuse) ─── */
 export const NAV_GROUPS = [
   {
     label: "Main",
-    items: [{ label: "Home", href: "/dashboard", icon: House }],
+    items: [{ label: "Home", href: "/dashboard", icon: Home }],
   },
   {
     label: "Create",
     items: [
       { label: "Create", href: "/create", icon: Plus },
-      { label: "Create Mass", href: "/create-mass", icon: Stack },
-      { label: "Create Premium", href: "/create-premium", icon: Sparkle },
+      { label: "Create Mass", href: "/create-mass", icon: Layers },
+      { label: "Create Premium", href: "/create-premium", icon: Sparkles },
     ],
   },
   {
     label: "Production",
     items: [
       { label: "Running", href: "/running", icon: Play },
-      { label: "Exports", href: "/exports", icon: DownloadSimple },
+      { label: "Exports", href: "/exports", icon: Download },
     ],
   },
   {
     label: "Assets",
     items: [
-      { label: "Voices", href: "/voices", icon: Microphone },
+      { label: "Voices", href: "/voices", icon: Mic },
       { label: "Avatars", href: "/avatars", icon: UserCircle },
       { label: "Scripts", href: "/scripts", icon: FileText },
     ],
@@ -83,19 +54,30 @@ export const NAV_GROUPS = [
   {
     label: "Tools",
     items: [
-      { label: "Image Gen", href: "/image-generation", icon: ImageSquare },
-      { label: "Script Gen", href: "/script-generation", icon: FileText },
-      { label: "Hooks", href: "/hooks", icon: Lightning },
-      { label: "Editor", href: "/editor", icon: FilmSlate },
+      { label: "Image Gen", href: "/image-generation", icon: Image },
+      { label: "Script Gen", href: "/script-generation", icon: PenTool },
+      { label: "Hooks", href: "/hooks", icon: Zap },
+      { label: "Editor", href: "/editor", icon: Clapperboard },
     ],
   },
   {
     label: "System",
-    items: [{ label: "Settings", href: "/settings", icon: Gear }],
+    items: [{ label: "Settings", href: "/settings", icon: Settings }],
   },
 ];
 
 /* Flatten groups into dock entries with separators between groups */
+interface ItemEntry {
+  type: "item";
+  label: string;
+  href: string;
+  icon: LucideIcon;
+}
+interface SeparatorEntry {
+  type: "separator";
+}
+type DockEntry = ItemEntry | SeparatorEntry;
+
 const DOCK_ENTRIES: DockEntry[] = NAV_GROUPS.flatMap((group, i) => {
   const items: DockEntry[] = group.items.map((item) => ({
     type: "item" as const,
@@ -106,14 +88,8 @@ const DOCK_ENTRIES: DockEntry[] = NAV_GROUPS.flatMap((group, i) => {
     : items;
 });
 
-/* ─── Magnification Constants ─── */
-const BASE_SIZE = 40;
-const MAX_SIZE = 60;
-const DISTANCE = 140;
-const SPRING_CONFIG = { mass: 0.1, stiffness: 170, damping: 12 };
-
 /* ═══════════════════════════════════════════════════════════
-   DockSidebar — macOS-style vertical dock with magnification
+   DockSidebar — Liquid glass vertical dock (no magnification)
    ═══════════════════════════════════════════════════════════ */
 export function DockSidebar({
   onSignOut,
@@ -125,37 +101,33 @@ export function DockSidebar({
   userName: string;
 }) {
   const pathname = usePathname();
-  const mouseY = useMotionValue(Infinity);
 
   return (
     <div className="hidden lg:flex items-center pl-3 py-3 shrink-0 z-40">
-      <motion.div
-        onMouseMove={(e) => mouseY.set(e.clientY)}
-        onMouseLeave={() => mouseY.set(Infinity)}
-        className="dock-glass flex flex-col items-center max-h-[calc(100dvh-24px)] rounded-2xl"
-      >
+      <div className="dock-glass flex flex-col items-center max-h-[calc(100dvh-24px)] rounded-2xl">
         {/* ─── Brand (pinned top) ─── */}
-        <div className="flex flex-col items-center pt-3 px-1.75 shrink-0">
+        <div className="flex flex-col items-center pt-3 px-2 shrink-0">
           <Link
             href="/dashboard"
-            className="w-10 h-10 bg-accent-500 rounded-xl flex items-center justify-center shrink-0 hover:brightness-110 transition-all"
+            className="dock-icon-brand w-10 h-10 rounded-xl flex items-center justify-center shrink-0 transition-all duration-200"
             title="InfiniteUGC"
           >
-            <InfinityIcon size={18} weight="bold" className="text-white" />
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-white">
+              <path d="M18.178 8c5.096 0 5.096 8 0 8-5.095 0-7.133-8-12.739-8-4.585 0-4.585 8 0 8 5.606 0 7.644-8 12.74-8z" />
+            </svg>
           </Link>
           <DockSeparator />
         </div>
 
         {/* ─── Scrollable dock items ─── */}
-        <div className="flex-1 min-h-0 overflow-y-auto dock-scroll px-1.75">
-          <div className="flex flex-col items-center gap-0.75 py-0.5">
+        <div className="flex-1 min-h-0 overflow-y-auto dock-scroll px-2">
+          <div className="flex flex-col items-center gap-1 py-0.5">
             {DOCK_ENTRIES.map((entry, i) =>
               entry.type === "separator" ? (
                 <DockSeparator key={`sep-${i}`} />
               ) : (
                 <DockIcon
                   key={entry.href}
-                  mouseY={mouseY}
                   href={entry.href}
                   icon={entry.icon}
                   label={entry.label}
@@ -167,105 +139,76 @@ export function DockSidebar({
         </div>
 
         {/* ─── User (pinned bottom) ─── */}
-        <div className="flex flex-col items-center pb-3 px-1.75 shrink-0">
+        <div className="flex flex-col items-center pb-3 px-2 shrink-0">
           <DockSeparator />
           <button
             onClick={onSignOut}
-            className="relative w-10 h-10 rounded-full bg-accent-500/20 text-accent-400 flex items-center justify-center text-[11px] font-bold shrink-0 hover:bg-accent-500/30 transition-colors group"
+            className="relative w-10 h-10 rounded-full dock-icon-user flex items-center justify-center text-[11px] font-bold shrink-0 transition-all duration-200 group"
             title={`${userName} — Sign out`}
           >
             {userInitials}
             {/* Hover tooltip */}
-            <span className="absolute left-full ml-3 px-2.5 py-1.5 bg-zinc-900/95 backdrop-blur-sm text-white text-xs font-medium rounded-lg whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none shadow-lg border border-white/5 z-50">
+            <span className="absolute left-full ml-3 px-2.5 py-1.5 dock-tooltip text-white text-xs font-medium rounded-lg whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50">
               {userName}
-              <span className="absolute right-full top-1/2 -translate-y-1/2 border-[5px] border-transparent border-r-zinc-900/95" />
+              <span className="absolute right-full top-1/2 -translate-y-1/2 border-[5px] border-transparent border-r-[rgba(15,15,18,0.92)]" />
             </span>
           </button>
         </div>
-      </motion.div>
+      </div>
     </div>
   );
 }
 
 /* ─── Separator ─── */
 function DockSeparator() {
-  return <div className="w-7 my-0.75 border-t border-white/6" />;
+  return <div className="w-7 my-1 border-t border-white/4" />;
 }
 
 /* ═══════════════════════════════════════════════════════
-   DockIcon — individual icon with magnification effect
+   DockIcon — individual icon (no magnification, clean hover)
    ═══════════════════════════════════════════════════════ */
 function DockIcon({
-  mouseY,
   href,
   icon: Icon,
   label,
   active,
 }: {
-  mouseY: MotionValue<number>;
   href: string;
-  icon: PhosphorIcon;
+  icon: LucideIcon;
   label: string;
   active: boolean;
 }) {
-  const ref = useRef<HTMLDivElement>(null);
   const [hovered, setHovered] = useState(false);
 
-  /* Distance from cursor to this icon's center */
-  const distance = useTransform(mouseY, (val) => {
-    const bounds = ref.current?.getBoundingClientRect();
-    if (!bounds) return Infinity;
-    return val - (bounds.y + bounds.height / 2);
-  });
-
-  /* Container size — magnifies as cursor approaches */
-  const sizeRaw = useTransform(
-    distance,
-    [-DISTANCE, 0, DISTANCE],
-    [BASE_SIZE, MAX_SIZE, BASE_SIZE]
-  );
-  const size = useSpring(sizeRaw, SPRING_CONFIG);
-
-  /* Icon scale — matches container growth */
-  const scaleRaw = useTransform(
-    distance,
-    [-DISTANCE, 0, DISTANCE],
-    [1, MAX_SIZE / BASE_SIZE, 1]
-  );
-  const iconScale = useSpring(scaleRaw, SPRING_CONFIG);
-
   return (
-    <motion.div
-      ref={ref}
-      style={{ width: size, height: size }}
+    <div
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      className="relative flex items-center justify-center shrink-0"
+      className="relative flex items-center justify-center shrink-0 w-10 h-10"
     >
       <Link
         href={href}
         className={`
-          w-full h-full flex items-center justify-center rounded-xl transition-colors duration-150
+          w-full h-full flex items-center justify-center rounded-xl transition-all duration-200
           ${
             active
-              ? "bg-white/12 text-accent-400 shadow-[inset_0_0_0_1px_rgba(56,189,248,0.15)]"
-              : "text-zinc-400 hover:bg-white/[0.07] hover:text-zinc-200"
+              ? "dock-icon-active"
+              : "text-white/50 hover:text-white/90 hover:bg-white/6"
           }
         `}
       >
-        <motion.div
-          style={{ scale: iconScale }}
-          className="flex items-center justify-center"
-        >
-          <Icon size={18} weight={active ? "fill" : "regular"} />
-        </motion.div>
+        <Icon
+          size={19}
+          strokeWidth={active ? 2 : 1.5}
+          className="transition-all duration-200"
+        />
       </Link>
 
       {/* Active indicator — animated dot */}
       {active && (
         <motion.div
           layoutId="dock-active-indicator"
-          className="absolute -right-1.25 w-1 h-1 rounded-full bg-accent-400"
+          className="absolute -right-1 w-1 h-1 rounded-full bg-accent-400 shadow-[0_0_6px_1px_rgba(56,189,248,0.4)]"
           transition={{ type: "spring", stiffness: 300, damping: 25 }}
         />
       )}
@@ -278,14 +221,13 @@ function DockIcon({
             animate={{ opacity: 1, x: 0, scale: 1 }}
             exit={{ opacity: 0, x: -4, scale: 0.96 }}
             transition={{ duration: 0.12 }}
-            className="absolute left-full ml-3 px-2.5 py-1.5 bg-zinc-900/95 backdrop-blur-sm text-white text-xs font-medium rounded-lg whitespace-nowrap pointer-events-none shadow-lg z-60 border border-white/5"
+            className="absolute left-full ml-3 px-2.5 py-1.5 dock-tooltip text-white text-xs font-medium rounded-lg whitespace-nowrap pointer-events-none shadow-lg z-60"
           >
             {label}
-            {/* Left arrow */}
-            <span className="absolute right-full top-1/2 -translate-y-1/2 border-[5px] border-transparent border-r-zinc-900/95" />
+            <span className="absolute right-full top-1/2 -translate-y-1/2 border-[5px] border-transparent border-r-[rgba(15,15,18,0.92)]" />
           </motion.div>
         )}
       </AnimatePresence>
-    </motion.div>
+    </div>
   );
 }

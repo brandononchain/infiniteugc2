@@ -5,12 +5,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useAuth } from "@/lib/auth-context";
 import { DockSidebar, NAV_GROUPS } from "@/components/dock-sidebar";
-import {
-  Infinity,
-  List,
-  X,
-  SignOut,
-} from "@phosphor-icons/react";
+import { Infinity, Menu, X, LogOut } from "lucide-react";
 
 export default function DashboardLayout({
   children,
@@ -64,7 +59,7 @@ export default function DashboardLayout({
         <div className="flex items-center justify-between h-14 px-4 border-b border-zinc-800 shrink-0">
           <Link href="/dashboard" className="flex items-center gap-2">
             <div className="w-7 h-7 bg-accent-500 rounded-lg flex items-center justify-center">
-              <Infinity size={14} weight="bold" className="text-white" />
+              <Infinity size={14} strokeWidth={2.5} className="text-white" />
             </div>
             <span className="text-sm font-bold text-white">InfiniteUGC</span>
           </Link>
@@ -72,7 +67,7 @@ export default function DashboardLayout({
             onClick={() => setMobileOpen(false)}
             className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-zinc-800 text-zinc-400"
           >
-            <X size={18} weight="bold" />
+            <X size={18} strokeWidth={2.5} />
           </button>
         </div>
 
@@ -102,7 +97,7 @@ export default function DashboardLayout({
                     >
                       <Icon
                         size={18}
-                        weight={isActive ? "fill" : "regular"}
+                        strokeWidth={isActive ? 2 : 1.5}
                         className="shrink-0"
                       />
                       <span>{item.label}</span>
@@ -131,7 +126,7 @@ export default function DashboardLayout({
               className="w-7 h-7 flex items-center justify-center rounded-lg hover:bg-zinc-800 text-zinc-500 hover:text-zinc-300"
               title="Sign out"
             >
-              <SignOut size={14} weight="bold" />
+              <LogOut size={14} strokeWidth={2} />
             </button>
           </div>
         </div>
@@ -145,11 +140,11 @@ export default function DashboardLayout({
             onClick={() => setMobileOpen(true)}
             className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-zinc-100 text-zinc-600"
           >
-            <List size={20} weight="bold" />
+            <Menu size={20} strokeWidth={2} />
           </button>
           <div className="flex items-center gap-2 ml-3">
             <div className="w-6 h-6 bg-zinc-950 rounded-lg flex items-center justify-center">
-              <Infinity size={13} weight="bold" className="text-white" />
+              <Infinity size={13} strokeWidth={2.5} className="text-white" />
             </div>
             <span className="text-sm font-bold text-zinc-950">InfiniteUGC</span>
           </div>
