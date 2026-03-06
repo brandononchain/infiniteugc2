@@ -113,19 +113,14 @@ export default function CreateMass() {
   const completedSteps = steps.filter((s) => s.done).length;
 
   return (
-    <div className="flex items-center justify-center min-h-full p-4 lg:p-6">
-      {/* ═══ Mac-style window card ═══ */}
-      <div className="w-full max-w-[1120px] rounded-2xl border border-white/[0.08] bg-[#1e1e22] shadow-2xl shadow-black/40 overflow-hidden flex flex-col max-h-[calc(100dvh-100px)]">
+    <div className="flex h-full p-3 lg:p-4">
+      {/* ═══ Window card — full dock height ═══ */}
+      <div className="w-full rounded-2xl border border-white/[0.08] bg-[#1e1e22] shadow-2xl shadow-black/40 overflow-hidden flex flex-col">
 
         {/* ── Window title bar ── */}
         <div className="flex items-center justify-between px-5 py-3 border-b border-white/[0.06] bg-[#1e1e22] shrink-0">
           <div className="flex items-center gap-3">
-            <div className="flex items-center gap-1.5">
-              <span className="w-3 h-3 rounded-full bg-[#ff5f57] shadow-inner" />
-              <span className="w-3 h-3 rounded-full bg-[#febc2e] shadow-inner" />
-              <span className="w-3 h-3 rounded-full bg-[#28c840] shadow-inner" />
-            </div>
-            <div className="flex items-center gap-2 ml-2">
+            <div className="flex items-center gap-2">
               <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-rose-500 to-pink-500 flex items-center justify-center">
                 <Stack size={12} weight="fill" className="text-white" />
               </div>
@@ -171,9 +166,8 @@ export default function CreateMass() {
               </span>
             </div>
 
-            <div className="flex-1 flex items-center justify-center p-6 bg-black/20">
-              <div className="w-full aspect-[9/16] max-w-[220px] rounded-2xl bg-gradient-to-br from-[#252529] to-[#1a1a1e] border border-white/[0.06] overflow-hidden relative shadow-lg shadow-black/30">
-                <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 p-4">
+            <div className="flex-1 flex flex-col items-center justify-center p-6 bg-black/20 relative overflow-hidden">
+                <div className="flex flex-col items-center justify-center gap-3">
                   {selectedAvatar?.image_url ? (
                     <img
                       src={selectedAvatar.image_url}
@@ -196,23 +190,22 @@ export default function CreateMass() {
                 </div>
 
                 {captionsEnabled && (
-                  <div className="absolute bottom-12 inset-x-0 flex justify-center">
-                    <span className="text-[8px] bg-black/60 text-white px-2 py-0.5 rounded-full font-medium backdrop-blur-sm">CC — Auto-Captions</span>
+                  <div className="absolute bottom-16 inset-x-0 flex justify-center">
+                    <span className="text-[9px] bg-black/50 text-white/80 px-3 py-1 rounded-full font-medium backdrop-blur-sm border border-white/[0.06]">CC — Auto-Captions</span>
                   </div>
                 )}
                 {replyEnabled && replyText && (
-                  <div className="absolute bottom-4 inset-x-3">
-                    <div className="bg-white/10 backdrop-blur-sm rounded-lg px-2 py-1">
-                      <p className="text-[7px] text-zinc-400 font-medium truncate">{replyText}</p>
+                  <div className="absolute bottom-6 inset-x-6">
+                    <div className="bg-white/[0.06] backdrop-blur-sm rounded-lg px-3 py-1.5 border border-white/[0.04]">
+                      <p className="text-[9px] text-zinc-400 font-medium truncate">{replyText}</p>
                     </div>
                   </div>
                 )}
                 {textOverlays.filter(o => o.text).map((o, i) => (
-                  <div key={i} className="absolute top-4 inset-x-3" style={{ top: `${12 + i * 14}%` }}>
-                    <p className="text-[8px] text-white font-bold text-center drop-shadow-md">{o.text}</p>
+                  <div key={i} className="absolute inset-x-6" style={{ top: `${10 + i * 12}%` }}>
+                    <p className="text-[10px] text-white font-bold text-center drop-shadow-md">{o.text}</p>
                   </div>
                 ))}
-              </div>
             </div>
 
             <div className="shrink-0 border-t border-white/[0.06] px-4 py-3 flex items-center justify-between">
@@ -227,14 +220,6 @@ export default function CreateMass() {
           {/* ─── Right: Form steps (scrollable) ─── */}
           <div className="flex-1 overflow-y-auto">
             <div className="max-w-2xl mx-auto px-5 lg:px-8 py-5 space-y-5">
-
-              {/* Progress indicator */}
-              <div className="flex items-center gap-2">
-                {[1, 2, 3, 4].map((n) => (
-                  <div key={n} className={`h-1 flex-1 rounded-full transition-all duration-300 ${steps[n - 1].done ? "bg-[#00BCFF]" : "bg-white/[0.06]"}`} />
-                ))}
-                <span className="text-[10px] font-semibold text-zinc-500 ml-1">{completedSteps}/4</span>
-              </div>
 
               {/* Step 1: Project Details */}
               <section className="space-y-3">
