@@ -124,13 +124,13 @@ export default function Settings() {
   return (
     <div className="min-h-full">
       {/* Header */}
-      <div className="sticky top-0 z-30 brutal-header">
+      <div className="">
         <div className="max-w-4xl mx-auto px-6 lg:px-10 h-16 flex items-center">
           <div>
-            <h1 className="text-lg font-bold text-zinc-950 tracking-tight">
+            <h1 className="text-lg font-bold text-zinc-100 tracking-tight">
               Settings
             </h1>
-            <p className="text-xs text-zinc-500">
+            <p className="text-xs text-zinc-400">
               Manage your account and preferences
             </p>
           </div>
@@ -139,7 +139,7 @@ export default function Settings() {
 
       <div className="max-w-4xl mx-auto px-6 lg:px-10 py-8">
         {error && (
-          <div className="mb-4 bg-rose-50 border border-rose-200 text-rose-700 text-xs font-medium px-3 py-2 rounded-lg flex items-center gap-2">
+          <div className="mb-4 bg-rose-500/10 border border-rose-200 text-rose-700 text-xs font-medium px-3 py-2 rounded-lg flex items-center gap-2">
             {error}
             <button onClick={() => setError(null)} className="ml-auto">
               <X size={12} />
@@ -148,14 +148,14 @@ export default function Settings() {
         )}
 
         {saveSuccess && (
-          <div className="mb-4 bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs font-medium px-3 py-2 rounded-lg flex items-center gap-2">
+          <div className="mb-4 bg-emerald-500/10 border border-emerald-200 text-emerald-700 text-xs font-medium px-3 py-2 rounded-lg flex items-center gap-2">
             <Check size={12} weight="bold" />
             Changes saved successfully
           </div>
         )}
 
         {/* Tabs */}
-        <div className="flex gap-1 bg-zinc-50 border border-zinc-200 rounded-xl p-1 mb-8 w-fit shadow-sm">
+        <div className="flex gap-1 bg-white/[0.03] border border-white/[0.08] rounded-xl p-1 mb-8 w-fit shadow-sm">
           {tabs.map((tab) => {
             const Icon = tab.icon;
             return (
@@ -164,8 +164,8 @@ export default function Settings() {
                 onClick={() => setActiveTab(tab.id)}
                 className={`flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-medium transition-all ${
                   activeTab === tab.id
-                    ? "bg-white text-zinc-900 shadow-sm"
-                    : "text-zinc-500 hover:text-zinc-700"
+                    ? "bg-[#1e1e22] text-zinc-200 shadow-sm"
+                    : "text-zinc-400 hover:text-zinc-400"
                 }`}
               >
                 <Icon
@@ -182,42 +182,42 @@ export default function Settings() {
         {activeTab === "account" && (
           <div className="space-y-6">
             {/* Profile */}
-            <div className="bg-white rounded-xl p-6 brutal-card">
-              <h3 className="text-sm font-bold text-zinc-900 mb-4">Profile</h3>
+            <div className="bg-[#1e1e22] rounded-xl p-6 brutal-card">
+              <h3 className="text-sm font-bold text-zinc-200 mb-4">Profile</h3>
               <div className="flex items-center gap-4 mb-6">
                 <div className="w-16 h-16 rounded-2xl bg-linear-to-br from-sky-400 to-blue-500 flex items-center justify-center text-white text-xl font-bold">
                   {initials}
                 </div>
                 <div>
-                  <p className="text-sm font-semibold text-zinc-900">
+                  <p className="text-sm font-semibold text-zinc-200">
                     {profile?.full_name || "User"}
                   </p>
-                  <p className="text-xs text-zinc-500">
+                  <p className="text-xs text-zinc-400">
                     {user?.email || "—"}
                   </p>
                 </div>
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="text-[11px] font-medium text-zinc-500 mb-1.5 block">
+                  <label className="text-[11px] font-medium text-zinc-400 mb-1.5 block">
                     Full Name
                   </label>
                   <input
                     type="text"
                     value={fullName}
                     onChange={(e) => setFullName(e.target.value)}
-                    className="w-full brutal-input bg-white px-3 py-2 text-sm transition-all"
+                    className="w-full brutal-input bg-[#1e1e22] px-3 py-2 text-sm transition-all"
                   />
                 </div>
                 <div>
-                  <label className="text-[11px] font-medium text-zinc-500 mb-1.5 block">
+                  <label className="text-[11px] font-medium text-zinc-400 mb-1.5 block">
                     Email
                   </label>
                   <input
                     type="email"
                     value={email}
                     disabled
-                    className="w-full brutal-input bg-zinc-50 px-3 py-2 text-sm transition-all text-zinc-500 cursor-not-allowed"
+                    className="w-full brutal-input bg-white/[0.03] px-3 py-2 text-sm transition-all text-zinc-400 cursor-not-allowed"
                   />
                 </div>
               </div>
@@ -236,12 +236,12 @@ export default function Settings() {
             </div>
 
             {/* Password */}
-            <div className="bg-white rounded-xl p-6 brutal-card">
-              <h3 className="text-sm font-bold text-zinc-900 mb-4">
+            <div className="bg-[#1e1e22] rounded-xl p-6 brutal-card">
+              <h3 className="text-sm font-bold text-zinc-200 mb-4">
                 Password
               </h3>
               <div className="max-w-xs">
-                <label className="text-[11px] font-medium text-zinc-500 mb-1.5 block">
+                <label className="text-[11px] font-medium text-zinc-400 mb-1.5 block">
                   New Password
                 </label>
                 <input
@@ -249,7 +249,7 @@ export default function Settings() {
                   value={newPassword}
                   onChange={(e) => setNewPassword(e.target.value)}
                   placeholder="Enter new password"
-                  className="w-full brutal-input bg-white px-3 py-2 text-sm transition-all"
+                  className="w-full brutal-input bg-[#1e1e22] px-3 py-2 text-sm transition-all"
                 />
               </div>
               <div className="mt-4 flex justify-end">
@@ -267,14 +267,14 @@ export default function Settings() {
             </div>
 
             {/* Sign Out */}
-            <div className="bg-white rounded-xl p-6 brutal-card">
-              <h3 className="text-sm font-bold text-zinc-900 mb-1">Session</h3>
-              <p className="text-xs text-zinc-500 mb-4">
+            <div className="bg-[#1e1e22] rounded-xl p-6 brutal-card">
+              <h3 className="text-sm font-bold text-zinc-200 mb-1">Session</h3>
+              <p className="text-xs text-zinc-400 mb-4">
                 Sign out of your current session.
               </p>
               <button
                 onClick={signOut}
-                className="flex items-center gap-2 text-xs font-semibold text-zinc-600 border border-zinc-200 px-5 py-2 rounded-full shadow-sm hover:shadow-md hover:-translate-y-px transition-all"
+                className="flex items-center gap-2 text-xs font-semibold text-zinc-400 border border-white/[0.08] px-5 py-2 rounded-full shadow-sm hover:shadow-md hover:-translate-y-px transition-all"
               >
                 <SignOut size={14} weight="bold" />
                 Sign Out
@@ -282,16 +282,16 @@ export default function Settings() {
             </div>
 
             {/* Danger Zone */}
-            <div className="bg-white rounded-xl border border-red-200 p-6 shadow-sm">
+            <div className="bg-[#1e1e22] rounded-xl border border-red-500/20 p-6 shadow-sm">
               <h3 className="text-sm font-bold text-red-600 mb-1">
                 Danger Zone
               </h3>
-              <p className="text-xs text-zinc-500 mb-4">
+              <p className="text-xs text-zinc-400 mb-4">
                 Permanently delete your account and all associated data.
               </p>
               <button
                 onClick={handleDeleteAccount}
-                className="text-xs font-semibold text-red-600 border border-red-200 px-5 py-2 rounded-full shadow-sm hover:shadow-md hover:-translate-y-px transition-all hover:bg-red-50"
+                className="text-xs font-semibold text-red-600 border border-red-500/20 px-5 py-2 rounded-full shadow-sm hover:shadow-md hover:-translate-y-px transition-all hover:bg-red-500/10"
               >
                 Delete Account
               </button>
@@ -302,27 +302,27 @@ export default function Settings() {
         {/* API Keys Tab */}
         {activeTab === "api" && (
           <div className="space-y-6">
-            <div className="bg-white rounded-xl p-6 brutal-card">
-              <h3 className="text-sm font-bold text-zinc-900 mb-1">
+            <div className="bg-[#1e1e22] rounded-xl p-6 brutal-card">
+              <h3 className="text-sm font-bold text-zinc-200 mb-1">
                 User ID
               </h3>
-              <p className="text-xs text-zinc-500 mb-4">
+              <p className="text-xs text-zinc-400 mb-4">
                 Your unique user identifier (use as API key for authenticated
                 requests).
               </p>
-              <div className="flex items-center gap-3 bg-zinc-50 rounded-xl px-4 py-3 border border-zinc-200 shadow-sm">
-                <code className="flex-1 text-xs text-zinc-600 font-mono">
+              <div className="flex items-center gap-3 bg-white/[0.03] rounded-xl px-4 py-3 border border-white/[0.08] shadow-sm">
+                <code className="flex-1 text-xs text-zinc-400 font-mono">
                   {showKey ? user?.id || "—" : "••••••••-••••-••••-••••-••••••••••••"}
                 </code>
                 <button
                   onClick={() => setShowKey(!showKey)}
-                  className="text-zinc-500 hover:text-zinc-700 transition-colors"
+                  className="text-zinc-400 hover:text-zinc-400 transition-colors"
                 >
                   {showKey ? <EyeSlash size={16} /> : <Eye size={16} />}
                 </button>
                 <button
                   onClick={handleCopy}
-                  className="text-zinc-500 hover:text-zinc-700 transition-colors"
+                  className="text-zinc-400 hover:text-zinc-400 transition-colors"
                 >
                   {copied ? (
                     <Check size={16} className="text-emerald-500" />
@@ -345,31 +345,31 @@ export default function Settings() {
         {/* Billing Tab */}
         {activeTab === "billing" && (
           <div className="space-y-6">
-            <div className="bg-white rounded-xl p-6 brutal-card">
+            <div className="bg-[#1e1e22] rounded-xl p-6 brutal-card">
               <div className="flex items-center justify-between mb-4">
                 <div>
-                  <h3 className="text-sm font-bold text-zinc-900">
+                  <h3 className="text-sm font-bold text-zinc-200">
                     Credits Balance
                   </h3>
-                  <p className="text-xs text-zinc-500">
+                  <p className="text-xs text-zinc-400">
                     Your available generation credits
                   </p>
                 </div>
               </div>
               <div className="grid grid-cols-2 gap-4 mb-4">
-                <div className="bg-zinc-50 rounded-xl p-4 border border-zinc-200 shadow-sm">
-                  <p className="text-[10px] font-medium text-zinc-500 uppercase tracking-wider mb-1">
+                <div className="bg-white/[0.03] rounded-xl p-4 border border-white/[0.08] shadow-sm">
+                  <p className="text-[10px] font-medium text-zinc-400 uppercase tracking-wider mb-1">
                     Available Credits
                   </p>
-                  <p className="text-2xl font-bold text-zinc-900">
+                  <p className="text-2xl font-bold text-zinc-200">
                     {credits.toLocaleString()}
                   </p>
                 </div>
-                <div className="bg-zinc-50 rounded-xl p-4 border border-zinc-200 shadow-sm">
-                  <p className="text-[10px] font-medium text-zinc-500 uppercase tracking-wider mb-1">
+                <div className="bg-white/[0.03] rounded-xl p-4 border border-white/[0.08] shadow-sm">
+                  <p className="text-[10px] font-medium text-zinc-400 uppercase tracking-wider mb-1">
                     Account Created
                   </p>
-                  <p className="text-sm font-bold text-zinc-900 mt-2">
+                  <p className="text-sm font-bold text-zinc-200 mt-2">
                     {user?.created_at
                       ? new Date(user.created_at).toLocaleDateString()
                       : "—"}
@@ -388,8 +388,8 @@ export default function Settings() {
             </div>
 
             {/* Credit costs reference */}
-            <div className="bg-white rounded-xl p-6 brutal-card">
-              <h3 className="text-sm font-bold text-zinc-900 mb-4">
+            <div className="bg-[#1e1e22] rounded-xl p-6 brutal-card">
+              <h3 className="text-sm font-bold text-zinc-200 mb-4">
                 Credit Costs
               </h3>
               <div className="space-y-3">
@@ -423,10 +423,10 @@ export default function Settings() {
                 ].map((item) => (
                   <div
                     key={item.label}
-                    className="flex items-center justify-between py-2 border-b border-zinc-100 last:border-0"
+                    className="flex items-center justify-between py-2 border-b border-white/[0.05] last:border-0"
                   >
                     <div>
-                      <p className="text-xs font-semibold text-zinc-800">
+                      <p className="text-xs font-semibold text-zinc-300">
                         {item.label}
                       </p>
                       {item.note && (
@@ -435,7 +435,7 @@ export default function Settings() {
                         </p>
                       )}
                     </div>
-                    <span className="text-xs font-bold text-zinc-600">
+                    <span className="text-xs font-bold text-zinc-400">
                       {item.cost}
                     </span>
                   </div>
@@ -448,8 +448,8 @@ export default function Settings() {
         {/* Notifications Tab */}
         {activeTab === "notifications" && (
           <div className="space-y-6">
-            <div className="bg-white rounded-xl p-6 brutal-card">
-              <h3 className="text-sm font-bold text-zinc-900 mb-4">
+            <div className="bg-[#1e1e22] rounded-xl p-6 brutal-card">
+              <h3 className="text-sm font-bold text-zinc-200 mb-4">
                 Email Notifications
               </h3>
               <div className="space-y-4">
@@ -484,10 +484,10 @@ export default function Settings() {
                 ].map((item, i) => (
                   <div key={i} className="flex items-center justify-between py-2">
                     <div>
-                      <p className="text-xs font-semibold text-zinc-900">
+                      <p className="text-xs font-semibold text-zinc-200">
                         {item.label}
                       </p>
-                      <p className="text-[11px] text-zinc-500">
+                      <p className="text-[11px] text-zinc-400">
                         {item.description}
                       </p>
                     </div>
@@ -497,7 +497,7 @@ export default function Settings() {
                         defaultChecked={item.defaultOn}
                         className="sr-only peer"
                       />
-                      <div className="w-9 h-5 bg-zinc-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:inset-s-0.5 after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-sky-500"></div>
+                      <div className="w-9 h-5 bg-zinc-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:inset-s-0.5 after:bg-[#1e1e22] after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-sky-500/100"></div>
                     </label>
                   </div>
                 ))}

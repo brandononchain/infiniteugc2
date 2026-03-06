@@ -121,26 +121,26 @@ export default function CreateCampaign() {
   return (
     <div className="flex flex-col h-full overflow-hidden">
       {/* Header */}
-      <div className="shrink-0 z-30 brutal-header">
+      <div className="shrink-0">
         <div className="px-6 lg:px-8 h-14 flex items-center justify-between">
           <div className="flex items-center gap-2.5">
             <div className="w-8 h-8 rounded-xl bg-linear-to-br from-rose-500 to-pink-500 flex items-center justify-center">
               <Sparkle size={16} weight="fill" className="text-white" />
             </div>
             <div>
-              <h1 className="text-sm font-bold text-zinc-950 tracking-tight">Create Campaign</h1>
-              <p className="text-[10px] text-zinc-500">AI videos with captions &amp; overlays</p>
+              <h1 className="text-sm font-bold text-zinc-100 tracking-tight">Create Campaign</h1>
+              <p className="text-[10px] text-zinc-400">AI videos with captions &amp; overlays</p>
             </div>
           </div>
           <div className="flex items-center gap-2">
-            <div className="flex items-center gap-1.5 bg-accent-50 border border-accent-200/40 text-accent-700 text-[11px] font-semibold px-3 py-1 rounded-full">
+            <div className="flex items-center gap-1.5 bg-[#00BCFF]/10 border border-[#00BCFF]/20/40 text-[#00BCFF] text-[11px] font-semibold px-3 py-1 rounded-full">
               <Coin size={12} weight="fill" />
-              <span className="text-accent-800 font-bold">{credits}</span> credits
+              <span className="text-[#00BCFF] font-bold">{credits}</span> credits
             </div>
             <button
               onClick={handleSave}
               disabled={saving}
-              className="flex items-center gap-1.5 text-[11px] font-semibold text-zinc-500 border border-zinc-200 px-3 py-1.5 rounded-full hover:bg-zinc-50 transition-colors disabled:opacity-50"
+              className="flex items-center gap-1.5 text-[11px] font-semibold text-zinc-400 border border-white/[0.08] px-3 py-1.5 rounded-full hover:bg-white/[0.03] transition-colors disabled:opacity-50"
             >
               {saving ? <CircleNotch size={12} className="animate-spin" /> : <CheckCircle size={12} weight="bold" />}
               Save
@@ -150,7 +150,7 @@ export default function CreateCampaign() {
       </div>
 
       {error && (
-        <div className="mx-6 mt-2 bg-rose-50 border border-rose-200 text-rose-700 text-xs font-medium px-3 py-2 rounded-lg flex items-center gap-2">
+        <div className="mx-6 mt-2 bg-rose-500/10 border border-rose-200 text-rose-700 text-xs font-medium px-3 py-2 rounded-lg flex items-center gap-2">
           <Info size={14} />
           {error}
           <button onClick={() => setError(null)} className="ml-auto"><X size={12} /></button>
@@ -160,15 +160,15 @@ export default function CreateCampaign() {
       {/* Content: fills remaining height */}
       <div className="flex-1 min-h-0 flex">
         {/* ─── Left: Preview (fixed in view) ─── */}
-        <div className="hidden lg:flex flex-col w-80 xl:w-[400px] shrink-0 border-r border-zinc-200 bg-white">
-          <div className="flex items-center justify-between px-5 py-2.5 border-b border-zinc-200">
-            <span className="text-xs font-semibold text-zinc-900">Preview</span>
+        <div className="hidden lg:flex flex-col w-80 xl:w-[400px] shrink-0 border-r border-white/[0.08] bg-[#1e1e22]">
+          <div className="flex items-center justify-between px-5 py-2.5 border-b border-white/[0.08]">
+            <span className="text-xs font-semibold text-zinc-200">Preview</span>
             <span className="flex items-center gap-1 text-[10px] text-rose-500 font-semibold">
-              <span className="w-1.5 h-1.5 rounded-full bg-rose-500 animate-pulse" />
+              <span className="w-1.5 h-1.5 rounded-full bg-rose-500/100 animate-pulse" />
               LIVE
             </span>
           </div>
-          <div className="flex-1 min-h-0 flex items-center justify-center p-5 bg-zinc-50">
+          <div className="flex-1 min-h-0 flex items-center justify-center p-5 bg-white/[0.03]">
             {/* iPhone device frame */}
             <div className="relative w-full max-w-[240px] xl:max-w-[280px]">
               <div className="relative bg-zinc-950 rounded-[2.5rem] p-[10px] shadow-xl shadow-zinc-900/20 ring-1 ring-zinc-800">
@@ -191,14 +191,14 @@ export default function CreateCampaign() {
               </div>
             </div>
           </div>
-          <div className="shrink-0 border-t border-zinc-200 px-5 py-3">
+          <div className="shrink-0 border-t border-white/[0.08] px-5 py-3">
             <div className="flex items-center gap-1.5 mb-2">
               <Coin size={13} weight="duotone" className="text-amber-500" />
-              <span className="text-[11px] font-semibold text-zinc-900">Cost</span>
+              <span className="text-[11px] font-semibold text-zinc-200">Cost</span>
             </div>
             <div className="flex items-center justify-between text-[11px]">
-              <span className="text-zinc-500 flex items-center gap-1"><Eye size={12} className="text-zinc-400" />Estimated</span>
-              <span className="font-mono text-zinc-600">{estimatedCost ? `~${estimatedCost} credits` : "—"}</span>
+              <span className="text-zinc-400 flex items-center gap-1"><Eye size={12} className="text-zinc-400" />Estimated</span>
+              <span className="font-mono text-zinc-400">{estimatedCost ? `~${estimatedCost} credits` : "—"}</span>
             </div>
           </div>
         </div>
@@ -209,36 +209,36 @@ export default function CreateCampaign() {
             {/* Step 1: Project Details */}
             <section className="space-y-3">
               <div className="flex items-center gap-2">
-                <div className="w-6 h-6 rounded-full bg-accent-500 text-white flex items-center justify-center text-[10px] font-bold">1</div>
-                <h2 className="text-sm font-bold text-zinc-950">Project Details</h2>
+                <div className="w-6 h-6 rounded-full bg-[#00BCFF]/100 text-white flex items-center justify-center text-[10px] font-bold">1</div>
+                <h2 className="text-sm font-bold text-zinc-100">Project Details</h2>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                 <div>
-                  <label className="text-[11px] font-semibold text-zinc-700 mb-1 block">Campaign name</label>
+                  <label className="text-[11px] font-semibold text-zinc-400 mb-1 block">Campaign name</label>
                   <input
                     type="text"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     placeholder="e.g., Product Launch Video"
-                    className="w-full brutal-input bg-white px-3 py-2 text-sm text-zinc-900 placeholder:text-zinc-400 transition-all"
+                    className="w-full brutal-input bg-[#1e1e22] px-3 py-2 text-sm text-zinc-200 placeholder:text-zinc-400 transition-all"
                   />
                 </div>
                 <div className="relative">
-                  <label className="text-[11px] font-semibold text-zinc-700 mb-1 block">Video engine</label>
+                  <label className="text-[11px] font-semibold text-zinc-400 mb-1 block">Video engine</label>
                   <button
                     onClick={() => setShowProviderDropdown(!showProviderDropdown)}
-                    className="w-full flex items-center justify-between brutal-select bg-white px-3 py-2 text-sm text-zinc-900"
+                    className="w-full flex items-center justify-between brutal-select bg-[#1e1e22] px-3 py-2 text-sm text-zinc-200"
                   >
                     <span>{VIDEO_PROVIDERS.find((p) => p.value === provider)?.label}</span>
-                    <CaretDown size={14} className="text-zinc-500" />
+                    <CaretDown size={14} className="text-zinc-400" />
                   </button>
                   {showProviderDropdown && (
-                    <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-zinc-200 rounded-lg shadow-lg z-20 overflow-hidden">
+                    <div className="absolute top-full left-0 right-0 mt-1 bg-[#1e1e22] border border-white/[0.08] rounded-lg shadow-lg z-20 overflow-hidden">
                       {VIDEO_PROVIDERS.map((p) => (
                         <button
                           key={p.value}
                           onClick={() => { setProvider(p.value); setShowProviderDropdown(false); }}
-                          className={`w-full text-left px-3 py-2 text-sm hover:bg-zinc-50 transition-colors ${provider === p.value ? "bg-accent-50 text-accent-700 font-semibold" : "text-zinc-700"}`}
+                          className={`w-full text-left px-3 py-2 text-sm hover:bg-white/[0.03] transition-colors ${provider === p.value ? "bg-[#00BCFF]/10 text-[#00BCFF] font-semibold" : "text-zinc-400"}`}
                         >
                           {p.label}
                           {p.multiplier > 1 && <span className="text-[10px] text-zinc-400 ml-2">{p.multiplier}x credits</span>}
@@ -250,13 +250,13 @@ export default function CreateCampaign() {
               </div>
             </section>
 
-            <div className="border-t border-zinc-300" />
+            <div className="border-t border-white/[0.1]" />
 
             {/* Step 2: Select Avatar */}
             <section className="space-y-3">
               <div className="flex items-center gap-2">
-                <div className="w-6 h-6 rounded-full bg-accent-500 text-white flex items-center justify-center text-[10px] font-bold">2</div>
-                <h2 className="text-sm font-bold text-zinc-950">Select Avatar</h2>
+                <div className="w-6 h-6 rounded-full bg-[#00BCFF]/100 text-white flex items-center justify-center text-[10px] font-bold">2</div>
+                <h2 className="text-sm font-bold text-zinc-100">Select Avatar</h2>
               </div>
               {avatars && avatars.length > 0 ? (
                 <div className="grid grid-cols-3 md:grid-cols-4 gap-2">
@@ -266,34 +266,34 @@ export default function CreateCampaign() {
                       onClick={() => setSelectedAvatarId(avatar.id === selectedAvatarId ? null : avatar.id)}
                       className={`rounded-lg p-2 transition-all brutal-card text-center ${
                         selectedAvatarId === avatar.id
-                          ? "!border-accent-400 bg-accent-50/40 ring-2 ring-accent-200"
-                          : "hover:border-zinc-300"
+                          ? "!border-accent-400 bg-[#00BCFF]/10/40 ring-2 ring-accent-200"
+                          : "hover:border-white/[0.1]"
                       }`}
                     >
                       {avatar.image_url ? (
                         <img src={avatar.image_url} alt={avatar.name} className="w-12 h-12 rounded-full object-cover mx-auto mb-1" />
                       ) : (
-                        <div className="w-12 h-12 rounded-full bg-zinc-100 mx-auto mb-1" />
+                        <div className="w-12 h-12 rounded-full bg-white/[0.05] mx-auto mb-1" />
                       )}
-                      <p className="text-[10px] font-semibold text-zinc-800 truncate">{avatar.name}</p>
+                      <p className="text-[10px] font-semibold text-zinc-300 truncate">{avatar.name}</p>
                     </button>
                   ))}
                 </div>
               ) : (
                 <div className="brutal-info p-3 flex items-start gap-2.5">
-                  <Info size={14} className="text-amber-600 mt-0.5 shrink-0" />
-                  <p className="text-[11px] text-zinc-700 font-medium">No avatars yet. <a href="/avatars" className="text-accent-600 font-semibold hover:underline">Create an avatar</a></p>
+                  <Info size={14} className="text-amber-400 mt-0.5 shrink-0" />
+                  <p className="text-[11px] text-zinc-400 font-medium">No avatars yet. <a href="/avatars" className="text-[#00BCFF] font-semibold hover:underline">Create an avatar</a></p>
                 </div>
               )}
             </section>
 
-            <div className="border-t border-zinc-300" />
+            <div className="border-t border-white/[0.1]" />
 
             {/* Step 3: Write Script */}
             <section className="space-y-3">
               <div className="flex items-center gap-2">
-                <div className="w-6 h-6 rounded-full bg-accent-500 text-white flex items-center justify-center text-[10px] font-bold">3</div>
-                <h2 className="text-sm font-bold text-zinc-950">Select Script</h2>
+                <div className="w-6 h-6 rounded-full bg-[#00BCFF]/100 text-white flex items-center justify-center text-[10px] font-bold">3</div>
+                <h2 className="text-sm font-bold text-zinc-100">Select Script</h2>
               </div>
               {scripts && scripts.length > 0 ? (
                 <div className="space-y-2">
@@ -303,47 +303,47 @@ export default function CreateCampaign() {
                       onClick={() => setSelectedScriptId(script.id === selectedScriptId ? null : script.id)}
                       className={`w-full text-left rounded-lg p-3 transition-all brutal-card ${
                         selectedScriptId === script.id
-                          ? "!border-accent-400 bg-accent-50/40 ring-2 ring-accent-200"
-                          : "hover:border-zinc-300"
+                          ? "!border-accent-400 bg-[#00BCFF]/10/40 ring-2 ring-accent-200"
+                          : "hover:border-white/[0.1]"
                       }`}
                     >
-                      <p className="text-xs font-bold text-zinc-900">{script.name}</p>
-                      <p className="text-[10px] text-zinc-500 line-clamp-2 mt-0.5">{script.content}</p>
+                      <p className="text-xs font-bold text-zinc-200">{script.name}</p>
+                      <p className="text-[10px] text-zinc-400 line-clamp-2 mt-0.5">{script.content}</p>
                     </button>
                   ))}
                 </div>
               ) : (
                 <div className="brutal-info p-3 flex items-start gap-2.5">
-                  <Info size={14} className="text-amber-600 mt-0.5 shrink-0" />
-                  <p className="text-[11px] text-zinc-700 font-medium">
-                    No scripts found. <a href="/scripts" className="text-accent-600 font-semibold hover:underline">Write a script</a> or <a href="/script-generation" className="text-accent-600 font-semibold hover:underline">generate with AI</a>
+                  <Info size={14} className="text-amber-400 mt-0.5 shrink-0" />
+                  <p className="text-[11px] text-zinc-400 font-medium">
+                    No scripts found. <a href="/scripts" className="text-[#00BCFF] font-semibold hover:underline">Write a script</a> or <a href="/script-generation" className="text-[#00BCFF] font-semibold hover:underline">generate with AI</a>
                   </p>
                 </div>
               )}
             </section>
 
-            <div className="border-t border-zinc-300" />
+            <div className="border-t border-white/[0.1]" />
 
             {/* Step 4: Customization */}
             <section className="space-y-3">
               <div className="flex items-center gap-2">
-                <div className="w-6 h-6 rounded-full bg-accent-500 text-white flex items-center justify-center text-[10px] font-bold">4</div>
-                <h2 className="text-sm font-bold text-zinc-950">Customization</h2>
+                <div className="w-6 h-6 rounded-full bg-[#00BCFF]/100 text-white flex items-center justify-center text-[10px] font-bold">4</div>
+                <h2 className="text-sm font-bold text-zinc-100">Customization</h2>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                <div className="bg-white rounded-lg p-3 brutal-card">
+                <div className="bg-[#1e1e22] rounded-lg p-3 brutal-card">
                   <div className="flex items-center justify-between mb-0.5">
-                    <span className="text-xs font-semibold text-zinc-900">Auto-Captions</span>
-                    <button onClick={() => setCaptionsEnabled(!captionsEnabled)} className="flex items-center gap-1 text-[10px] font-medium text-zinc-600">
+                    <span className="text-xs font-semibold text-zinc-200">Auto-Captions</span>
+                    <button onClick={() => setCaptionsEnabled(!captionsEnabled)} className="flex items-center gap-1 text-[10px] font-medium text-zinc-400">
                       {captionsEnabled ? <ToggleRight size={20} weight="fill" className="text-accent-500" /> : <ToggleLeft size={20} className="text-zinc-400" />}
                     </button>
                   </div>
-                  <p className="text-[10px] text-zinc-500">TikTok-style synced captions (+25 cr)</p>
+                  <p className="text-[10px] text-zinc-400">TikTok-style synced captions (+25 cr)</p>
                 </div>
-                <div className="bg-white rounded-lg p-3 brutal-card">
+                <div className="bg-[#1e1e22] rounded-lg p-3 brutal-card">
                   <div className="flex items-center justify-between mb-0.5">
-                    <span className="text-xs font-semibold text-zinc-900">Text overlays</span>
-                    <button onClick={addOverlay} className="flex items-center gap-1 text-[10px] font-semibold text-zinc-700 bg-zinc-100 px-2 py-1 rounded hover:bg-zinc-200/70 transition-colors">
+                    <span className="text-xs font-semibold text-zinc-200">Text overlays</span>
+                    <button onClick={addOverlay} className="flex items-center gap-1 text-[10px] font-semibold text-zinc-400 bg-white/[0.05] px-2 py-1 rounded hover:bg-zinc-200/70 transition-colors">
                       <Plus size={10} weight="bold" />
                       Add
                     </button>
@@ -361,7 +361,7 @@ export default function CreateCampaign() {
                               setTextOverlays(updated);
                             }}
                             placeholder="Overlay text..."
-                            className="flex-1 brutal-input bg-white px-2 py-1 text-[11px] text-zinc-900"
+                            className="flex-1 brutal-input bg-[#1e1e22] px-2 py-1 text-[11px] text-zinc-200"
                           />
                           <button onClick={() => removeOverlay(idx)} className="text-zinc-400 hover:text-rose-500">
                             <Trash size={12} />
@@ -370,17 +370,17 @@ export default function CreateCampaign() {
                       ))}
                     </div>
                   ) : (
-                    <p className="text-[10px] text-zinc-500">No overlays yet</p>
+                    <p className="text-[10px] text-zinc-400">No overlays yet</p>
                   )}
                 </div>
               </div>
-              <div className="bg-white rounded-lg p-3 brutal-card">
+              <div className="bg-[#1e1e22] rounded-lg p-3 brutal-card">
                 <div className="flex items-center justify-between">
                   <div>
-                    <span className="text-xs font-semibold text-zinc-900">Reply Comment</span>
-                    <p className="text-[10px] text-zinc-500">TikTok style pinned reply</p>
+                    <span className="text-xs font-semibold text-zinc-200">Reply Comment</span>
+                    <p className="text-[10px] text-zinc-400">TikTok style pinned reply</p>
                   </div>
-                  <button onClick={() => setReplyEnabled(!replyEnabled)} className="flex items-center gap-1 text-[10px] font-medium text-zinc-500">
+                  <button onClick={() => setReplyEnabled(!replyEnabled)} className="flex items-center gap-1 text-[10px] font-medium text-zinc-400">
                     {replyEnabled ? <ToggleRight size={20} weight="fill" className="text-accent-500" /> : <ToggleLeft size={20} className="text-zinc-300" />}
                   </button>
                 </div>
@@ -390,7 +390,7 @@ export default function CreateCampaign() {
                     value={replyText}
                     onChange={(e) => setReplyText(e.target.value)}
                     placeholder="Enter reply comment..."
-                    className="mt-2 w-full brutal-input bg-white px-2 py-1.5 text-[11px] text-zinc-900"
+                    className="mt-2 w-full brutal-input bg-[#1e1e22] px-2 py-1.5 text-[11px] text-zinc-200"
                   />
                 )}
               </div>

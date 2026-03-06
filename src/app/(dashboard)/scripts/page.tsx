@@ -114,16 +114,16 @@ export default function Scripts() {
   return (
     <div className="min-h-full">
       {/* Header */}
-      <div className="sticky top-0 z-30 brutal-header">
+      <div className="">
         <div className="max-w-5xl mx-auto px-6 lg:px-10 h-16 flex items-center justify-between">
           <div>
-            <h1 className="text-lg font-bold text-zinc-950 tracking-tight">Scripts</h1>
-            <p className="text-xs text-zinc-500">Write and manage your video scripts</p>
+            <h1 className="text-lg font-bold text-zinc-100 tracking-tight">Scripts</h1>
+            <p className="text-xs text-zinc-400">Write and manage your video scripts</p>
           </div>
           <div className="flex items-center gap-2">
             <button
               onClick={() => { setGroupName(""); setSelectedScriptIds([]); setError(null); setShowGroupModal(true); }}
-              className="flex items-center gap-2 text-xs font-semibold text-zinc-700 border border-zinc-200 px-4 py-2 rounded-full shadow-sm hover:shadow-md hover:-translate-y-px transition-all"
+              className="flex items-center gap-2 text-xs font-semibold text-zinc-400 border border-white/[0.08] px-4 py-2 rounded-full shadow-sm hover:shadow-md hover:-translate-y-px transition-all"
             >
               <FolderOpen size={14} weight="bold" />
               New Group
@@ -141,11 +141,11 @@ export default function Scripts() {
 
       <div className="max-w-5xl mx-auto px-6 lg:px-10 py-8">
         {/* Tabs */}
-        <div className="flex border-b border-zinc-200 mb-6">
+        <div className="flex border-b border-white/[0.08] mb-6">
           <button
             onClick={() => setTab("scripts")}
             className={`px-5 py-2.5 text-sm font-semibold border-b-2 transition-all ${
-              tab === "scripts" ? "border-accent-500 text-accent-700" : "border-transparent text-zinc-500"
+              tab === "scripts" ? "border-accent-500 text-[#00BCFF]" : "border-transparent text-zinc-400"
             }`}
           >
             Scripts ({scripts?.length ?? 0})
@@ -153,7 +153,7 @@ export default function Scripts() {
           <button
             onClick={() => setTab("groups")}
             className={`px-5 py-2.5 text-sm font-semibold border-b-2 transition-all ${
-              tab === "groups" ? "border-accent-500 text-accent-700" : "border-transparent text-zinc-500"
+              tab === "groups" ? "border-accent-500 text-[#00BCFF]" : "border-transparent text-zinc-400"
             }`}
           >
             Groups ({scriptGroups?.length ?? 0})
@@ -168,13 +168,13 @@ export default function Scripts() {
           scripts && scripts.length > 0 ? (
             <div className="space-y-3">
               {scripts.map((script) => (
-                <div key={script.id} className="bg-white rounded-xl p-4 brutal-card">
+                <div key={script.id} className="bg-[#1e1e22] rounded-xl p-4 brutal-card">
                   <div className="flex items-center justify-between mb-2">
                     <div className="flex items-center gap-2">
                       <FileText size={16} weight="duotone" className="text-accent-500" />
-                      <p className="text-sm font-bold text-zinc-900">{script.name}</p>
+                      <p className="text-sm font-bold text-zinc-200">{script.name}</p>
                       {script.group_id && (
-                        <span className="text-[10px] font-semibold text-violet-600 bg-violet-50 px-2 py-0.5 rounded-full">
+                        <span className="text-[10px] font-semibold text-violet-400 bg-violet-500/10 px-2 py-0.5 rounded-full">
                           {scriptGroups?.find((g) => g.id === script.group_id)?.name || "Group"}
                         </span>
                       )}
@@ -182,7 +182,7 @@ export default function Scripts() {
                     <div className="flex items-center gap-2">
                       <button
                         onClick={() => openEditScript(script.id)}
-                        className="text-zinc-400 hover:text-accent-600 transition-colors"
+                        className="text-zinc-400 hover:text-[#00BCFF] transition-colors"
                       >
                         <PencilSimple size={14} />
                       </button>
@@ -195,7 +195,7 @@ export default function Scripts() {
                       </button>
                     </div>
                   </div>
-                  <p className="text-xs text-zinc-600 line-clamp-3 whitespace-pre-wrap">{script.content}</p>
+                  <p className="text-xs text-zinc-400 line-clamp-3 whitespace-pre-wrap">{script.content}</p>
                   <p className="text-[10px] text-zinc-400 mt-2">
                     {script.content.split(/\s+/).length} words &middot; {new Date(script.created_at).toLocaleDateString()}
                   </p>
@@ -203,13 +203,13 @@ export default function Scripts() {
               ))}
             </div>
           ) : (
-            <div className="bg-white rounded-xl p-16 text-center brutal-empty">
-              <div className="w-14 h-14 rounded-2xl bg-zinc-50 flex items-center justify-center mx-auto mb-4">
+            <div className="bg-[#1e1e22] rounded-xl p-16 text-center brutal-empty">
+              <div className="w-14 h-14 rounded-2xl bg-white/[0.03] flex items-center justify-center mx-auto mb-4">
                 <FileText size={24} weight="duotone" className="text-zinc-300" />
               </div>
-              <h3 className="text-sm font-bold text-zinc-900 mb-1">No scripts yet</h3>
-              <p className="text-xs text-zinc-500 mb-1">Write your first script or let AI generate one for you.</p>
-              <p className="text-xs text-zinc-500 mb-6">Organize scripts into groups for mass campaigns.</p>
+              <h3 className="text-sm font-bold text-zinc-200 mb-1">No scripts yet</h3>
+              <p className="text-xs text-zinc-400 mb-1">Write your first script or let AI generate one for you.</p>
+              <p className="text-xs text-zinc-400 mb-6">Organize scripts into groups for mass campaigns.</p>
               <button
                 onClick={openNewScript}
                 className="inline-flex items-center gap-2 btn-ice text-xs font-semibold px-6 py-2.5 rounded-full"
@@ -223,26 +223,26 @@ export default function Scripts() {
           scriptGroups && scriptGroups.length > 0 ? (
             <div className="space-y-3">
               {scriptGroups.map((group) => (
-                <div key={group.id} className="bg-white rounded-xl p-4 brutal-card">
+                <div key={group.id} className="bg-[#1e1e22] rounded-xl p-4 brutal-card">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-violet-50 flex items-center justify-center">
+                    <div className="w-10 h-10 rounded-xl bg-violet-500/10 flex items-center justify-center">
                       <FolderOpen size={18} weight="duotone" className="text-violet-500" />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm font-bold text-zinc-900">{group.name}</p>
-                      <p className="text-[10px] text-zinc-500">{group.script_ids?.length ?? 0} scripts</p>
+                      <p className="text-sm font-bold text-zinc-200">{group.name}</p>
+                      <p className="text-[10px] text-zinc-400">{group.script_ids?.length ?? 0} scripts</p>
                     </div>
                   </div>
                 </div>
               ))}
             </div>
           ) : (
-            <div className="bg-white rounded-xl p-16 text-center brutal-empty">
-              <div className="w-14 h-14 rounded-2xl bg-zinc-50 flex items-center justify-center mx-auto mb-4">
+            <div className="bg-[#1e1e22] rounded-xl p-16 text-center brutal-empty">
+              <div className="w-14 h-14 rounded-2xl bg-white/[0.03] flex items-center justify-center mx-auto mb-4">
                 <FolderOpen size={24} weight="duotone" className="text-zinc-300" />
               </div>
-              <h3 className="text-sm font-bold text-zinc-900 mb-1">No script groups yet</h3>
-              <p className="text-xs text-zinc-500 mb-6">Create groups to organize scripts for mass campaigns.</p>
+              <h3 className="text-sm font-bold text-zinc-200 mb-1">No script groups yet</h3>
+              <p className="text-xs text-zinc-400 mb-6">Create groups to organize scripts for mass campaigns.</p>
               <button
                 onClick={() => { setGroupName(""); setSelectedScriptIds([]); setError(null); setShowGroupModal(true); }}
                 className="inline-flex items-center gap-2 btn-ice text-xs font-semibold px-6 py-2.5 rounded-full"
@@ -258,57 +258,57 @@ export default function Scripts() {
       {/* Script Modal */}
       {showScriptModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm">
-          <div className="bg-white rounded-2xl p-6 w-full max-w-lg shadow-xl border border-zinc-200">
+          <div className="bg-[#1e1e22] rounded-2xl p-6 w-full max-w-lg shadow-xl border border-white/[0.08]">
             <div className="flex items-center justify-between mb-5">
-              <h2 className="text-sm font-bold text-zinc-950">{editingId ? "Edit Script" : "New Script"}</h2>
-              <button onClick={() => setShowScriptModal(false)} className="text-zinc-400 hover:text-zinc-600">
+              <h2 className="text-sm font-bold text-zinc-100">{editingId ? "Edit Script" : "New Script"}</h2>
+              <button onClick={() => setShowScriptModal(false)} className="text-zinc-400 hover:text-zinc-400">
                 <X size={16} />
               </button>
             </div>
 
             {error && (
-              <div className="mb-4 bg-rose-50 border border-rose-200 text-rose-700 text-xs font-medium px-3 py-2 rounded-lg">{error}</div>
+              <div className="mb-4 bg-rose-500/10 border border-rose-200 text-rose-700 text-xs font-medium px-3 py-2 rounded-lg">{error}</div>
             )}
 
             <div className="space-y-4">
               <div>
-                <label className="text-[11px] font-semibold text-zinc-700 mb-1 block">Script Name</label>
+                <label className="text-[11px] font-semibold text-zinc-400 mb-1 block">Script Name</label>
                 <input
                   type="text"
                   value={scriptName}
                   onChange={(e) => setScriptName(e.target.value)}
                   placeholder="e.g., Product Launch Hook"
-                  className="w-full brutal-input bg-white px-3 py-2 text-sm text-zinc-900 placeholder:text-zinc-400"
+                  className="w-full brutal-input bg-[#1e1e22] px-3 py-2 text-sm text-zinc-200 placeholder:text-zinc-400"
                 />
               </div>
               <div>
-                <label className="text-[11px] font-semibold text-zinc-700 mb-1 block">Content</label>
+                <label className="text-[11px] font-semibold text-zinc-400 mb-1 block">Content</label>
                 <textarea
                   value={scriptContent}
                   onChange={(e) => setScriptContent(e.target.value)}
                   rows={8}
                   placeholder="Write your video script here..."
-                  className="w-full brutal-input bg-white px-3 py-2 text-sm text-zinc-900 placeholder:text-zinc-400 resize-none"
+                  className="w-full brutal-input bg-[#1e1e22] px-3 py-2 text-sm text-zinc-200 placeholder:text-zinc-400 resize-none"
                 />
                 <p className="text-[10px] text-zinc-400 mt-1">{scriptContent.split(/\s+/).filter(Boolean).length} words</p>
               </div>
               <div className="relative">
-                <label className="text-[11px] font-semibold text-zinc-700 mb-1 block">Group (optional)</label>
+                <label className="text-[11px] font-semibold text-zinc-400 mb-1 block">Group (optional)</label>
                 <button
                   onClick={() => setShowGroupSelect(!showGroupSelect)}
-                  className="w-full flex items-center justify-between brutal-select bg-white px-3 py-2 text-sm text-zinc-700"
+                  className="w-full flex items-center justify-between brutal-select bg-[#1e1e22] px-3 py-2 text-sm text-zinc-400"
                 >
                   <span>{scriptGroups?.find((g) => g.id === scriptGroupId)?.name || "No group"}</span>
-                  <CaretDown size={14} className="text-zinc-500" />
+                  <CaretDown size={14} className="text-zinc-400" />
                 </button>
                 {showGroupSelect && scriptGroups && scriptGroups.length > 0 && (
-                  <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-zinc-200 rounded-lg shadow-lg z-20 overflow-hidden">
-                    <button onClick={() => { setScriptGroupId(null); setShowGroupSelect(false); }} className="w-full text-left px-3 py-2 text-sm text-zinc-500 hover:bg-zinc-50">No group</button>
+                  <div className="absolute top-full left-0 right-0 mt-1 bg-[#1e1e22] border border-white/[0.08] rounded-lg shadow-lg z-20 overflow-hidden">
+                    <button onClick={() => { setScriptGroupId(null); setShowGroupSelect(false); }} className="w-full text-left px-3 py-2 text-sm text-zinc-400 hover:bg-white/[0.03]">No group</button>
                     {scriptGroups.map((g) => (
                       <button
                         key={g.id}
                         onClick={() => { setScriptGroupId(g.id); setShowGroupSelect(false); }}
-                        className={`w-full text-left px-3 py-2 text-sm hover:bg-zinc-50 ${scriptGroupId === g.id ? "bg-accent-50 font-semibold" : "text-zinc-700"}`}
+                        className={`w-full text-left px-3 py-2 text-sm hover:bg-white/[0.03] ${scriptGroupId === g.id ? "bg-[#00BCFF]/10 font-semibold" : "text-zinc-400"}`}
                       >
                         {g.name}
                       </button>
@@ -319,7 +319,7 @@ export default function Scripts() {
             </div>
 
             <div className="flex justify-end gap-3 mt-6">
-              <button onClick={() => setShowScriptModal(false)} className="text-xs font-semibold text-zinc-600 px-4 py-2">Cancel</button>
+              <button onClick={() => setShowScriptModal(false)} className="text-xs font-semibold text-zinc-400 px-4 py-2">Cancel</button>
               <button
                 onClick={handleSaveScript}
                 disabled={savingScript || !scriptName.trim() || !scriptContent.trim()}
@@ -336,32 +336,32 @@ export default function Scripts() {
       {/* Group Modal */}
       {showGroupModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm">
-          <div className="bg-white rounded-2xl p-6 w-full max-w-md shadow-xl border border-zinc-200">
+          <div className="bg-[#1e1e22] rounded-2xl p-6 w-full max-w-md shadow-xl border border-white/[0.08]">
             <div className="flex items-center justify-between mb-5">
-              <h2 className="text-sm font-bold text-zinc-950">New Script Group</h2>
-              <button onClick={() => setShowGroupModal(false)} className="text-zinc-400 hover:text-zinc-600">
+              <h2 className="text-sm font-bold text-zinc-100">New Script Group</h2>
+              <button onClick={() => setShowGroupModal(false)} className="text-zinc-400 hover:text-zinc-400">
                 <X size={16} />
               </button>
             </div>
 
             {error && (
-              <div className="mb-4 bg-rose-50 border border-rose-200 text-rose-700 text-xs font-medium px-3 py-2 rounded-lg">{error}</div>
+              <div className="mb-4 bg-rose-500/10 border border-rose-200 text-rose-700 text-xs font-medium px-3 py-2 rounded-lg">{error}</div>
             )}
 
             <div className="space-y-4">
               <div>
-                <label className="text-[11px] font-semibold text-zinc-700 mb-1 block">Group Name</label>
+                <label className="text-[11px] font-semibold text-zinc-400 mb-1 block">Group Name</label>
                 <input
                   type="text"
                   value={groupName}
                   onChange={(e) => setGroupName(e.target.value)}
                   placeholder="e.g., Product Launch Scripts"
-                  className="w-full brutal-input bg-white px-3 py-2 text-sm text-zinc-900 placeholder:text-zinc-400"
+                  className="w-full brutal-input bg-[#1e1e22] px-3 py-2 text-sm text-zinc-200 placeholder:text-zinc-400"
                 />
               </div>
               {scripts && scripts.length > 0 && (
                 <div>
-                  <label className="text-[11px] font-semibold text-zinc-700 mb-1 block">Select Scripts</label>
+                  <label className="text-[11px] font-semibold text-zinc-400 mb-1 block">Select Scripts</label>
                   <div className="space-y-1 max-h-48 overflow-y-auto">
                     {scripts.map((s) => (
                       <button
@@ -372,10 +372,10 @@ export default function Scripts() {
                           );
                         }}
                         className={`w-full text-left px-3 py-2 rounded-lg flex items-center gap-2 text-xs transition-colors ${
-                          selectedScriptIds.includes(s.id) ? "bg-accent-50 text-accent-700 font-semibold" : "text-zinc-700 hover:bg-zinc-50"
+                          selectedScriptIds.includes(s.id) ? "bg-[#00BCFF]/10 text-[#00BCFF] font-semibold" : "text-zinc-400 hover:bg-white/[0.03]"
                         }`}
                       >
-                        {selectedScriptIds.includes(s.id) && <Check size={12} weight="bold" className="text-accent-600" />}
+                        {selectedScriptIds.includes(s.id) && <Check size={12} weight="bold" className="text-[#00BCFF]" />}
                         {s.name}
                       </button>
                     ))}
@@ -385,7 +385,7 @@ export default function Scripts() {
             </div>
 
             <div className="flex justify-end gap-3 mt-6">
-              <button onClick={() => setShowGroupModal(false)} className="text-xs font-semibold text-zinc-600 px-4 py-2">Cancel</button>
+              <button onClick={() => setShowGroupModal(false)} className="text-xs font-semibold text-zinc-400 px-4 py-2">Cancel</button>
               <button
                 onClick={handleCreateGroup}
                 disabled={savingGroup || !groupName.trim()}

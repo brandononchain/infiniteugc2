@@ -58,7 +58,7 @@ export default function DashboardLayout({
         {/* Drawer header */}
         <div className="flex items-center justify-between h-14 px-4 border-b border-zinc-800 shrink-0">
           <Link href="/dashboard" className="flex items-center gap-2">
-            <div className="w-7 h-7 bg-accent-500 rounded-lg flex items-center justify-center">
+            <div className="w-7 h-7 bg-gradient-to-br from-[#00BCFF] to-[#0069A8] rounded-lg flex items-center justify-center">
               <Infinity size={14} strokeWidth={2.5} className="text-white" />
             </div>
             <span className="text-sm font-bold text-white">InfiniteUGC</span>
@@ -75,7 +75,7 @@ export default function DashboardLayout({
         <nav className="flex-1 overflow-y-auto px-3 py-3 space-y-4">
           {NAV_GROUPS.map((group) => (
             <div key={group.label}>
-              <p className="text-[10px] font-semibold text-zinc-600 uppercase tracking-widest px-2 mb-1.5">
+              <p className="text-[10px] font-semibold text-zinc-400 uppercase tracking-widest px-2 mb-1.5">
                 {group.label}
               </p>
               <div className="space-y-0.5">
@@ -91,7 +91,7 @@ export default function DashboardLayout({
                         group flex items-center gap-2.5 px-2.5 py-2 rounded-xl text-sm font-medium transition-colors
                         ${isActive
                           ? "nav-active text-accent-400"
-                          : "text-zinc-500 hover:bg-zinc-800/60 hover:text-zinc-200"
+                          : "text-zinc-400 hover:bg-zinc-800/60 hover:text-zinc-200"
                         }
                       `}
                     >
@@ -112,7 +112,7 @@ export default function DashboardLayout({
         {/* Drawer footer */}
         <div className="border-t border-zinc-800 px-3 py-3">
           <div className="flex items-center gap-2.5 px-2.5 py-2">
-            <div className="w-7 h-7 rounded-full bg-accent-500/20 text-accent-400 flex items-center justify-center text-xs font-bold shrink-0">
+            <div className="w-7 h-7 rounded-full bg-[#00BCFF]/100/20 text-accent-400 flex items-center justify-center text-xs font-bold shrink-0">
               {initials}
             </div>
             <div className="min-w-0 flex-1">
@@ -123,7 +123,7 @@ export default function DashboardLayout({
             </div>
             <button
               onClick={handleSignOut}
-              className="w-7 h-7 flex items-center justify-center rounded-lg hover:bg-zinc-800 text-zinc-500 hover:text-zinc-300"
+              className="w-7 h-7 flex items-center justify-center rounded-lg hover:bg-zinc-800 text-zinc-400 hover:text-zinc-300"
               title="Sign out"
             >
               <LogOut size={14} strokeWidth={2} />
@@ -135,18 +135,18 @@ export default function DashboardLayout({
       {/* ─── Main Content ─── */}
       <main className="flex-1 flex flex-col min-w-0 overflow-hidden">
         {/* Mobile top bar */}
-        <div className="lg:hidden flex items-center h-14 px-4 brutal-header shrink-0">
+        <div className="lg:hidden flex items-center h-14 px-4 shrink-0 border-b border-white/[0.06]">
           <button
             onClick={() => setMobileOpen(true)}
-            className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-zinc-100 text-zinc-600"
+            className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-white/10 text-zinc-400"
           >
             <Menu size={20} strokeWidth={2} />
           </button>
           <div className="flex items-center gap-2 ml-3">
-            <div className="w-6 h-6 bg-zinc-950 rounded-lg flex items-center justify-center">
+            <div className="w-6 h-6 bg-gradient-to-br from-[#00BCFF] to-[#0069A8] rounded-lg flex items-center justify-center">
               <Infinity size={13} strokeWidth={2.5} className="text-white" />
             </div>
-            <span className="text-sm font-bold text-zinc-950">InfiniteUGC</span>
+            <span className="text-sm font-bold text-zinc-100">InfiniteUGC</span>
           </div>
         </div>
 

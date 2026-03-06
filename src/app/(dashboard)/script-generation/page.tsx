@@ -156,23 +156,23 @@ export default function ScriptGeneration() {
   return (
     <div className="min-h-full">
       {/* Header */}
-      <div className="sticky top-0 z-30 brutal-header">
+      <div className="">
         <div className="max-w-6xl mx-auto px-6 lg:px-10 h-16 flex items-center justify-between">
           <div className="flex items-center gap-2.5">
             <div className="w-8 h-8 rounded-xl bg-linear-to-br from-violet-500 to-purple-600 flex items-center justify-center">
               <Sparkle size={16} weight="fill" className="text-white" />
             </div>
             <div>
-              <h1 className="text-lg font-bold text-zinc-950 tracking-tight">
+              <h1 className="text-lg font-bold text-zinc-100 tracking-tight">
                 Script Generation
               </h1>
-              <p className="text-xs text-zinc-500">
+              <p className="text-xs text-zinc-400">
                 AI-powered viral UGC scripts — platform-optimized
               </p>
             </div>
           </div>
           {scriptSource === "ai" && (
-            <span className="text-[10px] font-bold text-emerald-600 bg-emerald-50 border border-emerald-200 px-2.5 py-1 rounded-full">
+            <span className="text-[10px] font-bold text-emerald-400 bg-emerald-500/10 border border-emerald-200 px-2.5 py-1 rounded-full">
               Powered by GPT-4o
             </span>
           )}
@@ -181,7 +181,7 @@ export default function ScriptGeneration() {
 
       <div className="max-w-6xl mx-auto px-6 lg:px-10 py-8">
         {error && (
-          <div className="mb-4 bg-rose-50 border border-rose-200 text-rose-700 text-xs font-medium px-3 py-2 rounded-lg flex items-center gap-2">
+          <div className="mb-4 bg-rose-500/10 border border-rose-200 text-rose-700 text-xs font-medium px-3 py-2 rounded-lg flex items-center gap-2">
             {error}
             <button onClick={() => setError(null)} className="ml-auto">
               <X size={12} />
@@ -193,14 +193,14 @@ export default function ScriptGeneration() {
           {/* ─── Left: Input Form ─── */}
           <div className="space-y-5">
             {/* Product / Service */}
-            <div className="bg-white rounded-xl p-5 brutal-card">
-              <h2 className="text-sm font-bold text-zinc-950 mb-4 flex items-center gap-2">
+            <div className="bg-[#1e1e22] rounded-xl p-5 brutal-card">
+              <h2 className="text-sm font-bold text-zinc-100 mb-4 flex items-center gap-2">
                 <Target size={14} weight="bold" className="text-violet-500" />
                 What are you selling?
               </h2>
 
               <div className="mb-4">
-                <label className="text-[11px] font-semibold text-zinc-700 mb-1.5 block">
+                <label className="text-[11px] font-semibold text-zinc-400 mb-1.5 block">
                   Product or Service *
                 </label>
                 <input
@@ -208,13 +208,13 @@ export default function ScriptGeneration() {
                   value={product}
                   onChange={(e) => setProduct(e.target.value)}
                   placeholder="e.g., AI video generation tool for marketers"
-                  className="w-full brutal-input bg-white px-3 py-2.5 text-sm text-zinc-900 placeholder:text-zinc-400 transition-all"
+                  className="w-full brutal-input bg-[#1e1e22] px-3 py-2.5 text-sm text-zinc-200 placeholder:text-zinc-400 transition-all"
                 />
               </div>
 
               {/* Platform */}
               <div className="mb-4">
-                <label className="text-[11px] font-semibold text-zinc-700 mb-1.5 block flex items-center gap-1.5">
+                <label className="text-[11px] font-semibold text-zinc-400 mb-1.5 block flex items-center gap-1.5">
                   <Megaphone size={11} weight="bold" />
                   Platform
                 </label>
@@ -226,7 +226,7 @@ export default function ScriptGeneration() {
                       className={`text-xs font-medium px-3 py-1.5 rounded-lg transition-all ${
                         platform === p.value
                           ? "bg-zinc-900 text-white"
-                          : "bg-zinc-50 border border-zinc-200 text-zinc-600 hover:border-zinc-300"
+                          : "bg-white/[0.03] border border-white/[0.08] text-zinc-400 hover:border-white/[0.1]"
                       }`}
                     >
                       {p.label}
@@ -237,7 +237,7 @@ export default function ScriptGeneration() {
 
               {/* Target Audience */}
               <div>
-                <label className="text-[11px] font-semibold text-zinc-700 mb-1.5 block flex items-center gap-1.5">
+                <label className="text-[11px] font-semibold text-zinc-400 mb-1.5 block flex items-center gap-1.5">
                   <Users size={11} weight="bold" />
                   Target Audience
                 </label>
@@ -249,7 +249,7 @@ export default function ScriptGeneration() {
                       className={`text-xs font-medium px-3 py-1.5 rounded-lg transition-all ${
                         audience === a.value
                           ? "bg-zinc-900 text-white"
-                          : "bg-zinc-50 border border-zinc-200 text-zinc-600 hover:border-zinc-300"
+                          : "bg-white/[0.03] border border-white/[0.08] text-zinc-400 hover:border-white/[0.1]"
                       }`}
                     >
                       {a.label}
@@ -260,15 +260,15 @@ export default function ScriptGeneration() {
             </div>
 
             {/* Script Style */}
-            <div className="bg-white rounded-xl p-5 brutal-card">
-              <h2 className="text-sm font-bold text-zinc-950 mb-4 flex items-center gap-2">
+            <div className="bg-[#1e1e22] rounded-xl p-5 brutal-card">
+              <h2 className="text-sm font-bold text-zinc-100 mb-4 flex items-center gap-2">
                 <Star size={14} weight="bold" className="text-amber-500" />
                 Script Style
               </h2>
 
               {/* Tone */}
               <div className="mb-4">
-                <label className="text-[11px] font-semibold text-zinc-700 mb-1.5 block">
+                <label className="text-[11px] font-semibold text-zinc-400 mb-1.5 block">
                   Tone
                 </label>
                 <div className="grid grid-cols-2 gap-2">
@@ -278,13 +278,13 @@ export default function ScriptGeneration() {
                       onClick={() => setTone(t.value)}
                       className={`text-left px-3 py-2 rounded-lg transition-all ${
                         tone === t.value
-                          ? "bg-violet-50 border-2 border-violet-300"
-                          : "bg-zinc-50 border border-zinc-200 hover:border-zinc-300"
+                          ? "bg-violet-500/10 border-2 border-violet-300"
+                          : "bg-white/[0.03] border border-white/[0.08] hover:border-white/[0.1]"
                       }`}
                     >
                       <div
                         className={`text-xs font-semibold ${
-                          tone === t.value ? "text-violet-700" : "text-zinc-700"
+                          tone === t.value ? "text-violet-700" : "text-zinc-400"
                         }`}
                       >
                         {t.label}
@@ -299,7 +299,7 @@ export default function ScriptGeneration() {
 
               {/* Format */}
               <div className="mb-4">
-                <label className="text-[11px] font-semibold text-zinc-700 mb-1.5 block">
+                <label className="text-[11px] font-semibold text-zinc-400 mb-1.5 block">
                   Format
                 </label>
                 <div className="grid grid-cols-2 gap-2">
@@ -309,13 +309,13 @@ export default function ScriptGeneration() {
                       onClick={() => setFormat(f.value)}
                       className={`text-left px-3 py-2 rounded-lg transition-all ${
                         format === f.value
-                          ? "bg-violet-50 border-2 border-violet-300"
-                          : "bg-zinc-50 border border-zinc-200 hover:border-zinc-300"
+                          ? "bg-violet-500/10 border-2 border-violet-300"
+                          : "bg-white/[0.03] border border-white/[0.08] hover:border-white/[0.1]"
                       }`}
                     >
                       <div
                         className={`text-xs font-semibold ${
-                          format === f.value ? "text-violet-700" : "text-zinc-700"
+                          format === f.value ? "text-violet-700" : "text-zinc-400"
                         }`}
                       >
                         {f.label}
@@ -330,7 +330,7 @@ export default function ScriptGeneration() {
 
               {/* Duration */}
               <div>
-                <label className="text-[11px] font-semibold text-zinc-700 mb-1.5 block flex items-center gap-1.5">
+                <label className="text-[11px] font-semibold text-zinc-400 mb-1.5 block flex items-center gap-1.5">
                   <Timer size={11} weight="bold" />
                   Target Duration
                 </label>
@@ -342,7 +342,7 @@ export default function ScriptGeneration() {
                       className={`text-xs font-semibold px-4 py-2 rounded-lg flex-1 transition-all ${
                         duration === d
                           ? "bg-zinc-900 text-white"
-                          : "bg-zinc-50 border border-zinc-200 text-zinc-600 hover:border-zinc-300"
+                          : "bg-white/[0.03] border border-white/[0.08] text-zinc-400 hover:border-white/[0.1]"
                       }`}
                     >
                       {d}s
@@ -353,12 +353,12 @@ export default function ScriptGeneration() {
             </div>
 
             {/* Advanced Options */}
-            <div className="bg-white rounded-xl brutal-card overflow-hidden">
+            <div className="bg-[#1e1e22] rounded-xl brutal-card overflow-hidden">
               <button
                 onClick={() => setShowAdvanced(!showAdvanced)}
                 className="w-full px-5 py-3.5 flex items-center justify-between text-left"
               >
-                <span className="text-sm font-bold text-zinc-950 flex items-center gap-2">
+                <span className="text-sm font-bold text-zinc-100 flex items-center gap-2">
                   <Lightbulb size={14} weight="bold" className="text-amber-500" />
                   Advanced Options
                 </span>
@@ -370,9 +370,9 @@ export default function ScriptGeneration() {
               </button>
 
               {showAdvanced && (
-                <div className="px-5 pb-5 space-y-4 border-t border-zinc-100 pt-4">
+                <div className="px-5 pb-5 space-y-4 border-t border-white/[0.05] pt-4">
                   <div>
-                    <label className="text-[11px] font-semibold text-zinc-700 mb-1.5 block">
+                    <label className="text-[11px] font-semibold text-zinc-400 mb-1.5 block">
                       Key Benefits to Highlight
                     </label>
                     <input
@@ -380,12 +380,12 @@ export default function ScriptGeneration() {
                       value={keyBenefits}
                       onChange={(e) => setKeyBenefits(e.target.value)}
                       placeholder="e.g., saves 10 hours/week, 90% cheaper than alternatives"
-                      className="w-full brutal-input bg-white px-3 py-2.5 text-sm text-zinc-900 placeholder:text-zinc-400"
+                      className="w-full brutal-input bg-[#1e1e22] px-3 py-2.5 text-sm text-zinc-200 placeholder:text-zinc-400"
                     />
                   </div>
 
                   <div>
-                    <label className="text-[11px] font-semibold text-zinc-700 mb-1.5 block">
+                    <label className="text-[11px] font-semibold text-zinc-400 mb-1.5 block">
                       Price Point
                     </label>
                     <input
@@ -393,12 +393,12 @@ export default function ScriptGeneration() {
                       value={pricePoint}
                       onChange={(e) => setPricePoint(e.target.value)}
                       placeholder="e.g., $29/month, $9.99 one-time"
-                      className="w-full brutal-input bg-white px-3 py-2.5 text-sm text-zinc-900 placeholder:text-zinc-400"
+                      className="w-full brutal-input bg-[#1e1e22] px-3 py-2.5 text-sm text-zinc-200 placeholder:text-zinc-400"
                     />
                   </div>
 
                   <div>
-                    <label className="text-[11px] font-semibold text-zinc-700 mb-1.5 block">
+                    <label className="text-[11px] font-semibold text-zinc-400 mb-1.5 block">
                       Competitor / Alternative to Reference
                     </label>
                     <input
@@ -406,12 +406,12 @@ export default function ScriptGeneration() {
                       value={competitorMention}
                       onChange={(e) => setCompetitorMention(e.target.value)}
                       placeholder="e.g., Canva, traditional video editors"
-                      className="w-full brutal-input bg-white px-3 py-2.5 text-sm text-zinc-900 placeholder:text-zinc-400"
+                      className="w-full brutal-input bg-[#1e1e22] px-3 py-2.5 text-sm text-zinc-200 placeholder:text-zinc-400"
                     />
                   </div>
 
                   <div>
-                    <label className="text-[11px] font-semibold text-zinc-700 mb-1.5 block">
+                    <label className="text-[11px] font-semibold text-zinc-400 mb-1.5 block">
                       Extra Creative Direction
                     </label>
                     <textarea
@@ -419,7 +419,7 @@ export default function ScriptGeneration() {
                       onChange={(e) => setExtra(e.target.value)}
                       rows={3}
                       placeholder="e.g., Include a question hook, mention free trial, reference trending audio 'I just found out...'"
-                      className="w-full brutal-input bg-white px-3 py-2.5 text-sm text-zinc-900 placeholder:text-zinc-400 resize-none"
+                      className="w-full brutal-input bg-[#1e1e22] px-3 py-2.5 text-sm text-zinc-200 placeholder:text-zinc-400 resize-none"
                     />
                   </div>
                 </div>
@@ -449,23 +449,23 @@ export default function ScriptGeneration() {
           {/* ─── Right: Output + Inspiration ─── */}
           <div className="space-y-5">
             {generatedScript ? (
-              <div className="bg-white rounded-xl p-6 brutal-card">
+              <div className="bg-[#1e1e22] rounded-xl p-6 brutal-card">
                 <div className="flex items-center justify-between mb-4">
-                  <h2 className="text-sm font-bold text-zinc-950">
+                  <h2 className="text-sm font-bold text-zinc-100">
                     Generated Script
                   </h2>
                   <div className="flex items-center gap-2">
                     <button
                       onClick={handleGenerate}
                       disabled={generating}
-                      className="flex items-center gap-1.5 text-[11px] font-semibold text-zinc-600 border border-zinc-200 px-3 py-1.5 rounded-lg shadow-sm hover:shadow-md hover:-translate-y-px transition-all disabled:opacity-50"
+                      className="flex items-center gap-1.5 text-[11px] font-semibold text-zinc-400 border border-white/[0.08] px-3 py-1.5 rounded-lg shadow-sm hover:shadow-md hover:-translate-y-px transition-all disabled:opacity-50"
                     >
                       <ArrowClockwise size={12} weight="bold" />
                       Regenerate
                     </button>
                     <button
                       onClick={handleCopy}
-                      className="flex items-center gap-1.5 text-[11px] font-semibold text-zinc-600 border border-zinc-200 px-3 py-1.5 rounded-lg shadow-sm hover:shadow-md hover:-translate-y-px transition-all"
+                      className="flex items-center gap-1.5 text-[11px] font-semibold text-zinc-400 border border-white/[0.08] px-3 py-1.5 rounded-lg shadow-sm hover:shadow-md hover:-translate-y-px transition-all"
                     >
                       {copied ? (
                         <Check
@@ -482,45 +482,45 @@ export default function ScriptGeneration() {
                 </div>
 
                 {/* Script output */}
-                <div className="bg-zinc-50 border border-zinc-200 rounded-lg p-4 mb-4 shadow-sm">
-                  <pre className="text-xs text-zinc-700 font-mono whitespace-pre-wrap leading-relaxed">
+                <div className="bg-white/[0.03] border border-white/[0.08] rounded-lg p-4 mb-4 shadow-sm">
+                  <pre className="text-xs text-zinc-400 font-mono whitespace-pre-wrap leading-relaxed">
                     {generatedScript}
                   </pre>
                 </div>
 
                 {/* Meta info */}
-                <div className="flex flex-wrap items-center gap-3 text-[11px] text-zinc-500">
+                <div className="flex flex-wrap items-center gap-3 text-[11px] text-zinc-400">
                   <span>
                     Platform:{" "}
-                    <strong className="text-zinc-600">
+                    <strong className="text-zinc-400">
                       {SCRIPT_PLATFORMS.find((p) => p.value === platform)?.label}
                     </strong>
                   </span>
                   <span>
                     Tone:{" "}
-                    <strong className="text-zinc-600">
+                    <strong className="text-zinc-400">
                       {SCRIPT_TONES.find((t) => t.value === tone)?.label}
                     </strong>
                   </span>
                   <span>
                     Format:{" "}
-                    <strong className="text-zinc-600">
+                    <strong className="text-zinc-400">
                       {SCRIPT_FORMATS.find((f) => f.value === format)?.label}
                     </strong>
                   </span>
                   <span>
-                    Duration: <strong className="text-zinc-600">{duration}s</strong>
+                    Duration: <strong className="text-zinc-400">{duration}s</strong>
                   </span>
                   <span>
                     Audience:{" "}
-                    <strong className="text-zinc-600">
+                    <strong className="text-zinc-400">
                       {TARGET_AUDIENCES.find((a) => a.value === audience)?.label}
                     </strong>
                   </span>
                 </div>
 
                 {/* Actions */}
-                <div className="flex items-center gap-3 mt-5 pt-4 border-t border-zinc-200">
+                <div className="flex items-center gap-3 mt-5 pt-4 border-t border-white/[0.08]">
                   <button
                     onClick={handleSaveToScripts}
                     disabled={saving || saved}
@@ -538,7 +538,7 @@ export default function ScriptGeneration() {
                   <button
                     onClick={handleUseInCampaign}
                     disabled={saving}
-                    className="flex items-center gap-2 text-xs font-semibold text-zinc-700 border border-zinc-200 px-5 py-2.5 rounded-xl shadow-sm hover:shadow-md hover:-translate-y-px transition-all disabled:opacity-50"
+                    className="flex items-center gap-2 text-xs font-semibold text-zinc-400 border border-white/[0.08] px-5 py-2.5 rounded-xl shadow-sm hover:shadow-md hover:-translate-y-px transition-all disabled:opacity-50"
                   >
                     <FileText size={14} weight="bold" />
                     Use in Campaign
@@ -546,18 +546,18 @@ export default function ScriptGeneration() {
                 </div>
               </div>
             ) : (
-              <div className="bg-white rounded-xl p-16 text-center brutal-empty">
-                <div className="w-14 h-14 rounded-xl bg-zinc-50 border border-zinc-200 flex items-center justify-center mx-auto mb-4 shadow-sm">
+              <div className="bg-[#1e1e22] rounded-xl p-16 text-center brutal-empty">
+                <div className="w-14 h-14 rounded-xl bg-white/[0.03] border border-white/[0.08] flex items-center justify-center mx-auto mb-4 shadow-sm">
                   <FileText
                     size={24}
                     weight="duotone"
                     className="text-zinc-300"
                   />
                 </div>
-                <h3 className="text-sm font-bold text-zinc-900 mb-1">
+                <h3 className="text-sm font-bold text-zinc-200 mb-1">
                   Your script will appear here
                 </h3>
-                <p className="text-xs text-zinc-500 mb-1">
+                <p className="text-xs text-zinc-400 mb-1">
                   Fill in the parameters and click Generate.
                 </p>
                 <p className="text-[10px] text-zinc-400">
@@ -567,12 +567,12 @@ export default function ScriptGeneration() {
             )}
 
             {/* Hook Inspiration */}
-            <div className="bg-white rounded-xl brutal-card overflow-hidden">
+            <div className="bg-[#1e1e22] rounded-xl brutal-card overflow-hidden">
               <button
                 onClick={() => setShowHookInspiration(!showHookInspiration)}
                 className="w-full px-5 py-3.5 flex items-center justify-between text-left"
               >
-                <span className="text-sm font-bold text-zinc-950 flex items-center gap-2">
+                <span className="text-sm font-bold text-zinc-100 flex items-center gap-2">
                   <Lightning size={14} weight="fill" className="text-amber-500" />
                   Hook Inspiration
                   <span className="text-[10px] font-medium text-zinc-400">
@@ -587,8 +587,8 @@ export default function ScriptGeneration() {
               </button>
 
               {showHookInspiration && (
-                <div className="px-5 pb-5 border-t border-zinc-100 pt-4">
-                  <p className="text-[11px] text-zinc-500 mb-3">
+                <div className="px-5 pb-5 border-t border-white/[0.05] pt-4">
+                  <p className="text-[11px] text-zinc-400 mb-3">
                     Proven viral hook patterns used by top UGC creators. Click to
                     copy and customize.
                   </p>
@@ -599,7 +599,7 @@ export default function ScriptGeneration() {
                         onClick={() => {
                           navigator.clipboard.writeText(hook);
                         }}
-                        className="w-full text-left text-xs text-zinc-600 bg-zinc-50 border border-zinc-200 px-3 py-2 rounded-lg hover:border-violet-300 hover:text-violet-600 transition-all"
+                        className="w-full text-left text-xs text-zinc-400 bg-white/[0.03] border border-white/[0.08] px-3 py-2 rounded-lg hover:border-violet-300 hover:text-violet-400 transition-all"
                       >
                         &ldquo;{hook}&rdquo;
                       </button>
@@ -610,12 +610,12 @@ export default function ScriptGeneration() {
             </div>
 
             {/* CTA Inspiration */}
-            <div className="bg-white rounded-xl brutal-card overflow-hidden">
+            <div className="bg-[#1e1e22] rounded-xl brutal-card overflow-hidden">
               <button
                 onClick={() => setShowCtaInspiration(!showCtaInspiration)}
                 className="w-full px-5 py-3.5 flex items-center justify-between text-left"
               >
-                <span className="text-sm font-bold text-zinc-950 flex items-center gap-2">
+                <span className="text-sm font-bold text-zinc-100 flex items-center gap-2">
                   <Megaphone size={14} weight="fill" className="text-emerald-500" />
                   CTA Templates
                   <span className="text-[10px] font-medium text-zinc-400">
@@ -630,8 +630,8 @@ export default function ScriptGeneration() {
               </button>
 
               {showCtaInspiration && (
-                <div className="px-5 pb-5 border-t border-zinc-100 pt-4">
-                  <p className="text-[11px] text-zinc-500 mb-3">
+                <div className="px-5 pb-5 border-t border-white/[0.05] pt-4">
+                  <p className="text-[11px] text-zinc-400 mb-3">
                     High-converting call-to-action closers. Click to copy.
                   </p>
                   <div className="space-y-1.5">
@@ -641,7 +641,7 @@ export default function ScriptGeneration() {
                         onClick={() => {
                           navigator.clipboard.writeText(cta);
                         }}
-                        className="w-full text-left text-xs text-zinc-600 bg-zinc-50 border border-zinc-200 px-3 py-2 rounded-lg hover:border-emerald-300 hover:text-emerald-600 transition-all"
+                        className="w-full text-left text-xs text-zinc-400 bg-white/[0.03] border border-white/[0.08] px-3 py-2 rounded-lg hover:border-emerald-300 hover:text-emerald-400 transition-all"
                       >
                         &ldquo;{cta}&rdquo;
                       </button>

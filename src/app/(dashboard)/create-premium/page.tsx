@@ -104,28 +104,28 @@ export default function CreatePremium() {
   return (
     <div className="flex flex-col h-full overflow-hidden">
       {/* Header */}
-      <div className="shrink-0 z-30 brutal-header">
+      <div className="shrink-0">
         <div className="px-6 lg:px-8 h-14 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <Link href="/dashboard" className="flex items-center gap-1.5 text-[11px] font-medium text-zinc-500 hover:text-zinc-700 transition-colors">
+            <Link href="/dashboard" className="flex items-center gap-1.5 text-[11px] font-medium text-zinc-400 hover:text-zinc-400 transition-colors">
               <ArrowLeft size={12} weight="bold" />
               Back
             </Link>
             <div className="w-px h-5 bg-zinc-200" />
             <div className="flex items-center gap-2">
               <Sparkle size={16} weight="duotone" className="text-rose-500" />
-              <h1 className="text-sm font-bold text-zinc-950 tracking-tight">Create Premium</h1>
+              <h1 className="text-sm font-bold text-zinc-100 tracking-tight">Create Premium</h1>
             </div>
           </div>
-          <div className="flex items-center gap-1.5 bg-accent-50 border border-accent-200 text-accent-700 text-[11px] font-semibold px-3 py-1 rounded-full">
+          <div className="flex items-center gap-1.5 bg-[#00BCFF]/10 border border-[#00BCFF]/20 text-[#00BCFF] text-[11px] font-semibold px-3 py-1 rounded-full">
             <Coin size={12} weight="fill" />
-            <span className="text-accent-800 font-bold">{credits}</span> credits
+            <span className="text-[#00BCFF] font-bold">{credits}</span> credits
           </div>
         </div>
       </div>
 
       {error && (
-        <div className="mx-6 mt-2 bg-rose-50 border border-rose-200 text-rose-700 text-xs font-medium px-3 py-2 rounded-lg flex items-center gap-2">
+        <div className="mx-6 mt-2 bg-rose-500/10 border border-rose-200 text-rose-700 text-xs font-medium px-3 py-2 rounded-lg flex items-center gap-2">
           <Info size={14} />
           {error}
           <button onClick={() => setError(null)} className="ml-auto"><X size={12} /></button>
@@ -138,27 +138,27 @@ export default function CreatePremium() {
           <div className="max-w-2xl mx-auto px-6 lg:px-8 py-6 space-y-5">
             {/* Campaign name */}
             <div>
-              <label className="text-[11px] font-semibold text-zinc-700 mb-1 block">Campaign name</label>
+              <label className="text-[11px] font-semibold text-zinc-400 mb-1 block">Campaign name</label>
               <input
                 type="text"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="e.g., Product Launch, Tutorial Part 1"
-                className="w-full brutal-input bg-white px-3 py-2 text-sm text-zinc-900 placeholder:text-zinc-400 transition-all"
+                className="w-full brutal-input bg-[#1e1e22] px-3 py-2 text-sm text-zinc-200 placeholder:text-zinc-400 transition-all"
               />
             </div>
 
             {/* Starting Keyframe */}
             <div className="space-y-2">
               <div className="flex items-center gap-2">
-                <div className="w-5 h-5 rounded bg-zinc-100 flex items-center justify-center">
-                  <Eye size={12} className="text-zinc-500" />
+                <div className="w-5 h-5 rounded bg-white/[0.05] flex items-center justify-center">
+                  <Eye size={12} className="text-zinc-400" />
                 </div>
-                <h2 className="text-xs font-bold text-zinc-950">Starting Keyframe Image</h2>
+                <h2 className="text-xs font-bold text-zinc-100">Starting Keyframe Image</h2>
               </div>
               <input ref={fileInputRef} type="file" accept="image/*" onChange={handleKeyframeUpload} className="hidden" />
               {keyframePreview ? (
-                <div className="relative w-32 h-32 rounded-lg overflow-hidden border border-zinc-200">
+                <div className="relative w-32 h-32 rounded-lg overflow-hidden border border-white/[0.08]">
                   <img src={keyframePreview} alt="Keyframe" className="w-full h-full object-cover" />
                   <button
                     onClick={() => { setKeyframeFile(null); setKeyframePreview(null); }}
@@ -170,11 +170,11 @@ export default function CreatePremium() {
               ) : (
                 <button
                   onClick={() => fileInputRef.current?.click()}
-                  className="brutal-empty p-5 w-full flex flex-col items-center justify-center gap-1.5 hover:border-accent-300 hover:bg-accent-50/30 transition-all cursor-pointer"
+                  className="brutal-empty p-5 w-full flex flex-col items-center justify-center gap-1.5 hover:border-[#00BCFF]/30 hover:bg-[#00BCFF]/10/30 transition-all cursor-pointer"
                 >
                   <Upload size={20} className="text-zinc-400" />
-                  <p className="text-[11px] font-semibold text-accent-600">Upload keyframe image</p>
-                  <p className="text-[10px] text-zinc-500">PNG, JPG, WebP (max 10MB)</p>
+                  <p className="text-[11px] font-semibold text-[#00BCFF]">Upload keyframe image</p>
+                  <p className="text-[10px] text-zinc-400">PNG, JPG, WebP (max 10MB)</p>
                 </button>
               )}
             </div>
@@ -182,24 +182,24 @@ export default function CreatePremium() {
             {/* Visual Instructions */}
             <div className="space-y-2">
               <div className="flex items-center gap-2">
-                <div className="w-5 h-5 rounded bg-zinc-100 flex items-center justify-center">
-                  <Eye size={12} className="text-zinc-500" />
+                <div className="w-5 h-5 rounded bg-white/[0.05] flex items-center justify-center">
+                  <Eye size={12} className="text-zinc-400" />
                 </div>
-                <h2 className="text-xs font-bold text-zinc-950">Visual Instructions</h2>
+                <h2 className="text-xs font-bold text-zinc-100">Visual Instructions</h2>
               </div>
               <textarea
                 rows={3}
                 value={instructions}
                 onChange={(e) => setInstructions(e.target.value)}
                 placeholder={`"warm golden lighting, cozy bedroom, handheld iPhone feel"`}
-                className="w-full brutal-input bg-white px-3 py-2 text-xs text-zinc-900 placeholder:text-zinc-400 font-mono transition-all resize-none"
+                className="w-full brutal-input bg-[#1e1e22] px-3 py-2 text-xs text-zinc-200 placeholder:text-zinc-400 font-mono transition-all resize-none"
               />
-              <p className="text-[10px] text-zinc-500">Optional. Plain text or JSON. Applied to all chunks.</p>
+              <p className="text-[10px] text-zinc-400">Optional. Plain text or JSON. Applied to all chunks.</p>
             </div>
 
             {/* Video Model */}
             <div className="space-y-2">
-              <h2 className="text-xs font-bold text-zinc-950">Video Model</h2>
+              <h2 className="text-xs font-bold text-zinc-100">Video Model</h2>
               <div className="grid grid-cols-3 gap-2">
                 {VIDEO_MODELS.map((model) => (
                   <button
@@ -207,12 +207,12 @@ export default function CreatePremium() {
                     onClick={() => { setSelectedModel(model.value); setEstimate(null); }}
                     className={`text-left rounded-lg p-3 transition-all brutal-card ${
                       selectedModel === model.value
-                        ? "!border-accent-400 bg-accent-50/40 ring-2 ring-accent-200"
-                        : "hover:border-zinc-300"
+                        ? "!border-accent-400 bg-[#00BCFF]/10/40 ring-2 ring-accent-200"
+                        : "hover:border-white/[0.1]"
                     }`}
                   >
-                    <span className="text-xs font-bold text-zinc-900">{model.name}</span>
-                    <p className="text-[10px] text-zinc-500 mt-0.5 leading-snug">{model.desc}</p>
+                    <span className="text-xs font-bold text-zinc-200">{model.name}</span>
+                    <p className="text-[10px] text-zinc-400 mt-0.5 leading-snug">{model.desc}</p>
                   </button>
                 ))}
               </div>
@@ -222,24 +222,24 @@ export default function CreatePremium() {
             {isOmniHuman && (
               <div className="space-y-2">
                 <div className="flex items-center gap-2">
-                  <Microphone size={14} className="text-zinc-500" />
-                  <h2 className="text-xs font-bold text-zinc-950">Voice (Required for OmniHuman)</h2>
+                  <Microphone size={14} className="text-zinc-400" />
+                  <h2 className="text-xs font-bold text-zinc-100">Voice (Required for OmniHuman)</h2>
                 </div>
                 <div className="relative">
                   <button
                     onClick={() => setShowVoiceDropdown(!showVoiceDropdown)}
-                    className="w-full flex items-center justify-between brutal-select bg-white px-3 py-2 text-sm text-zinc-700"
+                    className="w-full flex items-center justify-between brutal-select bg-[#1e1e22] px-3 py-2 text-sm text-zinc-400"
                   >
                     <span>{voices?.find((v) => v.id === selectedVoiceId)?.name || "Select a voice"}</span>
-                    <CaretDown size={14} className="text-zinc-500" />
+                    <CaretDown size={14} className="text-zinc-400" />
                   </button>
                   {showVoiceDropdown && voices && voices.length > 0 && (
-                    <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-zinc-200 rounded-lg shadow-lg z-20 overflow-hidden max-h-40 overflow-y-auto">
+                    <div className="absolute top-full left-0 right-0 mt-1 bg-[#1e1e22] border border-white/[0.08] rounded-lg shadow-lg z-20 overflow-hidden max-h-40 overflow-y-auto">
                       {voices.map((v) => (
                         <button
                           key={v.id}
                           onClick={() => { setSelectedVoiceId(v.id); setShowVoiceDropdown(false); }}
-                          className={`w-full text-left px-3 py-2 text-sm hover:bg-zinc-50 ${selectedVoiceId === v.id ? "bg-accent-50 text-accent-700 font-semibold" : "text-zinc-700"}`}
+                          className={`w-full text-left px-3 py-2 text-sm hover:bg-white/[0.03] ${selectedVoiceId === v.id ? "bg-[#00BCFF]/10 text-[#00BCFF] font-semibold" : "text-zinc-400"}`}
                         >
                           {v.name}
                         </button>
@@ -252,25 +252,25 @@ export default function CreatePremium() {
 
             {/* Script Content */}
             <div className="space-y-2">
-              <h2 className="text-xs font-bold text-zinc-950">Script Content</h2>
+              <h2 className="text-xs font-bold text-zinc-100">Script Content</h2>
               <textarea
                 rows={5}
                 value={script}
                 onChange={(e) => { setScript(e.target.value); setEstimate(null); }}
                 placeholder="Enter your video script here..."
-                className="w-full brutal-input bg-white px-3 py-2 text-sm text-zinc-900 placeholder:text-zinc-400 transition-all resize-none"
+                className="w-full brutal-input bg-[#1e1e22] px-3 py-2 text-sm text-zinc-200 placeholder:text-zinc-400 transition-all resize-none"
               />
             </div>
 
             {/* Estimate */}
             {estimate && (
-              <div className="bg-accent-50 border border-accent-200 rounded-lg p-3 flex items-center justify-between">
+              <div className="bg-[#00BCFF]/10 border border-[#00BCFF]/20 rounded-lg p-3 flex items-center justify-between">
                 <div>
-                  <p className="text-xs font-semibold text-accent-800">Estimated: {estimate.chunks} chunks</p>
-                  <p className="text-[10px] text-accent-600">{estimate.credits} credits total</p>
+                  <p className="text-xs font-semibold text-[#00BCFF]">Estimated: {estimate.chunks} chunks</p>
+                  <p className="text-[10px] text-[#00BCFF]">{estimate.credits} credits total</p>
                 </div>
                 {estimate.credits > credits && (
-                  <span className="text-[10px] font-semibold text-rose-600">Insufficient credits</span>
+                  <span className="text-[10px] font-semibold text-rose-400">Insufficient credits</span>
                 )}
               </div>
             )}
@@ -280,7 +280,7 @@ export default function CreatePremium() {
               <button
                 onClick={handleEstimate}
                 disabled={estimating || !script.trim()}
-                className="flex items-center gap-2 text-xs font-semibold text-zinc-700 border border-zinc-200 px-5 py-2.5 rounded-full shadow-sm hover:shadow-md hover:-translate-y-px transition-all disabled:opacity-50"
+                className="flex items-center gap-2 text-xs font-semibold text-zinc-400 border border-white/[0.08] px-5 py-2.5 rounded-full shadow-sm hover:shadow-md hover:-translate-y-px transition-all disabled:opacity-50"
               >
                 {estimating ? <CircleNotch size={14} className="animate-spin" /> : <Coin size={14} weight="duotone" />}
                 Estimate Cost

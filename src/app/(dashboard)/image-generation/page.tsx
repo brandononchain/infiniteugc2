@@ -180,24 +180,24 @@ export default function ImageGeneration() {
   return (
     <div className="min-h-full flex flex-col">
       {/* Header */}
-      <div className="sticky top-0 z-30 brutal-header">
+      <div className="">
         <div className="max-w-6xl mx-auto px-6 lg:px-10 h-16 flex items-center justify-between">
           <div className="flex items-center gap-2.5">
             <div className="w-8 h-8 rounded-xl bg-linear-to-br from-fuchsia-500 to-pink-600 flex items-center justify-center">
               <ImageSquare size={16} weight="fill" className="text-white" />
             </div>
             <div>
-              <h1 className="text-lg font-bold text-zinc-950 tracking-tight">
+              <h1 className="text-lg font-bold text-zinc-100 tracking-tight">
                 Image Generation
               </h1>
-              <p className="text-xs text-zinc-500">
+              <p className="text-xs text-zinc-400">
                 AI-powered visuals with smart prompt enhancement
               </p>
             </div>
           </div>
 
           {/* Tab navigation */}
-          <div className="flex items-center gap-1 bg-zinc-100 rounded-lg p-0.5">
+          <div className="flex items-center gap-1 bg-white/[0.05] rounded-lg p-0.5">
             {(
               [
                 { key: "generate" as Tab, label: "Create", icon: Sparkle },
@@ -210,14 +210,14 @@ export default function ImageGeneration() {
                 onClick={() => setActiveTab(key)}
                 className={`flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-md transition-all ${
                   activeTab === key
-                    ? "bg-white text-zinc-900 shadow-sm"
-                    : "text-zinc-500 hover:text-zinc-700"
+                    ? "bg-[#1e1e22] text-zinc-200 shadow-sm"
+                    : "text-zinc-400 hover:text-zinc-400"
                 }`}
               >
                 <Icon size={12} weight={activeTab === key ? "fill" : "regular"} />
                 {label}
                 {key === "gallery" && allCompleted.length > 0 && (
-                  <span className="text-[9px] bg-zinc-200 text-zinc-600 px-1.5 py-0.5 rounded-full">
+                  <span className="text-[9px] bg-zinc-200 text-zinc-400 px-1.5 py-0.5 rounded-full">
                     {allCompleted.length}
                   </span>
                 )}
@@ -228,7 +228,7 @@ export default function ImageGeneration() {
       </div>
 
       {error && (
-        <div className="mx-6 mt-2 bg-rose-50 border border-rose-200 text-rose-700 text-xs font-medium px-3 py-2 rounded-lg flex items-center gap-2">
+        <div className="mx-6 mt-2 bg-rose-500/10 border border-rose-200 text-rose-700 text-xs font-medium px-3 py-2 rounded-lg flex items-center gap-2">
           {error}
           <button onClick={() => setError(null)} className="ml-auto">
             <X size={12} />
@@ -239,8 +239,8 @@ export default function ImageGeneration() {
       {/* Processing banner */}
       {processingCount > 0 && (
         <div className="max-w-6xl mx-auto px-6 lg:px-10 pt-4">
-          <div className="bg-sky-50 border border-sky-200 rounded-lg p-3 flex items-center gap-2">
-            <CircleNotch size={14} className="animate-spin text-sky-600" />
+          <div className="bg-sky-500/10 border border-sky-200 rounded-lg p-3 flex items-center gap-2">
+            <CircleNotch size={14} className="animate-spin text-sky-400" />
             <span className="text-xs font-semibold text-sky-700">
               Generating {processingCount} image
               {processingCount > 1 ? "s" : ""}... This may take 30-60 seconds.
@@ -257,15 +257,15 @@ export default function ImageGeneration() {
               {/* Left: Prompt + Enhancement */}
               <div className="lg:col-span-2 space-y-5">
                 {/* Prompt input */}
-                <div className="bg-white rounded-xl p-5 brutal-card">
+                <div className="bg-[#1e1e22] rounded-xl p-5 brutal-card">
                   <div className="flex items-center justify-between mb-3">
-                    <h2 className="text-sm font-bold text-zinc-950">Prompt</h2>
+                    <h2 className="text-sm font-bold text-zinc-100">Prompt</h2>
                     <button
                       onClick={() => setEnhanceEnabled(!enhanceEnabled)}
                       className={`flex items-center gap-1.5 text-[11px] font-semibold px-3 py-1.5 rounded-lg transition-all ${
                         enhanceEnabled
-                          ? "bg-violet-50 text-violet-700 border border-violet-200"
-                          : "bg-zinc-50 text-zinc-500 border border-zinc-200"
+                          ? "bg-violet-500/10 text-violet-700 border border-violet-200"
+                          : "bg-white/[0.03] text-zinc-400 border border-white/[0.08]"
                       }`}
                     >
                       <MagicWand
@@ -287,7 +287,7 @@ export default function ImageGeneration() {
                     }}
                     rows={4}
                     placeholder="Describe your image... e.g., A premium skincare bottle on a marble surface with morning light"
-                    className="w-full brutal-input bg-white px-4 py-3 text-sm text-zinc-900 placeholder:text-zinc-400 resize-none transition-all"
+                    className="w-full brutal-input bg-[#1e1e22] px-4 py-3 text-sm text-zinc-200 placeholder:text-zinc-400 resize-none transition-all"
                   />
 
                   {/* Quick suggestions */}
@@ -300,7 +300,7 @@ export default function ImageGeneration() {
                       <button
                         key={s}
                         onClick={() => setPrompt(s)}
-                        className="text-[10px] text-zinc-500 bg-zinc-50 border border-zinc-200 px-2.5 py-1 rounded-full hover:border-violet-300 hover:text-violet-600 transition-all"
+                        className="text-[10px] text-zinc-400 bg-white/[0.03] border border-white/[0.08] px-2.5 py-1 rounded-full hover:border-violet-300 hover:text-violet-400 transition-all"
                       >
                         {s}
                       </button>
@@ -310,9 +310,9 @@ export default function ImageGeneration() {
 
                 {/* Style Selection */}
                 {enhanceEnabled && (
-                  <div className="bg-white rounded-xl p-5 brutal-card">
+                  <div className="bg-[#1e1e22] rounded-xl p-5 brutal-card">
                     <div className="flex items-center justify-between mb-3">
-                      <h2 className="text-sm font-bold text-zinc-950 flex items-center gap-2">
+                      <h2 className="text-sm font-bold text-zinc-100 flex items-center gap-2">
                         <Sliders size={14} weight="bold" className="text-violet-500" />
                         Style & Enhancement
                       </h2>
@@ -321,8 +321,8 @@ export default function ImageGeneration() {
                           onClick={() => setEnhanceDetail(!enhanceDetail)}
                           className={`text-[10px] font-semibold px-2.5 py-1 rounded-md transition-all ${
                             enhanceDetail
-                              ? "bg-emerald-50 text-emerald-700 border border-emerald-200"
-                              : "bg-zinc-50 text-zinc-400 border border-zinc-200"
+                              ? "bg-emerald-500/10 text-emerald-700 border border-emerald-200"
+                              : "bg-white/[0.03] text-zinc-400 border border-white/[0.08]"
                           }`}
                         >
                           +Detail
@@ -331,8 +331,8 @@ export default function ImageGeneration() {
                           onClick={() => setEnhanceComposition(!enhanceComposition)}
                           className={`text-[10px] font-semibold px-2.5 py-1 rounded-md transition-all ${
                             enhanceComposition
-                              ? "bg-emerald-50 text-emerald-700 border border-emerald-200"
-                              : "bg-zinc-50 text-zinc-400 border border-zinc-200"
+                              ? "bg-emerald-500/10 text-emerald-700 border border-emerald-200"
+                              : "bg-white/[0.03] text-zinc-400 border border-white/[0.08]"
                           }`}
                         >
                           +Composition
@@ -347,8 +347,8 @@ export default function ImageGeneration() {
                           onClick={() => setSelectedStyle(style.value)}
                           className={`text-left px-3 py-2.5 rounded-lg transition-all ${
                             selectedStyle === style.value
-                              ? "bg-violet-50 border-2 border-violet-300 shadow-sm"
-                              : "bg-zinc-50 border border-zinc-200 hover:border-zinc-300"
+                              ? "bg-violet-500/10 border-2 border-violet-300 shadow-sm"
+                              : "bg-white/[0.03] border border-white/[0.08] hover:border-white/[0.1]"
                           }`}
                         >
                           <div className="flex items-center gap-1.5">
@@ -356,14 +356,14 @@ export default function ImageGeneration() {
                               <Check
                                 size={10}
                                 weight="bold"
-                                className="text-violet-600"
+                                className="text-violet-400"
                               />
                             )}
                             <span
                               className={`text-xs font-semibold ${
                                 selectedStyle === style.value
                                   ? "text-violet-700"
-                                  : "text-zinc-700"
+                                  : "text-zinc-400"
                               }`}
                             >
                               {style.label}
@@ -378,7 +378,7 @@ export default function ImageGeneration() {
                       <div className="mt-4">
                         <button
                           onClick={() => setShowEnhancePreview(!showEnhancePreview)}
-                          className="flex items-center gap-1.5 text-[11px] font-semibold text-violet-600 mb-2"
+                          className="flex items-center gap-1.5 text-[11px] font-semibold text-violet-400 mb-2"
                         >
                           <Eye size={12} />
                           {showEnhancePreview ? "Hide" : "Preview"} enhanced prompt
@@ -388,7 +388,7 @@ export default function ImageGeneration() {
                           />
                         </button>
                         {showEnhancePreview && (
-                          <div className="bg-violet-50/50 border border-violet-200 rounded-lg p-3">
+                          <div className="bg-violet-500/10/50 border border-violet-200 rounded-lg p-3">
                             <p className="text-[11px] text-violet-800 leading-relaxed font-mono">
                               {getEnhancedPrompt()}
                             </p>
@@ -421,14 +421,14 @@ export default function ImageGeneration() {
 
               {/* Right: Settings panel */}
               <div className="space-y-5" ref={dropdownRef}>
-                <div className="bg-white rounded-xl p-5 brutal-card">
-                  <h2 className="text-sm font-bold text-zinc-950 mb-4">
+                <div className="bg-[#1e1e22] rounded-xl p-5 brutal-card">
+                  <h2 className="text-sm font-bold text-zinc-100 mb-4">
                     Settings
                   </h2>
 
                   {/* Model */}
                   <div className="mb-4">
-                    <label className="text-[11px] font-semibold text-zinc-600 mb-2 block">
+                    <label className="text-[11px] font-semibold text-zinc-400 mb-2 block">
                       AI Model
                     </label>
                     <div className="space-y-2">
@@ -439,7 +439,7 @@ export default function ImageGeneration() {
                           className={`w-full text-left px-3 py-2.5 rounded-lg transition-all ${
                             model === m.value
                               ? "bg-zinc-900 text-white"
-                              : "bg-zinc-50 border border-zinc-200 hover:border-zinc-300 text-zinc-700"
+                              : "bg-white/[0.03] border border-white/[0.08] hover:border-white/[0.1] text-zinc-400"
                           }`}
                         >
                           <div className="text-xs font-semibold">{m.label}</div>
@@ -457,7 +457,7 @@ export default function ImageGeneration() {
 
                   {/* Aspect Ratio */}
                   <div className="mb-4">
-                    <label className="text-[11px] font-semibold text-zinc-600 mb-2 block">
+                    <label className="text-[11px] font-semibold text-zinc-400 mb-2 block">
                       Aspect Ratio
                     </label>
                     <div className="flex flex-wrap gap-1.5">
@@ -468,7 +468,7 @@ export default function ImageGeneration() {
                           className={`text-xs font-semibold px-3 py-1.5 rounded-lg transition-all ${
                             aspectRatio === ar
                               ? "bg-zinc-900 text-white"
-                              : "bg-zinc-50 border border-zinc-200 text-zinc-600 hover:border-zinc-300"
+                              : "bg-white/[0.03] border border-white/[0.08] text-zinc-400 hover:border-white/[0.1]"
                           }`}
                         >
                           {ar}
@@ -479,7 +479,7 @@ export default function ImageGeneration() {
 
                   {/* Resolution */}
                   <div className="mb-4">
-                    <label className="text-[11px] font-semibold text-zinc-600 mb-2 block">
+                    <label className="text-[11px] font-semibold text-zinc-400 mb-2 block">
                       Resolution
                     </label>
                     <div className="flex gap-1.5">
@@ -490,7 +490,7 @@ export default function ImageGeneration() {
                           className={`text-xs font-semibold px-3 py-1.5 rounded-lg transition-all ${
                             resolution === r
                               ? "bg-zinc-900 text-white"
-                              : "bg-zinc-50 border border-zinc-200 text-zinc-600 hover:border-zinc-300"
+                              : "bg-white/[0.03] border border-white/[0.08] text-zinc-400 hover:border-white/[0.1]"
                           }`}
                         >
                           {r}
@@ -501,22 +501,22 @@ export default function ImageGeneration() {
 
                   {/* Count */}
                   <div>
-                    <label className="text-[11px] font-semibold text-zinc-600 mb-2 block">
+                    <label className="text-[11px] font-semibold text-zinc-400 mb-2 block">
                       Number of Images
                     </label>
                     <div className="flex items-center gap-2">
                       <button
                         onClick={() => setCount(Math.max(1, count - 1))}
-                        className="w-8 h-8 flex items-center justify-center rounded-lg bg-zinc-50 border border-zinc-200 text-zinc-500 hover:bg-zinc-100 transition-colors"
+                        className="w-8 h-8 flex items-center justify-center rounded-lg bg-white/[0.03] border border-white/[0.08] text-zinc-400 hover:bg-white/[0.05] transition-colors"
                       >
                         <Minus size={12} weight="bold" />
                       </button>
-                      <span className="text-sm font-bold text-zinc-900 min-w-6 text-center">
+                      <span className="text-sm font-bold text-zinc-200 min-w-6 text-center">
                         {count}
                       </span>
                       <button
                         onClick={() => setCount(Math.min(8, count + 1))}
-                        className="w-8 h-8 flex items-center justify-center rounded-lg bg-zinc-50 border border-zinc-200 text-zinc-500 hover:bg-zinc-100 transition-colors"
+                        className="w-8 h-8 flex items-center justify-center rounded-lg bg-white/[0.03] border border-white/[0.08] text-zinc-400 hover:bg-white/[0.05] transition-colors"
                       >
                         <Plus size={12} weight="bold" />
                       </button>
@@ -527,7 +527,7 @@ export default function ImageGeneration() {
                 {/* Keyboard shortcut hint */}
                 <div className="text-center">
                   <p className="text-[10px] text-zinc-400">
-                    Press <kbd className="px-1 py-0.5 bg-zinc-100 border border-zinc-200 rounded text-[9px] font-mono">Ctrl</kbd>+<kbd className="px-1 py-0.5 bg-zinc-100 border border-zinc-200 rounded text-[9px] font-mono">Enter</kbd> to generate
+                    Press <kbd className="px-1 py-0.5 bg-white/[0.05] border border-white/[0.08] rounded text-[9px] font-mono">Ctrl</kbd>+<kbd className="px-1 py-0.5 bg-white/[0.05] border border-white/[0.08] rounded text-[9px] font-mono">Enter</kbd> to generate
                   </p>
                 </div>
               </div>
@@ -547,7 +547,7 @@ export default function ImageGeneration() {
                 className={`text-xs font-semibold px-3 py-1.5 rounded-lg transition-all ${
                   selectedCategory === "all"
                     ? "bg-zinc-900 text-white"
-                    : "bg-zinc-50 border border-zinc-200 text-zinc-600 hover:border-zinc-300"
+                    : "bg-white/[0.03] border border-white/[0.08] text-zinc-400 hover:border-white/[0.1]"
                 }`}
               >
                 All ({IMAGE_PROMPT_TEMPLATES.length})
@@ -563,7 +563,7 @@ export default function ImageGeneration() {
                     className={`text-xs font-semibold px-3 py-1.5 rounded-lg transition-all ${
                       selectedCategory === cat.value
                         ? "bg-zinc-900 text-white"
-                        : "bg-zinc-50 border border-zinc-200 text-zinc-600 hover:border-zinc-300"
+                        : "bg-white/[0.03] border border-white/[0.08] text-zinc-400 hover:border-white/[0.1]"
                     }`}
                   >
                     {cat.icon} {cat.label} ({catCount})
@@ -578,10 +578,10 @@ export default function ImageGeneration() {
                 <button
                   key={template.id}
                   onClick={() => handleTemplateSelect(template.basePrompt)}
-                  className="bg-white rounded-xl p-4 brutal-card text-left hover:shadow-md hover:-translate-y-px transition-all group"
+                  className="bg-[#1e1e22] rounded-xl p-4 brutal-card text-left hover:shadow-md hover:-translate-y-px transition-all group"
                 >
                   <div className="flex items-start justify-between mb-2">
-                    <h3 className="text-sm font-bold text-zinc-900">
+                    <h3 className="text-sm font-bold text-zinc-200">
                       {template.name}
                     </h3>
                     <ArrowUp
@@ -590,14 +590,14 @@ export default function ImageGeneration() {
                       className="text-zinc-300 group-hover:text-violet-500 rotate-45 transition-colors"
                     />
                   </div>
-                  <p className="text-[11px] text-zinc-500 mb-3 leading-relaxed">
+                  <p className="text-[11px] text-zinc-400 mb-3 leading-relaxed">
                     {template.description}
                   </p>
                   <div className="flex flex-wrap gap-1.5">
                     {template.tags.map((tag) => (
                       <span
                         key={tag}
-                        className="text-[9px] font-semibold uppercase tracking-wider text-zinc-400 bg-zinc-50 border border-zinc-200 px-2 py-0.5 rounded-md"
+                        className="text-[9px] font-semibold uppercase tracking-wider text-zinc-400 bg-white/[0.03] border border-white/[0.08] px-2 py-0.5 rounded-md"
                       >
                         {tag}
                       </span>
@@ -620,10 +620,10 @@ export default function ImageGeneration() {
             {allCompleted.length > 0 ? (
               <>
                 <div className="flex items-center justify-between mb-4">
-                  <h2 className="text-sm font-bold text-zinc-950">
+                  <h2 className="text-sm font-bold text-zinc-100">
                     Generated Images
                   </h2>
-                  <span className="text-xs text-zinc-500 font-medium">
+                  <span className="text-xs text-zinc-400 font-medium">
                     {allCompleted.length} image{allCompleted.length !== 1 ? "s" : ""}
                   </span>
                 </div>
@@ -631,9 +631,9 @@ export default function ImageGeneration() {
                   {allCompleted.map((job) => (
                     <div
                       key={job.id}
-                      className="bg-white rounded-xl overflow-hidden brutal-card group"
+                      className="bg-[#1e1e22] rounded-xl overflow-hidden brutal-card group"
                     >
-                      <div className="aspect-square bg-zinc-50 relative">
+                      <div className="aspect-square bg-white/[0.03] relative">
                         <img
                           src={job.image_url!}
                           alt={job.prompt}
@@ -646,7 +646,7 @@ export default function ImageGeneration() {
                               setPrompt(job.prompt);
                               setActiveTab("generate");
                             }}
-                            className="w-7 h-7 rounded-lg bg-white/90 text-zinc-700 flex items-center justify-center shadow-sm hover:bg-white"
+                            className="w-7 h-7 rounded-lg bg-white/90 text-zinc-400 flex items-center justify-center shadow-sm hover:bg-[#1e1e22]"
                             title="Reuse prompt"
                           >
                             <Sparkle size={12} weight="fill" />
@@ -655,7 +655,7 @@ export default function ImageGeneration() {
                             href={job.image_url!}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="w-7 h-7 rounded-lg bg-white/90 text-zinc-700 flex items-center justify-center shadow-sm hover:bg-white"
+                            className="w-7 h-7 rounded-lg bg-white/90 text-zinc-400 flex items-center justify-center shadow-sm hover:bg-[#1e1e22]"
                             title="Download"
                           >
                             <DownloadSimple size={12} weight="bold" />
@@ -663,7 +663,7 @@ export default function ImageGeneration() {
                         </div>
                       </div>
                       <div className="px-3 py-2">
-                        <p className="text-[10px] text-zinc-500 truncate">
+                        <p className="text-[10px] text-zinc-400 truncate">
                           {job.prompt}
                         </p>
                       </div>
@@ -677,17 +677,17 @@ export default function ImageGeneration() {
               </div>
             ) : (
               <div className="flex flex-col items-center justify-center py-16">
-                <div className="w-14 h-14 rounded-2xl bg-zinc-50 border border-zinc-200 shadow-sm flex items-center justify-center mx-auto mb-5">
+                <div className="w-14 h-14 rounded-2xl bg-white/[0.03] border border-white/[0.08] shadow-sm flex items-center justify-center mx-auto mb-5">
                   <ImageSquare
                     size={24}
                     weight="duotone"
                     className="text-zinc-400"
                   />
                 </div>
-                <h2 className="text-sm font-bold text-zinc-900 mb-1">
+                <h2 className="text-sm font-bold text-zinc-200 mb-1">
                   No images yet
                 </h2>
-                <p className="text-xs text-zinc-500 mb-4">
+                <p className="text-xs text-zinc-400 mb-4">
                   Generate your first image using the Create tab or a template.
                 </p>
                 <button

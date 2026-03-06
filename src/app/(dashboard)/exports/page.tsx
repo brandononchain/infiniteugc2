@@ -22,8 +22,8 @@ export default function Exports() {
   const totalCount = (completedJobs?.length ?? 0) + (completedPremium?.length ?? 0) + (completedMass?.length ?? 0);
 
   const renderVideoCard = (id: string, name: string, thumbnailUrl: string | null, videoUrl: string | null, provider: string | null) => (
-    <div key={id} className="bg-white rounded-xl overflow-hidden brutal-card group">
-      <div className="aspect-[9/16] bg-zinc-50 relative">
+    <div key={id} className="bg-[#1e1e22] rounded-xl overflow-hidden brutal-card group">
+      <div className="aspect-[9/16] bg-white/[0.03] relative">
         {thumbnailUrl ? (
           <img src={thumbnailUrl} alt={name} className="w-full h-full object-cover" />
         ) : (
@@ -39,15 +39,15 @@ export default function Exports() {
       </div>
       <div className="p-3 flex items-center justify-between">
         <div className="min-w-0">
-          <p className="text-xs font-semibold text-zinc-900 truncate">{name || "Untitled"}</p>
-          <p className="text-[10px] text-zinc-500">{provider || "—"}</p>
+          <p className="text-xs font-semibold text-zinc-200 truncate">{name || "Untitled"}</p>
+          <p className="text-[10px] text-zinc-400">{provider || "—"}</p>
         </div>
         {videoUrl && (
           <a
             href={videoUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="w-8 h-8 flex items-center justify-center rounded-lg border border-zinc-200 text-zinc-500 hover:text-accent-600 hover:border-accent-300 transition-colors shrink-0"
+            className="w-8 h-8 flex items-center justify-center rounded-lg border border-white/[0.08] text-zinc-400 hover:text-[#00BCFF] hover:border-[#00BCFF]/30 transition-colors shrink-0"
           >
             <DownloadSimple size={14} weight="bold" />
           </a>
@@ -59,18 +59,18 @@ export default function Exports() {
   return (
     <div className="min-h-full">
       {/* Header */}
-      <div className="sticky top-0 z-30 brutal-header">
+      <div className="">
         <div className="max-w-5xl mx-auto px-6 lg:px-10 h-16 flex items-center">
           <div>
-            <h1 className="text-lg font-bold text-zinc-950 tracking-tight">Exports</h1>
-            <p className="text-xs text-zinc-500">{totalCount} videos ready to download</p>
+            <h1 className="text-lg font-bold text-zinc-100 tracking-tight">Exports</h1>
+            <p className="text-xs text-zinc-400">{totalCount} videos ready to download</p>
           </div>
         </div>
       </div>
 
       <div className="max-w-5xl mx-auto px-6 lg:px-10 py-8">
         {/* Tabs */}
-        <div className="flex border-b border-zinc-200 mb-6">
+        <div className="flex border-b border-white/[0.08] mb-6">
           {(
             [
               { id: "standard" as Tab, label: "Standard", count: completedJobs?.length ?? 0 },
@@ -83,8 +83,8 @@ export default function Exports() {
               onClick={() => setTab(t.id)}
               className={`px-5 py-2.5 text-sm font-semibold border-b-2 transition-all ${
                 tab === t.id
-                  ? "border-accent-500 text-accent-700"
-                  : "border-transparent text-zinc-500 hover:text-zinc-700"
+                  ? "border-accent-500 text-[#00BCFF]"
+                  : "border-transparent text-zinc-400 hover:text-zinc-400"
               }`}
             >
               {t.label} ({t.count})
@@ -115,13 +115,13 @@ export default function Exports() {
             )}
           </div>
         ) : (
-          <div className="bg-white rounded-xl p-16 text-center brutal-empty">
-            <div className="w-14 h-14 rounded-2xl bg-zinc-50 flex items-center justify-center mx-auto mb-4">
+          <div className="bg-[#1e1e22] rounded-xl p-16 text-center brutal-empty">
+            <div className="w-14 h-14 rounded-2xl bg-white/[0.03] flex items-center justify-center mx-auto mb-4">
               <VideoCamera size={24} weight="duotone" className="text-zinc-300" />
             </div>
-            <h3 className="text-sm font-semibold text-zinc-500 mb-1">No exported videos yet</h3>
-            <p className="text-xs text-zinc-500 mb-1">Create and run campaigns or premium videos to</p>
-            <p className="text-xs text-zinc-500 mb-6">see them here.</p>
+            <h3 className="text-sm font-semibold text-zinc-400 mb-1">No exported videos yet</h3>
+            <p className="text-xs text-zinc-400 mb-1">Create and run campaigns or premium videos to</p>
+            <p className="text-xs text-zinc-400 mb-6">see them here.</p>
             <Link
               href="/dashboard"
               className="inline-flex btn-ice text-xs font-semibold px-6 py-2.5 rounded-full"
