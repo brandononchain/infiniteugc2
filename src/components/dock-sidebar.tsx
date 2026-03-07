@@ -20,6 +20,7 @@ import {
   Zap,
   Clapperboard,
   Settings,
+  Package,
   type LucideIcon,
 } from "lucide-react";
 
@@ -80,16 +81,21 @@ interface SeparatorEntry {
 interface CreateHubEntry {
   type: "create-hub";
 }
-type DockEntry = ItemEntry | SeparatorEntry | CreateHubEntry;
+interface AssetsHubEntry {
+  type: "assets-hub";
+}
+type DockEntry = ItemEntry | SeparatorEntry | CreateHubEntry | AssetsHubEntry;
 
 const DOCK_ENTRIES: DockEntry[] = NAV_GROUPS.flatMap((group, i) => {
   const items: DockEntry[] =
     group.label === "Create"
       ? [{ type: "create-hub" as const }]
-      : group.items.map((item) => ({
-          type: "item" as const,
-          ...item,
-        }));
+      : group.label === "Assets"
+        ? [{ type: "assets-hub" as const }]
+        : group.items.map((item) => ({
+            type: "item" as const,
+            ...item,
+          }));
   return i < NAV_GROUPS.length - 1
     ? [...items, { type: "separator" as const }]
     : items;
@@ -113,6 +119,27 @@ const CREATE_MODES = [
     desc: "Cinematic quality with advanced controls",
     href: "/create-premium",
     image: "https://images.unsplash.com/photo-1519681393784-d120267933ba?w=400&h=300&fit=crop&q=80",
+  },
+];
+
+const ASSET_ITEMS = [
+  {
+    label: "Voice Hyper-Realism",
+    desc: "Create the most realistic voices using our realism technology",
+    href: "/voices",
+    image: "https://images.unsplash.com/photo-1558591710-4b4a1ae0f04d?w=500&h=400&fit=crop&q=80",
+  },
+  {
+    label: "Avatars",
+    desc: "Choose from our library or create your own custom avatar",
+    href: "/avatars",
+    image: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=500&h=400&fit=crop&q=80",
+  },
+  {
+    label: "Scripts",
+    desc: "Bulk upload scripts, handwrite 1 by 1, or AI generate w/ our trained models",
+    href: "/scripts",
+    image: "https://images.unsplash.com/photo-1633356122102-3fe601e05bd2?w=500&h=400&fit=crop&q=80",
   },
 ];
 
@@ -155,6 +182,8 @@ export function DockSidebar({
                 <DockSeparator key={`sep-${i}`} />
               ) : entry.type === "create-hub" ? (
                 <DockCreateHub key="create-hub" pathname={pathname} />
+              ) : entry.type === "assets-hub" ? (
+                <DockAssetsHub key="assets-hub" pathname={pathname} />
               ) : (
                 <DockIcon
                   key={entry.href}
@@ -370,6 +399,203 @@ function DockCreateHub({ pathname }: { pathname: string }) {
                       </Link>
                     </motion.div>
                   ))}
+                </motion.div>
+              </motion.div>
+            )}
+          </AnimatePresence>,
+          document.body
+        )}
+    </div>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════
+   DockAssetsHub — horizontal pop-out for Voices / Avatars / Scripts
+   ═══════════════════════════════════════════════════════ */
+function DockAssetsHub({ pathname }: { pathname: string }) {
+  const [hovered, setHovered] = useState(false);
+  const [mounted, setMounted] = useState(false);
+  const iconRef = useRef<HTMLDivElement>(null);
+  const [rect, setRect] = useState<DOMRect | null>(null);
+  const timeoutRef = useRef<ReturnType<typeof setTimeout>>(undefined);
+  const active = ["/voices", "/avatars", "/scripts"].includes(pathname);
+
+  useEffect(() => {
+    setMounted(true);
+    return () => clearTimeout(timeoutRef.current);
+  }, []);
+
+  const handleEnter = () => {
+    clearTimeout(timeoutRef.current);
+    if (iconRef.current) setRect(iconRef.current.getBoundingClientRect());
+    setHovered(true);
+  };
+
+  const handleLeave = () => {
+    timeoutRef.current = setTimeout(() => setHovered(false), 150);
+  };
+
+  return (
+    <div
+      ref={iconRef}
+      onMouseEnter={handleEnter}
+      onMouseLeave={handleLeave}
+      className="relative flex items-center justify-center shrink-0 w-10 h-10"
+    >
+      <div
+        className={`
+          w-full h-full flex items-center justify-center rounded-xl transition-all duration-200 cursor-pointer
+          ${
+            active
+              ? "dock-icon-active"
+              : "text-white/50 hover:text-white/90 hover:bg-white/6"
+          }
+        `}
+      >
+        <Package
+          size={19}
+          strokeWidth={active ? 2 : 1.5}
+          className="transition-all duration-200"
+        />
+      </div>
+
+      {/* Active indicator — animated dot */}
+      {active && (
+        <motion.div
+          layoutId="dock-active-indicator"
+          className="absolute -right-1 w-1 h-1 rounded-full bg-accent-400 shadow-[0_0_6px_1px_rgba(56,189,248,0.4)]"
+          transition={{ type: "spring", stiffness: 300, damping: 25 }}
+        />
+      )}
+
+      {/* Pop-out panel — portal */}
+      {mounted &&
+        createPortal(
+          <AnimatePresence>
+            {hovered && rect && (
+              <motion.div
+                key="assets-hub-popout"
+                initial={{ opacity: 0, y: "-50%" }}
+                animate={{ opacity: 1, y: "-50%" }}
+                exit={{ opacity: 0, y: "-50%" }}
+                transition={{ duration: 0.18 }}
+                onMouseEnter={handleEnter}
+                onMouseLeave={handleLeave}
+                style={{
+                  position: "fixed",
+                  top: rect.top + rect.height / 2,
+                  left: rect.right + 28,
+                  zIndex: 9999,
+                }}
+              >
+                {/* Hover bridge */}
+                <div
+                  style={{
+                    position: "absolute",
+                    right: "100%",
+                    top: "-20%",
+                    width: 36,
+                    height: "140%",
+                  }}
+                />
+
+                {/* Speech bubble tail */}
+                <motion.div
+                  initial={{ scaleX: 0 }}
+                  animate={{ scaleX: 1 }}
+                  transition={{
+                    type: "spring",
+                    stiffness: 500,
+                    damping: 28,
+                  }}
+                  style={{
+                    position: "absolute",
+                    right: "100%",
+                    top: 0,
+                    bottom: 0,
+                    width: 20,
+                    marginRight: -1,
+                    transformOrigin: "right center",
+                  }}
+                >
+                  <svg
+                    width="100%"
+                    height="100%"
+                    viewBox="0 0 20 100"
+                    preserveAspectRatio="none"
+                    style={{ display: "block" }}
+                  >
+                    <path
+                      d="M20,0 C8,2 0,38 0,50 C0,62 8,98 20,100 Z"
+                      fill="rgba(15,15,18,0.92)"
+                    />
+                  </svg>
+                </motion.div>
+
+                {/* Panel body */}
+                <motion.div
+                  initial={{ scale: 0.8, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  transition={{
+                    type: "spring",
+                    stiffness: 400,
+                    damping: 26,
+                    delay: 0.04,
+                  }}
+                  style={{
+                    transformOrigin: "left center",
+                    borderTopLeftRadius: 0,
+                    borderBottomLeftRadius: 0,
+                    borderLeft: "none",
+                  }}
+                  className="dock-tooltip rounded-xl pt-4 pb-4 px-4 shadow-2xl"
+                >
+                  {/* Header */}
+                  <div className="mb-3.5 px-0.5">
+                    <h3 className="text-white text-base font-bold tracking-tight">
+                      Create Custom Assets
+                    </h3>
+                    <p className="text-white/45 text-xs leading-snug mt-1">
+                      Create your own or choose from our huge selection
+                    </p>
+                  </div>
+
+                  {/* Vertical cards */}
+                  <div className="flex flex-col gap-2">
+                    {ASSET_ITEMS.map((item, i) => (
+                      <motion.div
+                        key={item.href}
+                        initial={{ opacity: 0, x: -12 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{
+                          delay: 0.1 + i * 0.07,
+                          type: "spring",
+                          stiffness: 400,
+                          damping: 25,
+                        }}
+                      >
+                        <Link
+                          href={item.href}
+                          className="relative w-[280px] h-[80px] rounded-xl overflow-hidden block hover:scale-[1.03] hover:brightness-110 transition-all duration-200"
+                        >
+                          <img
+                            src={item.image}
+                            alt={item.label}
+                            className="w-full h-full object-cover"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
+                          <div className="absolute bottom-2.5 left-3 right-3">
+                            <span className="text-white text-sm font-semibold">
+                              {item.label}
+                            </span>
+                            <p className="text-white/60 text-[11px] leading-tight mt-0.5">
+                              {item.desc}
+                            </p>
+                          </div>
+                        </Link>
+                      </motion.div>
+                    ))}
+                  </div>
                 </motion.div>
               </motion.div>
             )}

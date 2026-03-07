@@ -94,6 +94,7 @@ export default function LumaGenerationCanvas() {
 
     const handler = (e: WheelEvent) => {
       if (e.deltaY > 0) {
+        e.preventDefault();
         cancelAnimationFrame(rafRef.current);
         clearTimeout(decayTimeout);
 
@@ -109,6 +110,7 @@ export default function LumaGenerationCanvas() {
 
         decayTimeout = setTimeout(startDecay, 400);
       } else if (e.deltaY < 0 && pullAccRef.current > 0) {
+        e.preventDefault();
         cancelAnimationFrame(rafRef.current);
         clearTimeout(decayTimeout);
 
@@ -126,7 +128,7 @@ export default function LumaGenerationCanvas() {
     const el = canvasRef.current;
     if (!el) return;
 
-    el.addEventListener("wheel", handler, { passive: true });
+    el.addEventListener("wheel", handler, { passive: false });
     return () => {
       el.removeEventListener("wheel", handler);
       clearTimeout(decayTimeout);
@@ -135,7 +137,7 @@ export default function LumaGenerationCanvas() {
   }, [historyOpen, showAvatarPicker, startDecay]);
 
   return (
-    <div className="relative w-full h-full overflow-hidden">
+    <div className="relative w-full h-full overflow-hidden bg-[#0A0A0A]">
       {/* Canvas layer */}
       <div
         ref={canvasRef}

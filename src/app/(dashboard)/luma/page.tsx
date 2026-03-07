@@ -4,7 +4,7 @@ import LumaGenerationCanvas from "@/components/sandbox/luma-ui/LumaGenerationCan
 
 export default function LumaPage() {
   return (
-    <div className="h-full">
+    <div className="h-full overflow-hidden">
       <LumaGenerationCanvas />
     </div>
   );

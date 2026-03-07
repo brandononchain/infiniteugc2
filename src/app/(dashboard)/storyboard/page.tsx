@@ -59,15 +59,15 @@ const RECENT_OUTPUTS = [
 const DECK_CARDS = TEMPLATES.slice(0, 3);
 
 const CARD_STACKED = [
-  { x: "-50%", y: "-50%", rotate: -5, scale: 1, zIndex: 1 },
-  { x: "-50%", y: "-50%", rotate: 0,  scale: 1, zIndex: 2 },
-  { x: "-50%", y: "-50%", rotate: 5,  scale: 1, zIndex: 3 },
+  { x: "-50%", y: "-58%", rotate: -2, scale: 0.96, zIndex: 1 },
+  { x: "-50%", y: "-50%", rotate: 0,  scale: 0.98, zIndex: 2 },
+  { x: "-50%", y: "-42%", rotate: 2,  scale: 1,    zIndex: 3 },
 ];
 
 const CARD_FANNED = [
-  { x: "-120%", y: "-52%", rotate: -8, scale: 1.12, zIndex: 1 },
-  { x: "-50%",  y: "-55%", rotate: 0,  scale: 1.15, zIndex: 3 },
-  { x: "20%",   y: "-52%", rotate: 8,  scale: 1.12, zIndex: 2 },
+  { x: "-50%", y: "-95%",  rotate: 0, scale: 1.04, zIndex: 1 },
+  { x: "-50%", y: "-50%",  rotate: 0, scale: 1.04, zIndex: 2 },
+  { x: "-50%", y: "-5%",   rotate: 0, scale: 1.04, zIndex: 3 },
 ];
 
 function TemplateDeck({ onClick }: { onClick: () => void }) {
@@ -81,14 +81,14 @@ function TemplateDeck({ onClick }: { onClick: () => void }) {
       onMouseLeave={() => setHovered(false)}
       className="relative w-full rounded-2xl border border-dashed border-[#00BCFF]/30 p-6 pt-8 pb-5 flex flex-col items-center justify-end overflow-hidden cursor-pointer group hover:border-[#00BCFF]/60 hover:shadow-[0_0_30px_rgba(0,188,255,0.08)] transition-all duration-300"
     >
-      {/* Fanned card deck */}
-      <div className="relative w-full h-44 mb-2">
+      {/* Stacked card deck — vertical fan-out */}
+      <div className="relative w-full h-52 mb-2">
         {DECK_CARDS.map((tpl, i) => {
           const pos = positions[i];
           return (
             <motion.div
               key={tpl.name}
-              className="absolute left-1/2 top-1/2 w-[96px] h-[134px] rounded-xl overflow-hidden shadow-lg border border-white/[0.08]"
+              className="absolute left-1/2 top-1/2 w-[85%] h-[54px] rounded-lg overflow-hidden shadow-lg border border-white/[0.08]"
               animate={{
                 x: pos.x,
                 y: pos.y,
