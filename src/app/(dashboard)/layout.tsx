@@ -31,7 +31,7 @@ export default function DashboardLayout({
   };
 
   return (
-    <div className="flex h-dvh bg-[var(--color-background)] overflow-hidden">
+    <div className="flex h-dvh overflow-hidden">
       {/* ─── Desktop: macOS Dock Side Nav ─── */}
       <DockSidebar
         onSignOut={handleSignOut}

@@ -45,39 +45,39 @@ export default function AvatarPicker({
     >
       {/* Backdrop */}
       <div
-        className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+        className="absolute inset-0 bg-black/70 backdrop-blur-sm"
         onClick={onClose}
       />
 
       {/* Panel */}
       <motion.div
-        initial={{ opacity: 0, scale: 0.95, y: 10 }}
+        initial={{ opacity: 0, scale: 0.95, y: 12 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
-        exit={{ opacity: 0, scale: 0.95, y: 10 }}
+        exit={{ opacity: 0, scale: 0.95, y: 12 }}
         transition={{ type: "spring", stiffness: 400, damping: 30 }}
-        className="relative z-10 w-full max-w-[600px] max-h-[70vh] bg-[#0D0D0D]/95 backdrop-blur-2xl border border-white/[0.07] rounded-2xl shadow-[0_24px_80px_rgba(0,0,0,0.6)] overflow-hidden"
+        className="relative z-10 w-full max-w-[820px] max-h-[80vh] bg-[#0D0D0D]/95 backdrop-blur-2xl border border-white/[0.07] rounded-2xl shadow-[0_24px_80px_rgba(0,0,0,0.6)] overflow-hidden"
       >
         {/* Header */}
-        <div className="flex items-center justify-between px-5 py-4 border-b border-white/[0.06]">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-white/[0.06]">
           <div>
-            <h2 className="text-[14px] text-white font-semibold">
+            <h2 className="text-[15px] text-white font-semibold">
               Select Avatar
             </h2>
-            <p className="text-[11px] text-zinc-500 mt-0.5">
+            <p className="text-[12px] text-zinc-500 mt-0.5">
               Choose an AI presenter for your video
             </p>
           </div>
           <button
             onClick={onClose}
-            className="p-1.5 rounded-lg text-zinc-500 hover:text-white hover:bg-white/[0.05] transition-all duration-150"
+            className="p-2 rounded-lg text-zinc-500 hover:text-white hover:bg-white/[0.05] transition-all duration-150"
           >
-            <X size={16} />
+            <X size={18} />
           </button>
         </div>
 
-        {/* Avatar grid */}
-        <div className="p-4 overflow-y-auto max-h-[calc(70vh-64px)]">
-          <div className="grid grid-cols-4 gap-3">
+        {/* Avatar grid — 9:16 portrait thumbnails */}
+        <div className="p-5 overflow-y-auto max-h-[calc(80vh-72px)]">
+          <div className="grid grid-cols-4 gap-4">
             {AVATARS.map((avatar) => {
               const isSelected = selectedAvatar?.id === avatar.id;
               return (
@@ -87,25 +87,64 @@ export default function AvatarPicker({
                     onSelect(avatar);
                     onClose();
                   }}
-                  className={`group flex flex-col items-center gap-2 p-3 rounded-xl border transition-all duration-200 ${
+                  className={`group relative rounded-xl overflow-hidden border-2 transition-all duration-200 ${
                     isSelected
-                      ? "border-[#00A3FF] bg-[#00A3FF]/[0.06]"
-                      : "border-white/[0.06] hover:border-white/[0.12] bg-white/[0.02] hover:bg-white/[0.04]"
+                      ? "border-[#00A3FF] shadow-[0_0_20px_rgba(0,163,255,0.2)]"
+                      : "border-transparent hover:border-white/[0.12]"
                   }`}
                 >
+                  {/* 9:16 portrait thumbnail */}
                   <div
-                    className="w-14 h-14 rounded-full flex items-center justify-center text-white/80 text-lg font-semibold shadow-lg"
-                    style={{ backgroundColor: avatar.color + "30", borderColor: avatar.color + "50", borderWidth: 1 }}
+                    className="aspect-[9/16] w-full rounded-xl flex flex-col items-center justify-center gap-3 transition-all duration-200 group-hover:brightness-110"
+                    style={{
+                      background: `linear-gradient(160deg, ${avatar.color}15 0%, ${avatar.color}08 50%, #0A0A0A 100%)`,
+                    }}
                   >
-                    <User size={24} weight="fill" style={{ color: avatar.color }} />
+                    <div
+                      className="w-16 h-16 rounded-full flex items-center justify-center shadow-lg"
+                      style={{
+                        backgroundColor: avatar.color + "20",
+                        border: `2px solid ${avatar.color}40`,
+                      }}
+                    >
+                      <User
+                        size={28}
+                        weight="fill"
+                        style={{ color: avatar.color }}
+                      />
+                    </div>
                   </div>
-                  <span
-                    className={`text-[11px] font-medium truncate w-full text-center ${
-                      isSelected ? "text-[#00A3FF]" : "text-zinc-400 group-hover:text-zinc-200"
-                    }`}
-                  >
-                    {avatar.name}
-                  </span>
+
+                  {/* Name overlay at bottom */}
+                  <div className="absolute bottom-0 inset-x-0 px-2 py-2 bg-gradient-to-t from-black/60 to-transparent">
+                    <p
+                      className={`text-[12px] font-medium text-center truncate ${
+                        isSelected ? "text-[#00A3FF]" : "text-zinc-300"
+                      }`}
+                    >
+                      {avatar.name}
+                    </p>
+                  </div>
+
+                  {/* Selected check */}
+                  {isSelected && (
+                    <div className="absolute top-2 right-2 w-5 h-5 rounded-full bg-[#00A3FF] flex items-center justify-center">
+                      <svg
+                        width="10"
+                        height="8"
+                        viewBox="0 0 10 8"
+                        fill="none"
+                      >
+                        <path
+                          d="M1 4L3.5 6.5L9 1"
+                          stroke="white"
+                          strokeWidth="1.5"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
+                    </div>
+                  )}
                 </button>
               );
             })}

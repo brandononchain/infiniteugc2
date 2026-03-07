@@ -72,7 +72,7 @@ export default function CommandPill({
       setPrompt(e.target.value);
       const el = e.target;
       el.style.height = "auto";
-      el.style.height = Math.min(el.scrollHeight, 140) + "px";
+      el.style.height = Math.min(el.scrollHeight, 160) + "px";
     },
     [setPrompt]
   );
@@ -107,9 +107,9 @@ export default function CommandPill({
   }, [showScriptMenu]);
 
   return (
-    <div className="w-full flex flex-col items-center gap-3">
+    <div className="w-full flex flex-col items-center gap-3.5">
       {/* Action pills */}
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-2.5">
         {[
           { label: "KEYFRAME", icon: Keyhole },
           { label: "REFERENCE", icon: Eye },
@@ -117,9 +117,9 @@ export default function CommandPill({
         ].map(({ label, icon: Icon }) => (
           <button
             key={label}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/[0.05] hover:bg-white/[0.09] border border-white/[0.07] text-[10px] font-semibold tracking-widest text-zinc-400 hover:text-zinc-200 transition-all duration-200 uppercase"
+            className="flex items-center gap-2 px-3.5 py-2 rounded-full bg-white/[0.05] hover:bg-white/[0.09] border border-white/[0.07] text-[11px] font-semibold tracking-widest text-zinc-400 hover:text-zinc-200 transition-all duration-200 uppercase"
           >
-            <Icon size={12} weight="bold" />
+            <Icon size={14} weight="bold" />
             {label}
           </button>
         ))}
@@ -128,7 +128,7 @@ export default function CommandPill({
       {/* Main prompt pill */}
       <div className="relative w-full bg-[#0D0D0D]/90 backdrop-blur-2xl rounded-2xl border border-white/[0.07] shadow-[0_4px_48px_rgba(0,0,0,0.55)]">
         {/* Textarea row */}
-        <div className="px-4 pt-3.5 pb-1.5">
+        <div className="px-5 pt-4 pb-2">
           <textarea
             ref={textareaRef}
             value={prompt}
@@ -136,67 +136,67 @@ export default function CommandPill({
             onKeyDown={handleKeyDown}
             placeholder="What do you want to see..."
             rows={1}
-            className="w-full bg-transparent text-[14px] text-zinc-100 placeholder:text-zinc-600 resize-none focus:outline-none leading-relaxed"
-            style={{ maxHeight: 140 }}
+            className="w-full bg-transparent text-[15px] text-zinc-100 placeholder:text-zinc-600 resize-none focus:outline-none leading-relaxed"
+            style={{ maxHeight: 160 }}
           />
         </div>
 
         {/* Divider */}
-        <div className="mx-3 h-px bg-white/[0.05]" />
+        <div className="mx-4 h-px bg-white/[0.05]" />
 
         {/* Bottom toolbar */}
-        <div className="flex items-center justify-between px-2 py-2">
+        <div className="flex items-center justify-between px-3 py-2.5">
           {/* Left icons */}
           <div className="flex items-center">
             {/* Avatar button */}
             <button
               onClick={onAvatarClick}
-              className="p-2 rounded-lg hover:bg-white/[0.05] transition-all duration-150 flex items-center gap-1.5"
+              className="p-2.5 rounded-lg hover:bg-white/[0.05] transition-all duration-150 flex items-center gap-1.5"
               title="Select avatar"
             >
               {selectedAvatar ? (
                 <div
-                  className="w-5 h-5 rounded-full flex items-center justify-center"
+                  className="w-6 h-6 rounded-full flex items-center justify-center"
                   style={{
                     backgroundColor: selectedAvatar.color + "30",
                     border: `1px solid ${selectedAvatar.color}50`,
                   }}
                 >
                   <User
-                    size={10}
+                    size={12}
                     weight="fill"
                     style={{ color: selectedAvatar.color }}
                   />
                 </div>
               ) : (
-                <User size={17} className="text-zinc-500" />
+                <User size={20} className="text-zinc-500" />
               )}
             </button>
 
-            <button className="p-2 rounded-lg text-zinc-500 hover:text-zinc-300 hover:bg-white/[0.05] transition-all duration-150">
-              <Plus size={16} weight="bold" />
+            <button className="p-2.5 rounded-lg text-zinc-500 hover:text-zinc-300 hover:bg-white/[0.05] transition-all duration-150">
+              <Plus size={18} weight="bold" />
             </button>
-            <button className="p-2 rounded-lg text-zinc-500 hover:text-zinc-300 hover:bg-white/[0.05] transition-all duration-150">
-              <VideoCamera size={17} />
+            <button className="p-2.5 rounded-lg text-zinc-500 hover:text-zinc-300 hover:bg-white/[0.05] transition-all duration-150">
+              <VideoCamera size={20} />
             </button>
-            <button className="p-2 rounded-lg text-zinc-500 hover:text-zinc-300 hover:bg-white/[0.05] transition-all duration-150">
-              <InfinityIcon size={17} />
+            <button className="p-2.5 rounded-lg text-zinc-500 hover:text-zinc-300 hover:bg-white/[0.05] transition-all duration-150">
+              <InfinityIcon size={20} />
             </button>
 
-            <div className="w-px h-4 bg-white/[0.06] mx-1.5" />
+            <div className="w-px h-5 bg-white/[0.06] mx-2" />
 
             {/* Script selector */}
             <div ref={scriptRef} className="relative">
               <button
                 onClick={() => setShowScriptMenu(!showScriptMenu)}
-                className={`p-2 rounded-lg transition-all duration-150 ${
+                className={`p-2.5 rounded-lg transition-all duration-150 ${
                   showScriptMenu || selectedScript
                     ? "text-[#00A3FF] bg-[#00A3FF]/[0.08]"
                     : "text-zinc-500 hover:text-zinc-300 hover:bg-white/[0.05]"
                 }`}
                 title="Script library"
               >
-                <BookOpen size={17} />
+                <BookOpen size={20} />
               </button>
               <AnimatePresence>
                 {showScriptMenu && (
@@ -212,34 +212,34 @@ export default function CommandPill({
             {/* Settings */}
             <button
               onClick={() => setShowSettings(!showSettings)}
-              className={`p-2 rounded-lg transition-all duration-150 ${
+              className={`p-2.5 rounded-lg transition-all duration-150 ${
                 showSettings
                   ? "text-[#00A3FF] bg-[#00A3FF]/[0.08]"
                   : "text-zinc-500 hover:text-zinc-300 hover:bg-white/[0.05]"
               }`}
             >
-              <SlidersHorizontal size={17} />
+              <SlidersHorizontal size={20} />
             </button>
           </div>
 
           {/* Right controls */}
-          <div className="flex items-center gap-2.5">
+          <div className="flex items-center gap-3">
             {/* Draft toggle */}
             <button
               onClick={() => setDraftMode(!draftMode)}
-              className="flex items-center gap-1.5"
+              className="flex items-center gap-2"
             >
-              <span className="text-[10px] font-semibold tracking-wider text-zinc-500 uppercase">
+              <span className="text-[11px] font-semibold tracking-wider text-zinc-500 uppercase">
                 Draft
               </span>
               <div
-                className={`w-7 h-[16px] rounded-full relative transition-colors duration-200 flex-shrink-0 ${
+                className={`w-8 h-[18px] rounded-full relative transition-colors duration-200 flex-shrink-0 ${
                   draftMode ? "bg-[#00A3FF]" : "bg-white/[0.10]"
                 }`}
               >
                 <div
-                  className={`absolute top-[2px] w-3 h-3 rounded-full bg-white shadow-sm transition-all duration-200 ${
-                    draftMode ? "left-[14px]" : "left-[2px]"
+                  className={`absolute top-[2px] w-3.5 h-3.5 rounded-full bg-white shadow-sm transition-all duration-200 ${
+                    draftMode ? "left-[16px]" : "left-[2px]"
                   }`}
                 />
               </div>
@@ -249,13 +249,13 @@ export default function CommandPill({
             <div ref={engineRef} className="relative">
               <button
                 onClick={() => setShowEngineMenu(!showEngineMenu)}
-                className="flex items-center gap-1.5 h-8 px-2.5 rounded-lg bg-white/[0.04] hover:bg-white/[0.07] border border-white/[0.06] transition-all duration-150 whitespace-nowrap"
+                className="flex items-center gap-2 h-9 px-3 rounded-lg bg-white/[0.04] hover:bg-white/[0.07] border border-white/[0.06] transition-all duration-150 whitespace-nowrap"
               >
-                <span className="text-[10px] font-semibold tracking-wide text-zinc-300">
+                <span className="text-[11px] font-semibold tracking-wide text-zinc-300">
                   {videoEngine}&nbsp;·&nbsp;{aspectRatio}
                 </span>
                 <CaretDown
-                  size={9}
+                  size={10}
                   weight="bold"
                   className={`text-zinc-500 transition-transform duration-200 flex-shrink-0 ${
                     showEngineMenu ? "rotate-180" : ""
@@ -322,9 +322,9 @@ export default function CommandPill({
             {/* Generate */}
             <button
               disabled={!prompt.trim()}
-              className="w-8 h-8 rounded-full bg-[#00A3FF] flex items-center justify-center flex-shrink-0 shadow-[0_0_16px_rgba(0,163,255,0.35)] hover:shadow-[0_0_24px_rgba(0,163,255,0.55)] hover:brightness-110 transition-all duration-200 disabled:opacity-20 disabled:shadow-none disabled:cursor-not-allowed"
+              className="w-9 h-9 rounded-full bg-[#00A3FF] flex items-center justify-center flex-shrink-0 shadow-[0_0_16px_rgba(0,163,255,0.35)] hover:shadow-[0_0_24px_rgba(0,163,255,0.55)] hover:brightness-110 transition-all duration-200 disabled:opacity-20 disabled:shadow-none disabled:cursor-not-allowed"
             >
-              <ArrowUp size={15} weight="bold" className="text-white" />
+              <ArrowUp size={17} weight="bold" className="text-white" />
             </button>
           </div>
         </div>
