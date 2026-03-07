@@ -107,18 +107,18 @@ const UGC_TABS = [
 ];
 
 const UGC_ITEMS = [
-  { image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&h=530&fit=crop", likes: 284, wide: false },
-  { image: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&h=530&fit=crop", likes: 193, wide: false },
-  { image: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=400&h=530&fit=crop", likes: 412, wide: false },
-  { image: "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=400&h=530&fit=crop", likes: 156, wide: false },
-  { image: "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=800&h=530&fit=crop", likes: 378, wide: true },
-  { image: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=400&h=530&fit=crop", likes: 229, wide: false },
-  { image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=530&fit=crop", likes: 341, wide: false },
-  { image: "https://images.unsplash.com/photo-1507591064344-4c6ce005b128?w=400&h=530&fit=crop", likes: 167, wide: false },
-  { image: "https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?w=400&h=530&fit=crop", likes: 298, wide: false },
-  { image: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=400&h=530&fit=crop", likes: 445, wide: false },
-  { image: "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=800&h=530&fit=crop", likes: 512, wide: true },
-  { image: "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=400&h=530&fit=crop", likes: 189, wide: false },
+  { image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&h=710&fit=crop", likes: 284 },
+  { image: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&h=710&fit=crop", likes: 193 },
+  { image: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=400&h=710&fit=crop", likes: 412 },
+  { image: "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=400&h=710&fit=crop", likes: 156 },
+  { image: "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=400&h=710&fit=crop", likes: 378 },
+  { image: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=400&h=710&fit=crop", likes: 229 },
+  { image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=710&fit=crop", likes: 341 },
+  { image: "https://images.unsplash.com/photo-1507591064344-4c6ce005b128?w=400&h=710&fit=crop", likes: 167 },
+  { image: "https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?w=400&h=710&fit=crop", likes: 298 },
+  { image: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=400&h=710&fit=crop", likes: 445 },
+  { image: "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=400&h=710&fit=crop", likes: 512 },
+  { image: "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=400&h=710&fit=crop", likes: 189 },
 ];
 
 const PRODUCT_TABS = [
@@ -128,33 +128,57 @@ const PRODUCT_TABS = [
 ];
 
 const PRODUCT_ITEMS = [
-  { image: "https://images.unsplash.com/photo-1541643600914-78b084683601?w=400&h=400&fit=crop", likes: 231 },
-  { image: "https://images.unsplash.com/photo-1585386959984-a4155224a1ad?w=400&h=530&fit=crop", likes: 187 },
-  { image: "https://images.unsplash.com/photo-1556228578-8c89e6adf883?w=400&h=400&fit=crop", likes: 342 },
-  { image: "https://images.unsplash.com/photo-1563203369-26f2e4a5ccf7?w=400&h=530&fit=crop", likes: 156 },
-  { image: "https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?w=400&h=400&fit=crop", likes: 289 },
-  { image: "https://images.unsplash.com/photo-1491553895911-0055eca6402d?w=400&h=530&fit=crop", likes: 478 },
-  { image: "https://images.unsplash.com/photo-1546868871-af0de0ae72be?w=400&h=400&fit=crop", likes: 134 },
-  { image: "https://images.unsplash.com/photo-1583394838336-acd977736f90?w=400&h=530&fit=crop", likes: 267 },
-  { image: "https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=400&h=400&fit=crop", likes: 198 },
-  { image: "https://images.unsplash.com/photo-1598327105666-5b89351aff97?w=400&h=530&fit=crop", likes: 356 },
-  { image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&h=400&fit=crop", likes: 423 },
-  { image: "https://images.unsplash.com/photo-1560343090-f0409e92791a?w=400&h=530&fit=crop", likes: 145 },
+  { image: "https://images.unsplash.com/photo-1541643600914-78b084683601?w=400&h=710&fit=crop", likes: 231 },
+  { image: "https://images.unsplash.com/photo-1585386959984-a4155224a1ad?w=400&h=710&fit=crop", likes: 187 },
+  { image: "https://images.unsplash.com/photo-1556228578-8c89e6adf883?w=400&h=710&fit=crop", likes: 342 },
+  { image: "https://images.unsplash.com/photo-1563203369-26f2e4a5ccf7?w=400&h=710&fit=crop", likes: 156 },
+  { image: "https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?w=400&h=710&fit=crop", likes: 289 },
+  { image: "https://images.unsplash.com/photo-1491553895911-0055eca6402d?w=400&h=710&fit=crop", likes: 478 },
+  { image: "https://images.unsplash.com/photo-1546868871-af0de0ae72be?w=400&h=710&fit=crop", likes: 134 },
+  { image: "https://images.unsplash.com/photo-1583394838336-acd977736f90?w=400&h=710&fit=crop", likes: 267 },
+  { image: "https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=400&h=710&fit=crop", likes: 198 },
+  { image: "https://images.unsplash.com/photo-1598327105666-5b89351aff97?w=400&h=710&fit=crop", likes: 356 },
+  { image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&h=710&fit=crop", likes: 423 },
+  { image: "https://images.unsplash.com/photo-1560343090-f0409e92791a?w=400&h=710&fit=crop", likes: 145 },
 ];
 
-const AVATAR_ITEMS = [
-  "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&h=530&fit=crop",
-  "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=530&fit=crop",
-  "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&h=530&fit=crop",
-  "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=530&fit=crop",
-  "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=400&h=530&fit=crop",
-  "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=530&fit=crop",
-  "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=400&h=530&fit=crop",
-  "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&h=530&fit=crop",
-  "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&h=530&fit=crop",
-  "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=400&h=530&fit=crop",
-  "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=400&h=530&fit=crop",
-  "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=530&fit=crop",
+// Row 1 avatars scroll left, Row 2 scrolls right
+const AVATAR_ROW_1 = [
+  "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=300&h=400&fit=crop&crop=face",
+  "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=300&h=400&fit=crop&crop=face",
+  "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=300&h=400&fit=crop&crop=face",
+  "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=300&h=400&fit=crop&crop=face",
+  "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=300&h=400&fit=crop&crop=face",
+  "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&h=400&fit=crop&crop=face",
+  "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=300&h=400&fit=crop&crop=face",
+  "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=300&h=400&fit=crop&crop=face",
+  "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=300&h=400&fit=crop&crop=face",
+  "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=300&h=400&fit=crop&crop=face",
+  "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=300&h=400&fit=crop&crop=face",
+  "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=300&h=400&fit=crop&crop=face",
+  "https://images.unsplash.com/photo-1552058544-f2b08422138a?w=300&h=400&fit=crop&crop=face",
+  "https://images.unsplash.com/photo-1521119989659-a83eee488004?w=300&h=400&fit=crop&crop=face",
+  "https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?w=300&h=400&fit=crop&crop=face",
+  "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=300&h=400&fit=crop&crop=face",
+];
+
+const AVATAR_ROW_2 = [
+  "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=300&h=400&fit=crop&crop=face",
+  "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=300&h=400&fit=crop&crop=face",
+  "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=300&h=400&fit=crop&crop=face",
+  "https://images.unsplash.com/photo-1507591064344-4c6ce005b128?w=300&h=400&fit=crop&crop=face",
+  "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=300&h=400&fit=crop&crop=face",
+  "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=300&h=400&fit=crop&crop=face",
+  "https://images.unsplash.com/photo-1546961342-ea5f71b193f3?w=300&h=400&fit=crop&crop=face",
+  "https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?w=300&h=400&fit=crop&crop=face",
+  "https://images.unsplash.com/photo-1504257432389-52343af06ae3?w=300&h=400&fit=crop&crop=face",
+  "https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=300&h=400&fit=crop&crop=face",
+  "https://images.unsplash.com/photo-1499996860823-5214fcc65f8f?w=300&h=400&fit=crop&crop=face",
+  "https://images.unsplash.com/photo-1542206395-9feb3edaa68d?w=300&h=400&fit=crop&crop=face",
+  "https://images.unsplash.com/photo-1514626585397-97672eb43365?w=300&h=400&fit=crop&crop=face",
+  "https://images.unsplash.com/photo-1463453091185-61582044d556?w=300&h=400&fit=crop&crop=face",
+  "https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?w=300&h=400&fit=crop&crop=face",
+  "https://images.unsplash.com/photo-1548142813-c348350df52b?w=300&h=400&fit=crop&crop=face",
 ];
 
 /* ─────────────────── COMPONENTS ─────────────────── */
@@ -175,7 +199,7 @@ function HeroSection() {
         <Link
           key={card.title}
           href={card.href}
-          className="group relative rounded-2xl overflow-hidden aspect-[4/3] bg-[#1e1e22]"
+          className="group relative rounded-2xl overflow-hidden aspect-[16/9] bg-[#1e1e22]"
         >
           <Image
             src={card.image}
@@ -363,28 +387,24 @@ function PillTabs({
 function MediaGrid({
   items,
   actionLabel,
-  variant,
 }: {
-  items: { image: string; likes: number; wide?: boolean }[];
+  items: { image: string; likes: number }[];
   actionLabel: string;
-  variant: "portrait" | "mixed";
 }) {
   return (
     <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
       {items.map((item, i) => (
         <div
           key={i}
-          className={`relative rounded-xl overflow-hidden bg-[#1e1e22] group cursor-pointer ${
-            item.wide ? "col-span-2" : ""
-          }`}
+          className="relative rounded-xl overflow-hidden bg-[#1e1e22] group cursor-pointer"
         >
-          <div className={variant === "portrait" ? "aspect-[3/4]" : i % 3 === 0 ? "aspect-square" : "aspect-[3/4]"}>
+          <div className="aspect-[9/16]">
             <Image
               src={item.image}
               alt=""
               fill
               className="object-cover"
-              sizes={item.wide ? "320px" : "200px"}
+              sizes="200px"
               unoptimized
             />
           </div>
@@ -436,7 +456,7 @@ function SocialUGCAds() {
         <PillTabs tabs={UGC_TABS} active={activeTab} onChange={setActiveTab} />
       </div>
 
-      <MediaGrid items={UGC_ITEMS} actionLabel="Recreate" variant="portrait" />
+      <MediaGrid items={UGC_ITEMS} actionLabel="Recreate" />
     </section>
   );
 }
@@ -469,15 +489,64 @@ function ProductVisualEffects() {
         <PillTabs tabs={PRODUCT_TABS} active={activeTab} onChange={setActiveTab} />
       </div>
 
-      <MediaGrid items={PRODUCT_ITEMS} actionLabel="Recreate" variant="mixed" />
+      <MediaGrid items={PRODUCT_ITEMS} actionLabel="Recreate" />
     </section>
+  );
+}
+
+function AvatarMarqueeRow({
+  images,
+  direction,
+  duration,
+}: {
+  images: string[];
+  direction: "left" | "right";
+  duration: number;
+}) {
+  // Double the images for seamless loop
+  const doubled = [...images, ...images];
+  const animName = direction === "left" ? "marquee-left" : "marquee-right";
+
+  return (
+    <div className="flex gap-3 overflow-hidden">
+      <div
+        className="flex gap-3 shrink-0"
+        style={{
+          animation: `${animName} ${duration}s linear infinite`,
+        }}
+      >
+        {doubled.map((src, i) => (
+          <div
+            key={i}
+            className="relative shrink-0 w-[140px] rounded-xl overflow-hidden bg-[#1e1e22] group cursor-pointer"
+          >
+            <div className="aspect-[3/4]">
+              <Image
+                src={src}
+                alt=""
+                fill
+                className="object-cover"
+                sizes="140px"
+                unoptimized
+              />
+            </div>
+            <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center">
+              <button className="bg-white text-zinc-900 text-[11px] font-bold px-3 py-1.5 rounded-lg hover:bg-zinc-100 transition-colors flex items-center gap-1">
+                <Robot size={12} weight="fill" />
+                Create video
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
   );
 }
 
 function AvatarShowcase() {
   return (
     <section>
-      <div className="mb-5">
+      <div className="mb-5 px-6 lg:px-10 max-w-[1400px] mx-auto">
         <h2 className="text-2xl font-extrabold text-zinc-100 tracking-tight uppercase">
           Avatar Showcase
           <AiBadge />
@@ -487,32 +556,26 @@ function AvatarShowcase() {
         </p>
       </div>
 
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
-        {AVATAR_ITEMS.map((src, i) => (
-          <div
-            key={i}
-            className="relative rounded-xl overflow-hidden bg-[#1e1e22] group cursor-pointer"
-          >
-            <div className="aspect-[3/4]">
-              <Image
-                src={src}
-                alt=""
-                fill
-                className="object-cover"
-                sizes="200px"
-                unoptimized
-              />
-            </div>
+      <style>{`
+        @keyframes marquee-left {
+          0% { transform: translateX(0); }
+          100% { transform: translateX(-50%); }
+        }
+        @keyframes marquee-right {
+          0% { transform: translateX(-50%); }
+          100% { transform: translateX(0); }
+        }
+      `}</style>
 
-            {/* Hover overlay */}
-            <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center">
-              <button className="bg-white text-zinc-900 text-xs font-bold px-4 py-2 rounded-lg hover:bg-zinc-100 transition-colors flex items-center gap-1.5">
-                <Robot size={14} weight="fill" />
-                Create video
-              </button>
-            </div>
-          </div>
-        ))}
+      <div className="relative">
+        {/* Fade edges */}
+        <div className="pointer-events-none absolute inset-y-0 left-0 w-24 z-10 bg-gradient-to-r from-[#0e0e10] to-transparent" />
+        <div className="pointer-events-none absolute inset-y-0 right-0 w-24 z-10 bg-gradient-to-l from-[#0e0e10] to-transparent" />
+
+        <div className="space-y-3">
+          <AvatarMarqueeRow images={AVATAR_ROW_1} direction="left" duration={40} />
+          <AvatarMarqueeRow images={AVATAR_ROW_2} direction="right" duration={45} />
+        </div>
       </div>
     </section>
   );
@@ -528,8 +591,15 @@ export default function DashboardHome() {
         <QuickTools />
         <TrendingCollections />
         <SocialUGCAds />
-        <ProductVisualEffects />
+      </div>
+
+      {/* Avatar Showcase — full-bleed with edge fades */}
+      <div className="py-12">
         <AvatarShowcase />
+      </div>
+
+      <div className="max-w-[1400px] mx-auto px-6 lg:px-10 pb-12 space-y-12">
+        <ProductVisualEffects />
       </div>
     </div>
   );
