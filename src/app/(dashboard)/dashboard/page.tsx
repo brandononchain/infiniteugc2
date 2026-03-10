@@ -32,7 +32,7 @@ const HERO_CARDS = [
     subtitle: "Generate talking avatar videos with AI actors",
     badge: "AURORA MODEL",
     href: "/create",
-    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&h=600&fit=crop",
+    image: "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=800&h=270&fit=crop",
   },
   {
     title: "ASSET GENERATOR",
@@ -199,7 +199,7 @@ function HeroSection() {
         <Link
           key={card.title}
           href={card.href}
-          className="group relative rounded-2xl overflow-hidden aspect-[16/9] bg-[#1e1e22]"
+          className="group relative rounded-2xl overflow-hidden aspect-[3/1] bg-[#1e1e22]"
         >
           <Image
             src={card.image}
