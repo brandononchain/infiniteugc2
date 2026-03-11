@@ -11,6 +11,14 @@ import {
   type ImageCategory,
   type ImageStyle,
 } from "@/lib/prompts";
+import {
+  generateImagePrompt,
+  getImageAgents,
+  getAllImageTemplates,
+  type ImageAgentCategory,
+  type ImageStyle as AgentImageStyle,
+  type ImageGenerationPayload,
+} from "@/lib/agents";
 import type { ImageModel, ImageGenerationJob } from "@/types";
 import {
   ImageSquare,
@@ -59,6 +67,10 @@ export default function ImageGeneration() {
   const [enhanceComposition, setEnhanceComposition] = useState(false);
   const [showEnhancePreview, setShowEnhancePreview] = useState(false);
 
+  // Agent system
+  const [useAgentMode, setUseAgentMode] = useState(true);
+  const [agentPayload, setAgentPayload] = useState<ImageGenerationPayload | null>(null);
+
   // Template browser
   const [activeTab, setActiveTab] = useState<Tab>("generate");
   const [selectedCategory, setSelectedCategory] = useState<ImageCategory | "all">("all");
@@ -106,6 +118,15 @@ export default function ImageGeneration() {
   const getEnhancedPrompt = () => {
     if (!prompt.trim()) return "";
     if (!enhanceEnabled) return prompt.trim();
+    // Use agent system when enabled
+    if (useAgentMode) {
+      const payload = generateImagePrompt(prompt, {
+        style: selectedStyle as AgentImageStyle,
+        aspectRatio,
+      });
+      setAgentPayload(payload);
+      return payload.prompt;
+    }
     return enhanceImagePrompt(prompt, selectedStyle, {
       enhanceDetail,
       enhanceComposition,
@@ -117,12 +138,23 @@ export default function ImageGeneration() {
     setGenerating(true);
     setError(null);
     try {
-      const finalPrompt = enhanceEnabled
-        ? enhanceImagePrompt(prompt, selectedStyle, {
-            enhanceDetail,
-            enhanceComposition,
-          }).prompt
-        : prompt.trim();
+      let finalPrompt: string;
+      if (enhanceEnabled && useAgentMode) {
+        // Agent-powered prompt generation
+        const payload = generateImagePrompt(prompt, {
+          style: selectedStyle as AgentImageStyle,
+          aspectRatio,
+        });
+        finalPrompt = payload.prompt;
+        setAgentPayload(payload);
+      } else if (enhanceEnabled) {
+        finalPrompt = enhanceImagePrompt(prompt, selectedStyle, {
+          enhanceDetail,
+          enhanceComposition,
+        }).prompt;
+      } else {
+        finalPrompt = prompt.trim();
+      }
 
       const response = await imageGeneration.generate({
         prompt: finalPrompt,
@@ -147,6 +179,10 @@ export default function ImageGeneration() {
     setPrompt(templatePrompt);
     setActiveTab("generate");
   };
+
+  // Agent-powered templates
+  const agentTemplates = getAllImageTemplates();
+  const agentCategories = getImageAgents();
 
   // Gallery data
   const completedFromPolled = polledJobs.filter(
@@ -260,20 +296,36 @@ export default function ImageGeneration() {
                 <div className="bg-[#1e1e22] rounded-xl p-5 brutal-card">
                   <div className="flex items-center justify-between mb-3">
                     <h2 className="text-sm font-bold text-zinc-100">Prompt</h2>
-                    <button
-                      onClick={() => setEnhanceEnabled(!enhanceEnabled)}
-                      className={`flex items-center gap-1.5 text-[11px] font-semibold px-3 py-1.5 rounded-lg transition-all ${
-                        enhanceEnabled
-                          ? "bg-violet-500/10 text-violet-700 border border-violet-200"
-                          : "bg-white/[0.03] text-zinc-400 border border-white/[0.08]"
-                      }`}
-                    >
-                      <MagicWand
-                        size={12}
-                        weight={enhanceEnabled ? "fill" : "regular"}
-                      />
-                      Smart Enhance {enhanceEnabled ? "ON" : "OFF"}
-                    </button>
+                    <div className="flex items-center gap-2">
+                      <button
+                        onClick={() => setUseAgentMode(!useAgentMode)}
+                        className={`flex items-center gap-1.5 text-[11px] font-semibold px-3 py-1.5 rounded-lg transition-all ${
+                          useAgentMode
+                            ? "bg-fuchsia-500/10 text-fuchsia-400 border border-fuchsia-500/30"
+                            : "bg-white/[0.03] text-zinc-400 border border-white/[0.08]"
+                        }`}
+                      >
+                        <Lightning
+                          size={12}
+                          weight={useAgentMode ? "fill" : "regular"}
+                        />
+                        Agent {useAgentMode ? "ON" : "OFF"}
+                      </button>
+                      <button
+                        onClick={() => setEnhanceEnabled(!enhanceEnabled)}
+                        className={`flex items-center gap-1.5 text-[11px] font-semibold px-3 py-1.5 rounded-lg transition-all ${
+                          enhanceEnabled
+                            ? "bg-violet-500/10 text-violet-700 border border-violet-200"
+                            : "bg-white/[0.03] text-zinc-400 border border-white/[0.08]"
+                        }`}
+                      >
+                        <MagicWand
+                          size={12}
+                          weight={enhanceEnabled ? "fill" : "regular"}
+                        />
+                        Enhance {enhanceEnabled ? "ON" : "OFF"}
+                      </button>
+                    </div>
                   </div>
 
                   <textarea
@@ -389,6 +441,20 @@ export default function ImageGeneration() {
                         </button>
                         {showEnhancePreview && (
                           <div className="bg-violet-500/10/50 border border-violet-200 rounded-lg p-3">
+                            {useAgentMode && agentPayload && (
+                              <div className="flex items-center gap-2 mb-2 pb-2 border-b border-violet-200/50">
+                                <span className="text-[9px] uppercase tracking-wider font-bold text-fuchsia-400">Agent:</span>
+                                <span className="text-[10px] font-semibold text-violet-400">{agentPayload.agentUsed}</span>
+                                {agentPayload.templateUsed && (
+                                  <>
+                                    <span className="text-violet-300">|</span>
+                                    <span className="text-[10px] text-violet-400">Template: {agentPayload.templateUsed}</span>
+                                  </>
+                                )}
+                                <span className="text-violet-300">|</span>
+                                <span className="text-[10px] text-violet-400">Confidence: {Math.round(agentPayload.confidence * 100)}%</span>
+                              </div>
+                            )}
                             <p className="text-[11px] text-violet-800 leading-relaxed font-mono">
                               {getEnhancedPrompt()}
                             </p>
@@ -540,75 +606,111 @@ export default function ImageGeneration() {
       {activeTab === "templates" && (
         <div className="flex-1 overflow-y-auto">
           <div className="max-w-6xl mx-auto px-6 lg:px-10 py-6">
-            {/* Category filter */}
-            <div className="flex flex-wrap gap-2 mb-6">
-              <button
-                onClick={() => setSelectedCategory("all")}
-                className={`text-xs font-semibold px-3 py-1.5 rounded-lg transition-all ${
-                  selectedCategory === "all"
-                    ? "bg-zinc-900 text-white"
-                    : "bg-white/[0.03] border border-white/[0.08] text-zinc-400 hover:border-white/[0.1]"
-                }`}
-              >
-                All ({IMAGE_PROMPT_TEMPLATES.length})
-              </button>
-              {IMAGE_CATEGORIES.map((cat) => {
-                const catCount = IMAGE_PROMPT_TEMPLATES.filter(
-                  (t) => t.category === cat.value
-                ).length;
-                return (
+            {useAgentMode ? (
+              <>
+                {/* Agent-powered templates — grouped by specialist agent */}
+                {agentCategories.map((agent) => (
+                  <div key={agent.id} className="mb-8">
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="w-8 h-8 rounded-lg bg-fuchsia-500/10 border border-fuchsia-500/20 flex items-center justify-center">
+                        <Lightning size={14} weight="fill" className="text-fuchsia-400" />
+                      </div>
+                      <div>
+                        <h3 className="text-sm font-bold text-zinc-100">{agent.name}</h3>
+                        <p className="text-[10px] text-zinc-400">{agent.description} &middot; <span className="text-fuchsia-400">{agent.voice}</span></p>
+                      </div>
+                      <div className="ml-auto flex items-center gap-1.5">
+                        {agent.skills.slice(0, 3).map((skill) => (
+                          <span key={skill} className="text-[8px] font-semibold uppercase tracking-wider text-fuchsia-400/70 bg-fuchsia-500/5 border border-fuchsia-500/10 px-2 py-0.5 rounded-full">
+                            {skill}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                      {agent.templates.map((template) => (
+                        <button
+                          key={`${agent.id}-${template.id}`}
+                          onClick={() => handleTemplateSelect(template.prompt)}
+                          className="bg-[#1e1e22] rounded-xl p-4 brutal-card text-left hover:shadow-md hover:-translate-y-px transition-all group border border-transparent hover:border-fuchsia-500/20"
+                        >
+                          <div className="flex items-start justify-between mb-2">
+                            <h3 className="text-sm font-bold text-zinc-200">{template.name}</h3>
+                            <ArrowUp size={12} weight="bold" className="text-zinc-300 group-hover:text-fuchsia-400 rotate-45 transition-colors" />
+                          </div>
+                          <p className="text-[11px] text-zinc-400 mb-3 leading-relaxed">{template.description}</p>
+                          <div className="flex flex-wrap gap-1.5">
+                            {template.tags.map((tag) => (
+                              <span key={tag} className="text-[9px] font-semibold uppercase tracking-wider text-zinc-400 bg-white/[0.03] border border-white/[0.08] px-2 py-0.5 rounded-md">
+                                {tag}
+                              </span>
+                            ))}
+                          </div>
+                          <p className="text-[10px] text-zinc-400 mt-3 line-clamp-2 leading-relaxed">{template.prompt.slice(0, 120)}...</p>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </>
+            ) : (
+              <>
+                {/* Legacy flat templates */}
+                <div className="flex flex-wrap gap-2 mb-6">
                   <button
-                    key={cat.value}
-                    onClick={() => setSelectedCategory(cat.value)}
+                    onClick={() => setSelectedCategory("all")}
                     className={`text-xs font-semibold px-3 py-1.5 rounded-lg transition-all ${
-                      selectedCategory === cat.value
+                      selectedCategory === "all"
                         ? "bg-zinc-900 text-white"
                         : "bg-white/[0.03] border border-white/[0.08] text-zinc-400 hover:border-white/[0.1]"
                     }`}
                   >
-                    {cat.icon} {cat.label} ({catCount})
+                    All ({IMAGE_PROMPT_TEMPLATES.length})
                   </button>
-                );
-              })}
-            </div>
-
-            {/* Template grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {filteredTemplates.map((template) => (
-                <button
-                  key={template.id}
-                  onClick={() => handleTemplateSelect(template.basePrompt)}
-                  className="bg-[#1e1e22] rounded-xl p-4 brutal-card text-left hover:shadow-md hover:-translate-y-px transition-all group"
-                >
-                  <div className="flex items-start justify-between mb-2">
-                    <h3 className="text-sm font-bold text-zinc-200">
-                      {template.name}
-                    </h3>
-                    <ArrowUp
-                      size={12}
-                      weight="bold"
-                      className="text-zinc-300 group-hover:text-violet-500 rotate-45 transition-colors"
-                    />
-                  </div>
-                  <p className="text-[11px] text-zinc-400 mb-3 leading-relaxed">
-                    {template.description}
-                  </p>
-                  <div className="flex flex-wrap gap-1.5">
-                    {template.tags.map((tag) => (
-                      <span
-                        key={tag}
-                        className="text-[9px] font-semibold uppercase tracking-wider text-zinc-400 bg-white/[0.03] border border-white/[0.08] px-2 py-0.5 rounded-md"
+                  {IMAGE_CATEGORIES.map((cat) => {
+                    const catCount = IMAGE_PROMPT_TEMPLATES.filter(
+                      (t) => t.category === cat.value
+                    ).length;
+                    return (
+                      <button
+                        key={cat.value}
+                        onClick={() => setSelectedCategory(cat.value)}
+                        className={`text-xs font-semibold px-3 py-1.5 rounded-lg transition-all ${
+                          selectedCategory === cat.value
+                            ? "bg-zinc-900 text-white"
+                            : "bg-white/[0.03] border border-white/[0.08] text-zinc-400 hover:border-white/[0.1]"
+                        }`}
                       >
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                  <p className="text-[10px] text-zinc-400 mt-3 line-clamp-2 leading-relaxed">
-                    {template.basePrompt.slice(0, 120)}...
-                  </p>
-                </button>
-              ))}
-            </div>
+                        {cat.icon} {cat.label} ({catCount})
+                      </button>
+                    );
+                  })}
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {filteredTemplates.map((template) => (
+                    <button
+                      key={template.id}
+                      onClick={() => handleTemplateSelect(template.basePrompt)}
+                      className="bg-[#1e1e22] rounded-xl p-4 brutal-card text-left hover:shadow-md hover:-translate-y-px transition-all group"
+                    >
+                      <div className="flex items-start justify-between mb-2">
+                        <h3 className="text-sm font-bold text-zinc-200">{template.name}</h3>
+                        <ArrowUp size={12} weight="bold" className="text-zinc-300 group-hover:text-violet-500 rotate-45 transition-colors" />
+                      </div>
+                      <p className="text-[11px] text-zinc-400 mb-3 leading-relaxed">{template.description}</p>
+                      <div className="flex flex-wrap gap-1.5">
+                        {template.tags.map((tag) => (
+                          <span key={tag} className="text-[9px] font-semibold uppercase tracking-wider text-zinc-400 bg-white/[0.03] border border-white/[0.08] px-2 py-0.5 rounded-md">
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
+                      <p className="text-[10px] text-zinc-400 mt-3 line-clamp-2 leading-relaxed">{template.basePrompt.slice(0, 120)}...</p>
+                    </button>
+                  ))}
+                </div>
+              </>
+            )}
           </div>
         </div>
       )}
