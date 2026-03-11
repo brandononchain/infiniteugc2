@@ -46,7 +46,9 @@ html {
 }
 
 body {
-  background: var(--color-background);
+  background: linear-gradient(to top left, #3a3a3f, #000000);
+  min-height: 100dvh;
+  background-attachment: fixed;
   color: var(--color-foreground);
   font-family: var(--font-sans);
   overflow-x: hidden;
