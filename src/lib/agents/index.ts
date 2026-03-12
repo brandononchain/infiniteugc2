@@ -31,6 +31,9 @@ export type {
   ImageAgentTemplate,
   ImageClassification,
   ImageGenerationPayload,
+  // Storyboard types
+  StoryboardKeyframe,
+  StoryboardPayload,
   // Video types
   VideoAgentCategory,
   VideoPlatform,
@@ -48,6 +51,7 @@ export type {
 export {
   classifyImageIntent,
   generateImagePrompt,
+  generateStoryboard,
   getImageAgents,
   getImageAgent,
   getAllImageTemplates,
@@ -68,3 +72,19 @@ export {
   getDurationGuidelines,
   VIDEO_SUB_AGENTS,
 } from "./video-agents";
+
+// ── Runtime Markdown Loader ──────────────────────────────────────────────────
+export { useImageAgents, useVideoAgents } from "./use-agents";
+
+// ── Markdown Parser (server-side only) ───────────────────────────────────────
+export type {
+  ParsedAgent,
+  ParsedSkills,
+  ParsedSkill,
+  ParsedRules,
+  ParsedTemplate,
+  ParsedScriptSection,
+  ParsedKnowledge,
+  ParsedTable,
+  ParsedAgentBundle,
+} from "./markdown-parser";

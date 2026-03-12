@@ -1,8 +1,9 @@
 /* ═══════════════════════════════════════════════════════════════════════════════
    IMAGE GENERATION AGENT SYSTEM
    ═══════════════════════════════════════════════════════════════════════════════
-   Master agent + 8 specialist sub-agents for image prompt generation.
+   Master agent + 9 specialist sub-agents for image prompt generation.
    Each sub-agent is a full agent with identity, skills, rules, and templates.
+   Includes the Storyboard agent for batch keyframe generation via nano_banana.
    ═══════════════════════════════════════════════════════════════════════════════ */
 
 import type {
@@ -12,6 +13,8 @@ import type {
   ImageAgentTemplate,
   ImageClassification,
   ImageGenerationPayload,
+  StoryboardKeyframe,
+  StoryboardPayload,
 } from "./types";
 
 // ── Routing Table (from Master Agent.md) ─────────────────────────────────────
@@ -25,6 +28,7 @@ const ROUTING_SIGNALS: Record<ImageAgentCategory, string[]> = {
   "abstract-artistic": ["abstract", "texture", "gradient", "pattern", "3d", "geometric", "art", "marble", "liquid", "fractal", "surreal", "void", "neon"],
   "social-media": ["social", "post", "story", "reel", "quote", "testimonial", "carousel", "background", "card", "overlay", "text-ready", "thumbnail"],
   "brand-marketing": ["brand", "campaign", "hero", "ad", "marketing", "launch", "premium", "commercial", "advertisement", "luxury", "editorial ad"],
+  "storyboard": ["storyboard", "keyframe", "shot list", "scene breakdown", "visual plan", "script to images", "pre-production", "shot by shot", "sequence", "scene 1", "scene 2", "frames"],
 };
 
 // ── Style Modifiers (from Master Skills.md) ──────────────────────────────────
@@ -350,6 +354,44 @@ const BRAND_MARKETING_TEMPLATES: ImageAgentTemplate[] = [
   },
 ];
 
+const STORYBOARD_TEMPLATES: ImageAgentTemplate[] = [
+  {
+    id: "ugc-ad-storyboard",
+    name: "UGC Ad Storyboard (5 frames)",
+    description: "Visual storyboard for a standard UGC product advertisement",
+    tags: ["storyboard", "ugc", "ad", "product", "sequence"],
+    prompt: "FRAME 1 [HOOK]: Wide shot of a person in a bright modern bathroom, looking at camera with expressive energy, natural window light, warm tones, 24mm || FRAME 2 [PROBLEM]: Medium shot of same person gesturing frustration, slightly dimmer lighting, same environment, 50mm || FRAME 3 [DISCOVERY]: Close-up of hands holding and presenting the product, soft focused background, rim light on product edges, 85mm || FRAME 4 [DEMO]: Medium-close shot actively using the product, visible satisfaction, bright warm lighting, 50mm || FRAME 5 [CTA]: Medium-wide shot holding product near face, direct eye contact, warm golden lighting, confident smile, 35mm",
+  },
+  {
+    id: "cinematic-hero-storyboard",
+    name: "Cinematic Product Launch Storyboard (6 frames)",
+    description: "Premium storyboard for a cinematic product reveal sequence",
+    tags: ["storyboard", "cinematic", "product", "launch", "premium"],
+    prompt: "FRAME 1 [ATMOSPHERE]: Ultra-wide dark environment, mist and volumetric light, mysterious, 24mm anamorphic || FRAME 2 [DETAIL]: Extreme macro of surface texture, side lighting, abstract, 100mm macro || FRAME 3 [REVEAL]: Medium shot product emerging from darkness, rim light silhouette, 50mm || FRAME 4 [HERO]: Full product beauty shot, orbiting light, glossy surface reflections, 70mm || FRAME 5 [CONTEXT]: Product in aspirational environment, hand reaching, 35mm || FRAME 6 [LOCKUP]: Clean brand frame, vast dark negative space, typography zone, 50mm",
+  },
+  {
+    id: "tutorial-storyboard",
+    name: "Tutorial/How-To Storyboard (5 frames)",
+    description: "Step-by-step tutorial storyboard with clear visual progression",
+    tags: ["storyboard", "tutorial", "how-to", "educational", "steps"],
+    prompt: "FRAME 1 [HOOK]: Medium shot of person at clean workspace, knowing expression, bright even lighting, 35mm || FRAME 2 [STEP 1]: Top-down overhead of hands performing first step, tools laid out, 50mm || FRAME 3 [STEP 2]: Close-up detail of key technique, shallow DOF, 85mm macro || FRAME 4 [STEP 3]: Medium 45-degree angle showing finishing step, result becoming visible, 50mm || FRAME 5 [RESULT]: Wide shot showing beautiful finished result, warm bright lighting, 24mm",
+  },
+  {
+    id: "testimonial-storyboard",
+    name: "Testimonial Journey Storyboard (6 frames)",
+    description: "Customer testimonial arc from skepticism to advocacy",
+    tags: ["storyboard", "testimonial", "journey", "emotional", "trust"],
+    prompt: "FRAME 1 [SKEPTIC]: Medium shot, casual home, skeptical expression, cool-neutral lighting, 50mm || FRAME 2 [RESEARCH]: Close-up hands holding phone, screen glow on face, 85mm || FRAME 3 [FIRST TRY]: Medium shot cautiously trying product, lighting warming slightly, 50mm || FRAME 4 [SURPRISE]: Close-up face showing genuine surprise, warm golden light, 85mm || FRAME 5 [RESULT]: Medium-wide confidently using product, bright warm lighting, 35mm || FRAME 6 [ADVOCATE]: Medium shot looking at camera with enthusiasm, product held up, 50mm",
+  },
+  {
+    id: "story-arc-storyboard",
+    name: "Story-Driven Narrative Storyboard (7 frames)",
+    description: "Full emotional narrative arc with cinematic progression",
+    tags: ["storyboard", "story", "narrative", "emotional", "arc"],
+    prompt: "FRAME 1 [ORDINARY WORLD]: Wide establishing, muted warm colors, everyday environment, 24mm || FRAME 2 [INCITING INCIDENT]: Medium shot of the change moment, dramatic lighting shift, 50mm || FRAME 3 [STRUGGLE]: Close-up showing effort, deeper shadows, cooling temperature, 85mm || FRAME 4 [DISCOVERY]: Medium shot finding the solution, warm light beam in darker scene, 50mm || FRAME 5 [TRANSFORMATION]: Dynamic medium-wide, dramatically warmer, saturating colors, 35mm || FRAME 6 [NEW WORLD]: Wide mirroring frame 1 but transformed, brighter and warmer, 24mm || FRAME 7 [RESOLUTION]: Clean medium shot at peace, warm golden light, 50mm",
+  },
+];
+
 // ── Sub-Agent Registry ───────────────────────────────────────────────────────
 
 export const IMAGE_SUB_AGENTS: ImageSubAgent[] = [
@@ -505,6 +547,25 @@ export const IMAGE_SUB_AGENTS: ImageSubAgent[] = [
     skills: ["Visual Hierarchy for Commerce", "Campaign World-Building", "Premium Composition", "Brand Tone Mapping"],
     templates: BRAND_MARKETING_TEMPLATES,
   },
+  {
+    id: "storyboard",
+    name: "Storyboard Keyframe Artist",
+    description: "Transforms video scripts into visual keyframe sequences via nano_banana",
+    voice: "Cinematic, precise, shot-aware",
+    defaultCamera: {
+      lens: "Varies per beat — 24mm wide, 50mm medium, 85mm close",
+      lighting: "Evolves across sequence to match mood arc",
+      filmStock: "Cinematic illustration with photographic grounding",
+      post: "Consistent grade across all keyframes, light sketch aesthetic",
+    },
+    rules: {
+      must: ["Generate 3-8 keyframes", "Always use nano_banana model", "Maintain character consistency", "Lock color palette across frames", "16:9 aspect ratio always", "Alternate shot scales"],
+      mustNot: ["Fewer than 3 frames", "More than 8 frames", "Inconsistent character descriptions", "Same focal length consecutively", "Forget beat labels"],
+      defaults: { keyframeCount: "5", aspectRatio: "16:9", model: "nano_banana", style: "Cinematic illustration", firstFrame: "Wide establishing 24mm", lastFrame: "Clean resolution shot" },
+    },
+    skills: ["Script-to-Visual Translation", "Sequential Composition", "Batch Prompt Engineering", "Mood Progression Mapping", "Automatic Model Routing"],
+    templates: STORYBOARD_TEMPLATES,
+  },
 ];
 
 // ── Master Agent: Intent Classifier ──────────────────────────────────────────
@@ -520,6 +581,7 @@ export function classifyImageIntent(userPrompt: string): ImageClassification {
     "abstract-artistic": 0,
     "social-media": 0,
     "brand-marketing": 0,
+    "storyboard": 0,
   };
 
   // Score each category based on signal word matches
@@ -775,4 +837,278 @@ export function getAllImageTemplates(): (ImageAgentTemplate & { category: ImageA
 /** Get templates for a specific agent category */
 export function getImageTemplates(category: ImageAgentCategory): ImageAgentTemplate[] {
   return IMAGE_SUB_AGENTS.find((a) => a.id === category)?.templates || [];
+}
+
+// ── Storyboard Agent: Batch Keyframe Generator ───────────────────────────────
+
+const STORYBOARD_NEGATIVE = "text, watermark, blurry, inconsistent style, cartoon, anime, different characters between frames, different environments between frames, low quality";
+
+const FOCAL_LENGTHS = ["24mm", "35mm", "50mm", "70mm", "85mm", "100mm"];
+
+/**
+ * Generate a complete storyboard from a script or description.
+ * Parses the input into beats, assigns camera setups, and returns
+ * individual prompts for batch nano_banana generation.
+ */
+export function generateStoryboard(
+  input: string,
+  options: {
+    templateId?: string;
+    palette?: string;
+    environment?: string;
+    character?: string;
+  } = {}
+): StoryboardPayload {
+  const agent = IMAGE_SUB_AGENTS.find((a) => a.id === "storyboard")!;
+
+  // If a template is specified, use it
+  if (options.templateId) {
+    const template = agent.templates.find((t) => t.id === options.templateId);
+    if (template) {
+      return parseTemplateIntoStoryboard(template, input, options);
+    }
+  }
+
+  // Otherwise, parse the input into beats
+  const beats = parseScriptBeats(input);
+
+  // Detect consistency anchors
+  const palette = options.palette || detectPalette(input);
+  const environment = options.environment || detectEnvironment(input);
+  const character = options.character || detectCharacter(input);
+
+  const keyframes: StoryboardKeyframe[] = beats.map((beat, i) => {
+    // Alternate focal lengths for visual rhythm
+    const focalLength = FOCAL_LENGTHS[i % FOCAL_LENGTHS.length];
+    // Avoid same focal length as previous frame
+    const adjustedFocal =
+      i > 0 && focalLength === FOCAL_LENGTHS[(i - 1) % FOCAL_LENGTHS.length]
+        ? FOCAL_LENGTHS[(i + 1) % FOCAL_LENGTHS.length]
+        : focalLength;
+
+    const prompt = buildKeyframePrompt(beat, {
+      focalLength: adjustedFocal,
+      palette,
+      environment,
+      character,
+      isFirst: i === 0,
+      isLast: i === beats.length - 1,
+      mood: beat.mood || "neutral",
+    });
+
+    return {
+      index: i,
+      beatLabel: beat.label,
+      prompt,
+      negativePrompt: STORYBOARD_NEGATIVE,
+      focalLength: adjustedFocal,
+      mood: beat.mood || "neutral",
+    };
+  });
+
+  return {
+    keyframes,
+    model: "nano_banana",
+    aspectRatio: "16:9",
+    agentUsed: "storyboard",
+    templateUsed: undefined,
+    palette,
+    totalFrames: keyframes.length,
+    consistency: {
+      environment,
+      character,
+      palette,
+      filmStock: "Cinematic illustration, consistent warm grade, light film grain",
+    },
+  };
+}
+
+interface ScriptBeat {
+  label: string;
+  content: string;
+  mood?: string;
+}
+
+function parseScriptBeats(input: string): ScriptBeat[] {
+  const beats: ScriptBeat[] = [];
+
+  // Try to parse section markers like [HOOK], [STEP 1], [CTA], etc.
+  const sectionRegex = /\[([A-Z][A-Z0-9 _-]*)\][\s:]*([^\[]*)/g;
+  let match;
+  while ((match = sectionRegex.exec(input)) !== null) {
+    beats.push({
+      label: match[1].trim(),
+      content: match[2].trim(),
+      mood: detectBeatMood(match[2]),
+    });
+  }
+
+  // If no section markers found, split by sentences/paragraphs
+  if (beats.length === 0) {
+    const sentences = input
+      .split(/[.!?\n]+/)
+      .map((s) => s.trim())
+      .filter((s) => s.length > 10);
+
+    // Group sentences into 3-6 beats
+    const targetBeats = Math.min(Math.max(3, Math.ceil(sentences.length / 2)), 6);
+    const beatsPerGroup = Math.ceil(sentences.length / targetBeats);
+    const defaultLabels = ["OPENING", "SETUP", "DEVELOPMENT", "CLIMAX", "RESOLUTION", "CLOSE"];
+
+    for (let i = 0; i < targetBeats; i++) {
+      const groupSentences = sentences.slice(
+        i * beatsPerGroup,
+        (i + 1) * beatsPerGroup
+      );
+      if (groupSentences.length > 0) {
+        beats.push({
+          label: defaultLabels[i] || `BEAT ${i + 1}`,
+          content: groupSentences.join(". "),
+          mood: detectBeatMood(groupSentences.join(" ")),
+        });
+      }
+    }
+  }
+
+  // Ensure at least 3 beats
+  if (beats.length < 3) {
+    while (beats.length < 3) {
+      beats.push({
+        label: beats.length === 1 ? "DEVELOPMENT" : "CLOSE",
+        content: input,
+        mood: "neutral",
+      });
+    }
+  }
+
+  // Cap at 8
+  return beats.slice(0, 8);
+}
+
+function detectBeatMood(text: string): string {
+  const lower = text.toLowerCase();
+  if (/struggle|problem|frustrat|fail|wrong|bad/.test(lower)) return "tense";
+  if (/discover|found|reveal|surprise/.test(lower)) return "hopeful";
+  if (/result|success|transform|amaz|love/.test(lower)) return "triumphant";
+  if (/begin|start|morning|first/.test(lower)) return "calm";
+  if (/end|final|close|last/.test(lower)) return "resolved";
+  return "neutral";
+}
+
+function detectPalette(text: string): string {
+  const lower = text.toLowerCase();
+  if (/luxury|premium|gold|elegant/.test(lower)) return "deep blacks, warm gold, cream";
+  if (/fresh|clean|natural|organic/.test(lower)) return "soft whites, sage green, natural wood";
+  if (/tech|digital|modern|futur/.test(lower)) return "deep navy, cool gray, electric blue accent";
+  if (/warm|cozy|comfort|home/.test(lower)) return "warm amber, terracotta, cream, soft brown";
+  if (/bold|energy|vibrant|excit/.test(lower)) return "rich saturated tones, warm with pops of contrast";
+  return "warm neutrals with subtle accent, consistent earth tones";
+}
+
+function detectEnvironment(text: string): string {
+  const lower = text.toLowerCase();
+  if (/kitchen|cook|food/.test(lower)) return "modern bright kitchen with natural materials";
+  if (/bathroom|skincare|beauty/.test(lower)) return "clean modern bathroom with natural light";
+  if (/office|work|desk/.test(lower)) return "minimal modern workspace";
+  if (/outdoor|garden|nature/.test(lower)) return "outdoor natural setting with greenery";
+  if (/studio|dark|product/.test(lower)) return "dark controlled studio environment";
+  return "modern lifestyle interior with natural light";
+}
+
+function detectCharacter(text: string): string {
+  // Default character description for consistency
+  return "same person throughout — natural appearance, warm skin tones, casual but styled clothing";
+}
+
+function buildKeyframePrompt(
+  beat: ScriptBeat,
+  opts: {
+    focalLength: string;
+    palette: string;
+    environment: string;
+    character: string;
+    isFirst: boolean;
+    isLast: boolean;
+    mood: string;
+  }
+): string {
+  const moodLighting: Record<string, string> = {
+    tense: "cooler lighting, deeper shadows, slightly desaturated",
+    hopeful: "warm light beginning to break through, side lighting",
+    triumphant: "bright warm golden light, high key, celebratory",
+    calm: "soft even lighting, gentle and neutral",
+    resolved: "warm soft light, peaceful and settled",
+    neutral: "natural balanced lighting",
+  };
+
+  const shotScale = opts.isFirst
+    ? "wide establishing shot"
+    : opts.isLast
+      ? "clean resolution shot"
+      : opts.focalLength === "85mm" || opts.focalLength === "100mm"
+        ? "close-up detail shot"
+        : opts.focalLength === "24mm" || opts.focalLength === "35mm"
+          ? "wide environmental shot"
+          : "medium shot";
+
+  const parts = [
+    `${shotScale} of ${beat.content}`,
+    opts.environment,
+    opts.character,
+    moodLighting[opts.mood] || moodLighting.neutral,
+    `color palette: ${opts.palette}`,
+    `shot on ${opts.focalLength}`,
+    "cinematic illustration with photographic grounding",
+    "16:9 widescreen composition",
+  ];
+
+  return parts.join(", ");
+}
+
+function parseTemplateIntoStoryboard(
+  template: ImageAgentTemplate,
+  userInput: string,
+  options: { palette?: string; environment?: string; character?: string }
+): StoryboardPayload {
+  // Template prompts use "||" to separate frames
+  const frameTexts = template.prompt.split("||").map((f) => f.trim());
+  const palette = options.palette || detectPalette(userInput);
+  const environment = options.environment || detectEnvironment(userInput);
+  const character = options.character || detectCharacter(userInput);
+
+  const keyframes: StoryboardKeyframe[] = frameTexts.map((frameText, i) => {
+    // Extract beat label from "FRAME N [LABEL]:" pattern
+    const labelMatch = frameText.match(/FRAME\s*\d+\s*\[(\w[\w\s]*)\]:\s*(.*)/i);
+    const label = labelMatch ? labelMatch[1].trim() : `FRAME ${i + 1}`;
+    const content = labelMatch ? labelMatch[2].trim() : frameText;
+
+    // Extract focal length from the content
+    const focalMatch = content.match(/(\d+mm)/);
+    const focalLength = focalMatch ? focalMatch[1] : FOCAL_LENGTHS[i % FOCAL_LENGTHS.length];
+
+    return {
+      index: i,
+      beatLabel: label,
+      prompt: `${content}, ${environment}, ${character}, color palette: ${palette}, cinematic illustration, 16:9`,
+      negativePrompt: STORYBOARD_NEGATIVE,
+      focalLength,
+      mood: detectBeatMood(content),
+    };
+  });
+
+  return {
+    keyframes,
+    model: "nano_banana",
+    aspectRatio: "16:9",
+    agentUsed: "storyboard",
+    templateUsed: template.id,
+    palette,
+    totalFrames: keyframes.length,
+    consistency: {
+      environment,
+      character,
+      palette,
+      filmStock: "Cinematic illustration, consistent warm grade, light film grain",
+    },
+  };
 }

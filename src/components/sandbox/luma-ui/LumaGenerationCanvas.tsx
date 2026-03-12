@@ -9,7 +9,13 @@ import HistoryPanel from "./HistoryPanel";
 import type { Script } from "./ScriptSelector";
 import type { TextOverlay } from "./tabs/TextOverlaysTab";
 import type { ReplyConfig } from "./tabs/ReplyCommentTab";
-import { Play, User } from "@phosphor-icons/react";
+import { Play, User, Lightning, Robot } from "@phosphor-icons/react";
+import type { AgentScriptSelection } from "./AgentScriptSelector";
+import {
+  classifyVideoIntent,
+  generateVideoPayload,
+  type VideoGenerationPayload,
+} from "@/lib/agents";
 
 /* Card width for each aspect ratio (enlarged ~30%) */
 const CARD_WIDTHS: Record<string, number> = {
@@ -34,6 +40,36 @@ export default function LumaGenerationCanvas() {
   const [showAvatarPicker, setShowAvatarPicker] = useState(false);
   const [selectedAvatar, setSelectedAvatar] = useState<Avatar | null>(null);
   const [selectedScript, setSelectedScript] = useState<Script | null>(null);
+
+  // Agent system state
+  const [agentMode, setAgentMode] = useState(true);
+  const [agentPayload, setAgentPayload] = useState<VideoGenerationPayload | null>(null);
+  const [agentTemplate, setAgentTemplate] = useState<AgentScriptSelection | null>(null);
+  const [generating, setGenerating] = useState(false);
+
+  // Live agent classification as user types
+  const liveClassification = prompt.trim()
+    ? classifyVideoIntent(prompt)
+    : null;
+
+  // Generate handler
+  const handleGenerate = () => {
+    if (!prompt.trim()) return;
+    setGenerating(true);
+
+    if (agentMode) {
+      const payload = generateVideoPayload(prompt, {
+        templateId: agentTemplate?.template.id,
+      });
+      setAgentPayload(payload);
+      // In a real integration, this would POST to the backend API
+      // For now, we surface the payload in the preview card
+      console.log("[Agent Payload]", payload);
+    }
+
+    // Simulate generation time
+    setTimeout(() => setGenerating(false), 2000);
+  };
 
   const [captionsEnabled, setCaptionsEnabled] = useState(false);
   const [captionStyle, setCaptionStyle] = useState("White");
@@ -183,23 +219,80 @@ export default function LumaGenerationCanvas() {
                   </div>
                 )}
 
+                {/* Agent classification indicator */}
+                {agentMode && liveClassification && liveClassification.confidence > 0 && (
+                  <div className="absolute top-4 right-4 flex items-center gap-1.5 px-2.5 py-1.5 rounded-full bg-fuchsia-500/10 backdrop-blur-sm border border-fuchsia-500/20">
+                    <Lightning size={10} weight="fill" className="text-fuchsia-400" />
+                    <span className="text-[9px] text-fuchsia-300 font-semibold uppercase tracking-wider">
+                      {liveClassification.category}
+                    </span>
+                    <span className="text-[9px] text-fuchsia-400/50">
+                      {Math.round(liveClassification.confidence * 100)}%
+                    </span>
+                  </div>
+                )}
+
                 {/* Centered content */}
-                <div className="flex flex-col items-center gap-4">
-                  <div className="w-14 h-14 rounded-full bg-white/[0.04] border border-white/[0.06] grid place-items-center">
-                    <Play size={22} weight="fill" className="text-zinc-600" />
-                  </div>
-                  <div className="text-center">
-                    <p className="text-zinc-500 text-[13px] font-medium">
-                      {selectedAvatar
-                        ? `Ready to generate with ${selectedAvatar.name}`
-                        : "Select an avatar to begin"}
-                    </p>
-                    <p className="text-zinc-600 text-[11px] mt-1">
-                      {selectedScript
-                        ? selectedScript.title
-                        : "Describe your scene below"}
-                    </p>
-                  </div>
+                <div className="flex flex-col items-center gap-4 px-6">
+                  {agentPayload && !generating ? (
+                    /* Show generated script preview */
+                    <div className="w-full max-h-[320px] overflow-y-auto">
+                      <div className="flex items-center gap-2 mb-3">
+                        <Robot size={14} weight="fill" className="text-fuchsia-400" />
+                        <span className="text-[10px] font-bold text-fuchsia-400 uppercase tracking-wider">
+                          {agentPayload.agentUsed}
+                        </span>
+                        <span className="text-[9px] text-zinc-600">
+                          {agentPayload.templateUsed} · {agentPayload.duration} · {agentPayload.provider}
+                        </span>
+                      </div>
+                      {agentPayload.sections.map((section, i) => (
+                        <div key={i} className="mb-2 last:mb-0">
+                          <div className="flex items-center gap-2 mb-0.5">
+                            <span className="text-[8px] font-bold text-fuchsia-400/70 uppercase tracking-widest">
+                              {section.label}
+                            </span>
+                            <span className="text-[8px] text-zinc-600">{section.duration}</span>
+                            {section.textOverlay && (
+                              <span className="text-[8px] text-cyan-500/70 ml-auto truncate max-w-[120px]">
+                                [{section.textOverlay}]
+                              </span>
+                            )}
+                          </div>
+                          <p className="text-[11px] text-zinc-400 leading-relaxed">
+                            {section.content}
+                          </p>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    /* Default empty state */
+                    <>
+                      <div className={`w-14 h-14 rounded-full bg-white/[0.04] border border-white/[0.06] grid place-items-center ${generating ? "animate-pulse" : ""}`}>
+                        {generating ? (
+                          <Lightning size={22} weight="fill" className="text-fuchsia-400" />
+                        ) : (
+                          <Play size={22} weight="fill" className="text-zinc-600" />
+                        )}
+                      </div>
+                      <div className="text-center">
+                        <p className="text-zinc-500 text-[13px] font-medium">
+                          {generating
+                            ? "Agent generating script..."
+                            : selectedAvatar
+                              ? `Ready to generate with ${selectedAvatar.name}`
+                              : "Select an avatar to begin"}
+                        </p>
+                        <p className="text-zinc-600 text-[11px] mt-1">
+                          {agentTemplate
+                            ? `${agentTemplate.agentName} · ${agentTemplate.template.name}`
+                            : selectedScript
+                              ? selectedScript.title
+                              : "Describe your scene below"}
+                        </p>
+                      </div>
+                    </>
+                  )}
                 </div>
               </div>
 
@@ -262,6 +355,12 @@ export default function LumaGenerationCanvas() {
               onAvatarClick={() => setShowAvatarPicker(true)}
               selectedScript={selectedScript}
               onSelectScript={setSelectedScript}
+              agentMode={agentMode}
+              onToggleAgentMode={() => setAgentMode(!agentMode)}
+              agentTemplate={agentTemplate}
+              onSelectAgentTemplate={setAgentTemplate}
+              onGenerate={handleGenerate}
+              generating={generating}
             />
           </div>
         </div>
