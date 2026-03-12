@@ -354,41 +354,16 @@ const BRAND_MARKETING_TEMPLATES: ImageAgentTemplate[] = [
   },
 ];
 
+// Storyboard "templates" are NOT prescriptive frame prompts.
+// They're just hints the user can browse in the UI for script structure ideas.
+// The actual image prompts come from generateImagePrompt() per-chunk.
 const STORYBOARD_TEMPLATES: ImageAgentTemplate[] = [
   {
-    id: "ugc-ad-storyboard",
-    name: "UGC Ad Storyboard (5 frames)",
-    description: "Visual storyboard for a standard UGC product advertisement",
-    tags: ["storyboard", "ugc", "ad", "product", "sequence"],
-    prompt: "FRAME 1 [HOOK]: Wide shot of a person in a bright modern bathroom, looking at camera with expressive energy, natural window light, warm tones, 24mm || FRAME 2 [PROBLEM]: Medium shot of same person gesturing frustration, slightly dimmer lighting, same environment, 50mm || FRAME 3 [DISCOVERY]: Close-up of hands holding and presenting the product, soft focused background, rim light on product edges, 85mm || FRAME 4 [DEMO]: Medium-close shot actively using the product, visible satisfaction, bright warm lighting, 50mm || FRAME 5 [CTA]: Medium-wide shot holding product near face, direct eye contact, warm golden lighting, confident smile, 35mm",
-  },
-  {
-    id: "cinematic-hero-storyboard",
-    name: "Cinematic Product Launch Storyboard (6 frames)",
-    description: "Premium storyboard for a cinematic product reveal sequence",
-    tags: ["storyboard", "cinematic", "product", "launch", "premium"],
-    prompt: "FRAME 1 [ATMOSPHERE]: Ultra-wide dark environment, mist and volumetric light, mysterious, 24mm anamorphic || FRAME 2 [DETAIL]: Extreme macro of surface texture, side lighting, abstract, 100mm macro || FRAME 3 [REVEAL]: Medium shot product emerging from darkness, rim light silhouette, 50mm || FRAME 4 [HERO]: Full product beauty shot, orbiting light, glossy surface reflections, 70mm || FRAME 5 [CONTEXT]: Product in aspirational environment, hand reaching, 35mm || FRAME 6 [LOCKUP]: Clean brand frame, vast dark negative space, typography zone, 50mm",
-  },
-  {
-    id: "tutorial-storyboard",
-    name: "Tutorial/How-To Storyboard (5 frames)",
-    description: "Step-by-step tutorial storyboard with clear visual progression",
-    tags: ["storyboard", "tutorial", "how-to", "educational", "steps"],
-    prompt: "FRAME 1 [HOOK]: Medium shot of person at clean workspace, knowing expression, bright even lighting, 35mm || FRAME 2 [STEP 1]: Top-down overhead of hands performing first step, tools laid out, 50mm || FRAME 3 [STEP 2]: Close-up detail of key technique, shallow DOF, 85mm macro || FRAME 4 [STEP 3]: Medium 45-degree angle showing finishing step, result becoming visible, 50mm || FRAME 5 [RESULT]: Wide shot showing beautiful finished result, warm bright lighting, 24mm",
-  },
-  {
-    id: "testimonial-storyboard",
-    name: "Testimonial Journey Storyboard (6 frames)",
-    description: "Customer testimonial arc from skepticism to advocacy",
-    tags: ["storyboard", "testimonial", "journey", "emotional", "trust"],
-    prompt: "FRAME 1 [SKEPTIC]: Medium shot, casual home, skeptical expression, cool-neutral lighting, 50mm || FRAME 2 [RESEARCH]: Close-up hands holding phone, screen glow on face, 85mm || FRAME 3 [FIRST TRY]: Medium shot cautiously trying product, lighting warming slightly, 50mm || FRAME 4 [SURPRISE]: Close-up face showing genuine surprise, warm golden light, 85mm || FRAME 5 [RESULT]: Medium-wide confidently using product, bright warm lighting, 35mm || FRAME 6 [ADVOCATE]: Medium shot looking at camera with enthusiasm, product held up, 50mm",
-  },
-  {
-    id: "story-arc-storyboard",
-    name: "Story-Driven Narrative Storyboard (7 frames)",
-    description: "Full emotional narrative arc with cinematic progression",
-    tags: ["storyboard", "story", "narrative", "emotional", "arc"],
-    prompt: "FRAME 1 [ORDINARY WORLD]: Wide establishing, muted warm colors, everyday environment, 24mm || FRAME 2 [INCITING INCIDENT]: Medium shot of the change moment, dramatic lighting shift, 50mm || FRAME 3 [STRUGGLE]: Close-up showing effort, deeper shadows, cooling temperature, 85mm || FRAME 4 [DISCOVERY]: Medium shot finding the solution, warm light beam in darker scene, 50mm || FRAME 5 [TRANSFORMATION]: Dynamic medium-wide, dramatically warmer, saturating colors, 35mm || FRAME 6 [NEW WORLD]: Wide mirroring frame 1 but transformed, brighter and warmer, 24mm || FRAME 7 [RESOLUTION]: Clean medium shot at peace, warm golden light, 50mm",
+    id: "storyboard-any",
+    name: "Auto-Storyboard",
+    description: "Paste any script — frames auto-generated from your sections",
+    tags: ["storyboard", "auto", "flexible", "any-script"],
+    prompt: "storyboard keyframe sequence from script",
   },
 ];
 
@@ -550,20 +525,20 @@ export const IMAGE_SUB_AGENTS: ImageSubAgent[] = [
   {
     id: "storyboard",
     name: "Storyboard Keyframe Artist",
-    description: "Transforms video scripts into visual keyframe sequences via nano_banana",
-    voice: "Cinematic, precise, shot-aware",
+    description: "Chunks scripts into sections, feeds each through the image pipeline for nano_banana keyframes",
+    voice: "Cinematic, precise, shot-aware — but the image pipeline does the real prompt work",
     defaultCamera: {
-      lens: "Varies per beat — 24mm wide, 50mm medium, 85mm close",
-      lighting: "Evolves across sequence to match mood arc",
-      filmStock: "Cinematic illustration with photographic grounding",
-      post: "Consistent grade across all keyframes, light sketch aesthetic",
+      lens: "Determined by image pipeline per-chunk",
+      lighting: "Determined by image pipeline per-chunk",
+      filmStock: "Determined by image pipeline per-chunk",
+      post: "Determined by image pipeline per-chunk",
     },
     rules: {
-      must: ["Generate 3-8 keyframes", "Always use nano_banana model", "Maintain character consistency", "Lock color palette across frames", "16:9 aspect ratio always", "Alternate shot scales"],
-      mustNot: ["Fewer than 3 frames", "More than 8 frames", "Inconsistent character descriptions", "Same focal length consecutively", "Forget beat labels"],
-      defaults: { keyframeCount: "5", aspectRatio: "16:9", model: "nano_banana", style: "Cinematic illustration", firstFrame: "Wide establishing 24mm", lastFrame: "Clean resolution shot" },
+      must: ["Chunk script into sections", "Flow each chunk through generateImagePrompt()", "Prepend consistency anchors to each chunk", "Always use nano_banana model", "16:9 aspect ratio for all keyframes"],
+      mustNot: ["Build its own prompts — delegate to image pipeline", "Fix the frame count — let the script decide", "Override image pipeline template/style choices"],
+      defaults: { aspectRatio: "16:9", model: "nano_banana", style: "cinematic" },
     },
-    skills: ["Script-to-Visual Translation", "Sequential Composition", "Batch Prompt Engineering", "Mood Progression Mapping", "Automatic Model Routing"],
+    skills: ["Script Chunking", "Consistency Anchor Detection", "Image Pipeline Orchestration"],
     templates: STORYBOARD_TEMPLATES,
   },
 ];
@@ -839,70 +814,80 @@ export function getImageTemplates(category: ImageAgentCategory): ImageAgentTempl
   return IMAGE_SUB_AGENTS.find((a) => a.id === category)?.templates || [];
 }
 
-// ── Storyboard Agent: Batch Keyframe Generator ───────────────────────────────
+// ── Storyboard Agent: Script Chunker → Image Pipeline Flow-Through ───────────
+//
+// The storyboard agent does NOT build its own prompts. It:
+//   1. Takes a user's script
+//   2. Chunks it into sections (flexible count based on script length)
+//   3. Detects consistency anchors (palette, environment, character)
+//   4. Prefixes each chunk with consistency context
+//   5. Feeds each chunk through generateImagePrompt() — the REAL image pipeline
+//   6. Returns the array of ImageGenerationPayloads as keyframes
+//
+// This means every keyframe gets the full benefit of: agent classification,
+// template matching, style modifiers, camera profiles, entity injection,
+// negative prompts — all the intelligence that makes nano_banana images great.
+// The storyboard agent just orchestrates the sequence.
 
-const STORYBOARD_NEGATIVE = "text, watermark, blurry, inconsistent style, cartoon, anime, different characters between frames, different environments between frames, low quality";
-
-const FOCAL_LENGTHS = ["24mm", "35mm", "50mm", "70mm", "85mm", "100mm"];
+// (unused, keeping for reference)
+// const FOCAL_LENGTHS = ["24mm", "35mm", "50mm", "70mm", "85mm", "100mm"];
 
 /**
- * Generate a complete storyboard from a script or description.
- * Parses the input into beats, assigns camera setups, and returns
- * individual prompts for batch nano_banana generation.
+ * Generate a storyboard by chunking a script and flowing each chunk
+ * through the existing image generation pipeline (generateImagePrompt).
+ *
+ * Each chunk is prefixed with consistency anchors so the image pipeline
+ * produces visually coherent frames across the sequence.
+ *
+ * The storyboard agent does NOT build its own prompts — it delegates to
+ * the same pipeline that makes great nano_banana images. It just handles:
+ * chunking, consistency, and sequencing.
  */
 export function generateStoryboard(
-  input: string,
+  script: string,
   options: {
-    templateId?: string;
+    style?: ImageStyle;
     palette?: string;
     environment?: string;
     character?: string;
   } = {}
 ): StoryboardPayload {
-  const agent = IMAGE_SUB_AGENTS.find((a) => a.id === "storyboard")!;
+  // 1. Chunk the script into sections — flexible count based on the script
+  const chunks = chunkScript(script);
 
-  // If a template is specified, use it
-  if (options.templateId) {
-    const template = agent.templates.find((t) => t.id === options.templateId);
-    if (template) {
-      return parseTemplateIntoStoryboard(template, input, options);
-    }
-  }
+  // 2. Detect consistency anchors from the full script
+  const palette = options.palette || inferPalette(script);
+  const environment = options.environment || inferEnvironment(script);
+  const character = options.character || inferCharacter(script);
 
-  // Otherwise, parse the input into beats
-  const beats = parseScriptBeats(input);
-
-  // Detect consistency anchors
-  const palette = options.palette || detectPalette(input);
-  const environment = options.environment || detectEnvironment(input);
-  const character = options.character || detectCharacter(input);
-
-  const keyframes: StoryboardKeyframe[] = beats.map((beat, i) => {
-    // Alternate focal lengths for visual rhythm
-    const focalLength = FOCAL_LENGTHS[i % FOCAL_LENGTHS.length];
-    // Avoid same focal length as previous frame
-    const adjustedFocal =
-      i > 0 && focalLength === FOCAL_LENGTHS[(i - 1) % FOCAL_LENGTHS.length]
-        ? FOCAL_LENGTHS[(i + 1) % FOCAL_LENGTHS.length]
-        : focalLength;
-
-    const prompt = buildKeyframePrompt(beat, {
-      focalLength: adjustedFocal,
+  // 3. For each chunk, prepend consistency context and flow through the pipeline
+  const keyframes: StoryboardKeyframe[] = chunks.map((chunk, i) => {
+    const consistencyPrefix = buildConsistencyPrefix({
       palette,
       environment,
       character,
-      isFirst: i === 0,
-      isLast: i === beats.length - 1,
-      mood: beat.mood || "neutral",
+      frameIndex: i,
+      totalFrames: chunks.length,
+    });
+
+    // The actual input sent through the image pipeline:
+    // consistency context + the chunk's content
+    const pipelineInput = `${consistencyPrefix}. ${chunk.content}`;
+
+    // Flow through the REAL image pipeline — this handles:
+    // agent classification → template matching → style modifiers →
+    // camera profiles → entity injection → negative prompts → word ceiling
+    const imagePayload = generateImagePrompt(pipelineInput, {
+      style: options.style || "cinematic",
+      aspectRatio: "16:9",
     });
 
     return {
       index: i,
-      beatLabel: beat.label,
-      prompt,
-      negativePrompt: STORYBOARD_NEGATIVE,
-      focalLength: adjustedFocal,
-      mood: beat.mood || "neutral",
+      beatLabel: chunk.label,
+      beatContent: chunk.content,
+      imagePayload,
+      consistencyPrefix,
     };
   });
 
@@ -911,204 +896,189 @@ export function generateStoryboard(
     model: "nano_banana",
     aspectRatio: "16:9",
     agentUsed: "storyboard",
-    templateUsed: undefined,
-    palette,
     totalFrames: keyframes.length,
-    consistency: {
-      environment,
-      character,
-      palette,
-      filmStock: "Cinematic illustration, consistent warm grade, light film grain",
-    },
+    consistency: { environment, character, palette },
   };
 }
 
-interface ScriptBeat {
+// ── Script Chunking ──────────────────────────────────────────────────────────
+
+interface ScriptChunk {
   label: string;
   content: string;
-  mood?: string;
 }
 
-function parseScriptBeats(input: string): ScriptBeat[] {
-  const beats: ScriptBeat[] = [];
+/**
+ * Chunk a script into sections. Handles multiple formats:
+ * - Explicit markers: [HOOK] content [PROBLEM] content ...
+ * - Numbered sections: 1. content 2. content ...
+ * - Paragraphs: double newline separated blocks
+ * - Sentences: falls back to grouping sentences for short scripts
+ *
+ * No fixed frame count — the script decides how many keyframes it needs.
+ */
+function chunkScript(script: string): ScriptChunk[] {
+  // Try explicit section markers first: [HOOK], [STEP 1], [CTA], etc.
+  const markerChunks = chunkByMarkers(script);
+  if (markerChunks.length >= 2) return markerChunks;
 
-  // Try to parse section markers like [HOOK], [STEP 1], [CTA], etc.
-  const sectionRegex = /\[([A-Z][A-Z0-9 _-]*)\][\s:]*([^\[]*)/g;
+  // Try numbered sections: "1." "2." etc.
+  const numberedChunks = chunkByNumbering(script);
+  if (numberedChunks.length >= 2) return numberedChunks;
+
+  // Try paragraph breaks (double newline)
+  const paragraphChunks = chunkByParagraphs(script);
+  if (paragraphChunks.length >= 2) return paragraphChunks;
+
+  // Fall back to sentence grouping
+  return chunkBySentences(script);
+}
+
+function chunkByMarkers(script: string): ScriptChunk[] {
+  const chunks: ScriptChunk[] = [];
+  const regex = /\[([A-Z][A-Z0-9 _-]*)\][\s:]*([^\[]*)/g;
   let match;
-  while ((match = sectionRegex.exec(input)) !== null) {
-    beats.push({
-      label: match[1].trim(),
-      content: match[2].trim(),
-      mood: detectBeatMood(match[2]),
+  while ((match = regex.exec(script)) !== null) {
+    const content = match[2].trim();
+    if (content.length > 5) {
+      chunks.push({ label: match[1].trim(), content });
+    }
+  }
+  return chunks;
+}
+
+function chunkByNumbering(script: string): ScriptChunk[] {
+  const chunks: ScriptChunk[] = [];
+  const regex = /(?:^|\n)\s*(\d+)[.)]\s+(.+?)(?=(?:\n\s*\d+[.)]|\s*$))/gs;
+  let match;
+  while ((match = regex.exec(script)) !== null) {
+    const content = match[2].trim();
+    if (content.length > 5) {
+      chunks.push({ label: `SECTION ${match[1]}`, content });
+    }
+  }
+  return chunks;
+}
+
+function chunkByParagraphs(script: string): ScriptChunk[] {
+  const paragraphs = script
+    .split(/\n\s*\n/)
+    .map((p) => p.trim())
+    .filter((p) => p.length > 10);
+
+  return paragraphs.map((content, i) => ({
+    label: `BEAT ${i + 1}`,
+    content,
+  }));
+}
+
+function chunkBySentences(script: string): ScriptChunk[] {
+  const sentences = script
+    .split(/[.!?]+/)
+    .map((s) => s.trim())
+    .filter((s) => s.length > 10);
+
+  if (sentences.length === 0) {
+    return [{ label: "FRAME 1", content: script }];
+  }
+
+  // Group sentences so each chunk has enough substance (~15+ words).
+  // No fixed frame count — the script length decides.
+  const chunks: ScriptChunk[] = [];
+  let currentWords: string[] = [];
+  let currentSentences: string[] = [];
+
+  for (const sentence of sentences) {
+    currentSentences.push(sentence);
+    currentWords.push(...sentence.split(/\s+/));
+
+    if (currentWords.length >= 15) {
+      chunks.push({
+        label: `BEAT ${chunks.length + 1}`,
+        content: currentSentences.join(". "),
+      });
+      currentWords = [];
+      currentSentences = [];
+    }
+  }
+
+  // Don't drop remaining sentences — add as final chunk
+  if (currentSentences.length > 0) {
+    chunks.push({
+      label: `BEAT ${chunks.length + 1}`,
+      content: currentSentences.join(". "),
     });
   }
 
-  // If no section markers found, split by sentences/paragraphs
-  if (beats.length === 0) {
-    const sentences = input
-      .split(/[.!?\n]+/)
-      .map((s) => s.trim())
-      .filter((s) => s.length > 10);
-
-    // Group sentences into 3-6 beats
-    const targetBeats = Math.min(Math.max(3, Math.ceil(sentences.length / 2)), 6);
-    const beatsPerGroup = Math.ceil(sentences.length / targetBeats);
-    const defaultLabels = ["OPENING", "SETUP", "DEVELOPMENT", "CLIMAX", "RESOLUTION", "CLOSE"];
-
-    for (let i = 0; i < targetBeats; i++) {
-      const groupSentences = sentences.slice(
-        i * beatsPerGroup,
-        (i + 1) * beatsPerGroup
-      );
-      if (groupSentences.length > 0) {
-        beats.push({
-          label: defaultLabels[i] || `BEAT ${i + 1}`,
-          content: groupSentences.join(". "),
-          mood: detectBeatMood(groupSentences.join(" ")),
-        });
-      }
-    }
-  }
-
-  // Ensure at least 3 beats
-  if (beats.length < 3) {
-    while (beats.length < 3) {
-      beats.push({
-        label: beats.length === 1 ? "DEVELOPMENT" : "CLOSE",
-        content: input,
-        mood: "neutral",
-      });
-    }
-  }
-
-  // Cap at 8
-  return beats.slice(0, 8);
+  return chunks;
 }
 
-function detectBeatMood(text: string): string {
-  const lower = text.toLowerCase();
-  if (/struggle|problem|frustrat|fail|wrong|bad/.test(lower)) return "tense";
-  if (/discover|found|reveal|surprise/.test(lower)) return "hopeful";
-  if (/result|success|transform|amaz|love/.test(lower)) return "triumphant";
-  if (/begin|start|morning|first/.test(lower)) return "calm";
-  if (/end|final|close|last/.test(lower)) return "resolved";
-  return "neutral";
+// ── Consistency Anchors ──────────────────────────────────────────────────────
+//
+// Detect scene-level properties from the full script. These get prepended
+// to each chunk before it enters the image pipeline, so every keyframe
+// inherits the same visual DNA.
+
+function buildConsistencyPrefix(opts: {
+  palette: string;
+  environment: string;
+  character: string;
+  frameIndex: number;
+  totalFrames: number;
+}): string {
+  const parts = [
+    `Scene: ${opts.environment}`,
+    `Subject: ${opts.character}`,
+    `Color palette: ${opts.palette}`,
+  ];
+
+  if (opts.frameIndex === 0) {
+    parts.push("wide establishing shot to set the scene");
+  } else if (opts.frameIndex === opts.totalFrames - 1) {
+    parts.push("closing frame, resolution");
+  }
+
+  return parts.join(", ");
 }
 
-function detectPalette(text: string): string {
+function inferPalette(text: string): string {
   const lower = text.toLowerCase();
   if (/luxury|premium|gold|elegant/.test(lower)) return "deep blacks, warm gold, cream";
   if (/fresh|clean|natural|organic/.test(lower)) return "soft whites, sage green, natural wood";
   if (/tech|digital|modern|futur/.test(lower)) return "deep navy, cool gray, electric blue accent";
   if (/warm|cozy|comfort|home/.test(lower)) return "warm amber, terracotta, cream, soft brown";
   if (/bold|energy|vibrant|excit/.test(lower)) return "rich saturated tones, warm with pops of contrast";
-  return "warm neutrals with subtle accent, consistent earth tones";
+  if (/dark|moody|noir|mystery/.test(lower)) return "deep shadows, desaturated cool tones, single warm accent";
+  return "warm neutrals, consistent earth tones";
 }
 
-function detectEnvironment(text: string): string {
+function inferEnvironment(text: string): string {
   const lower = text.toLowerCase();
-  if (/kitchen|cook|food/.test(lower)) return "modern bright kitchen with natural materials";
-  if (/bathroom|skincare|beauty/.test(lower)) return "clean modern bathroom with natural light";
-  if (/office|work|desk/.test(lower)) return "minimal modern workspace";
-  if (/outdoor|garden|nature/.test(lower)) return "outdoor natural setting with greenery";
-  if (/studio|dark|product/.test(lower)) return "dark controlled studio environment";
-  return "modern lifestyle interior with natural light";
+  if (/kitchen|cook|food|recipe/.test(lower)) return "modern bright kitchen with natural materials";
+  if (/bathroom|skincare|beauty|vanity/.test(lower)) return "clean modern bathroom with soft natural light";
+  if (/office|work|desk|studio/.test(lower)) return "minimal modern workspace";
+  if (/outdoor|garden|nature|park/.test(lower)) return "outdoor natural setting with soft light";
+  if (/gym|fitness|workout/.test(lower)) return "clean modern gym or fitness space";
+  if (/bedroom|morning|routine/.test(lower)) return "sunlit bedroom with warm morning light";
+  if (/store|shop|retail/.test(lower)) return "clean retail environment with styled displays";
+  return "modern lifestyle interior with natural window light";
 }
 
-function detectCharacter(text: string): string {
-  // Default character description for consistency
-  return "same person throughout — natural appearance, warm skin tones, casual but styled clothing";
-}
+function inferCharacter(text: string): string {
+  const lower = text.toLowerCase();
 
-function buildKeyframePrompt(
-  beat: ScriptBeat,
-  opts: {
-    focalLength: string;
-    palette: string;
-    environment: string;
-    character: string;
-    isFirst: boolean;
-    isLast: boolean;
-    mood: string;
+  // Check for explicit person descriptions
+  const personMatch = text.match(/(?:person|woman|man|girl|guy|creator|influencer|host)[^,.]*(?:with|wearing|in)[^,.]+/i);
+  if (personMatch) {
+    return `same person throughout — ${personMatch[0].trim()}`;
   }
-): string {
-  const moodLighting: Record<string, string> = {
-    tense: "cooler lighting, deeper shadows, slightly desaturated",
-    hopeful: "warm light beginning to break through, side lighting",
-    triumphant: "bright warm golden light, high key, celebratory",
-    calm: "soft even lighting, gentle and neutral",
-    resolved: "warm soft light, peaceful and settled",
-    neutral: "natural balanced lighting",
-  };
 
-  const shotScale = opts.isFirst
-    ? "wide establishing shot"
-    : opts.isLast
-      ? "clean resolution shot"
-      : opts.focalLength === "85mm" || opts.focalLength === "100mm"
-        ? "close-up detail shot"
-        : opts.focalLength === "24mm" || opts.focalLength === "35mm"
-          ? "wide environmental shot"
-          : "medium shot";
+  if (/unbox|review|tutorial|demo/.test(lower)) {
+    return "same person throughout — a creator at their workspace, natural appearance, casual but styled clothing";
+  }
+  if (/testimonial|story|journey/.test(lower)) {
+    return "same person throughout — natural appearance, relatable, warm expression, casual clothing";
+  }
 
-  const parts = [
-    `${shotScale} of ${beat.content}`,
-    opts.environment,
-    opts.character,
-    moodLighting[opts.mood] || moodLighting.neutral,
-    `color palette: ${opts.palette}`,
-    `shot on ${opts.focalLength}`,
-    "cinematic illustration with photographic grounding",
-    "16:9 widescreen composition",
-  ];
-
-  return parts.join(", ");
-}
-
-function parseTemplateIntoStoryboard(
-  template: ImageAgentTemplate,
-  userInput: string,
-  options: { palette?: string; environment?: string; character?: string }
-): StoryboardPayload {
-  // Template prompts use "||" to separate frames
-  const frameTexts = template.prompt.split("||").map((f) => f.trim());
-  const palette = options.palette || detectPalette(userInput);
-  const environment = options.environment || detectEnvironment(userInput);
-  const character = options.character || detectCharacter(userInput);
-
-  const keyframes: StoryboardKeyframe[] = frameTexts.map((frameText, i) => {
-    // Extract beat label from "FRAME N [LABEL]:" pattern
-    const labelMatch = frameText.match(/FRAME\s*\d+\s*\[(\w[\w\s]*)\]:\s*(.*)/i);
-    const label = labelMatch ? labelMatch[1].trim() : `FRAME ${i + 1}`;
-    const content = labelMatch ? labelMatch[2].trim() : frameText;
-
-    // Extract focal length from the content
-    const focalMatch = content.match(/(\d+mm)/);
-    const focalLength = focalMatch ? focalMatch[1] : FOCAL_LENGTHS[i % FOCAL_LENGTHS.length];
-
-    return {
-      index: i,
-      beatLabel: label,
-      prompt: `${content}, ${environment}, ${character}, color palette: ${palette}, cinematic illustration, 16:9`,
-      negativePrompt: STORYBOARD_NEGATIVE,
-      focalLength,
-      mood: detectBeatMood(content),
-    };
-  });
-
-  return {
-    keyframes,
-    model: "nano_banana",
-    aspectRatio: "16:9",
-    agentUsed: "storyboard",
-    templateUsed: template.id,
-    palette,
-    totalFrames: keyframes.length,
-    consistency: {
-      environment,
-      character,
-      palette,
-      filmStock: "Cinematic illustration, consistent warm grade, light film grain",
-    },
-  };
+  return "same person throughout — natural appearance, warm skin tones, casual but styled clothing";
 }

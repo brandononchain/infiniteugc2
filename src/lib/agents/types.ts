@@ -77,10 +77,11 @@ export interface ImageGenerationPayload {
 export interface StoryboardKeyframe {
   index: number;
   beatLabel: string;
-  prompt: string;
-  negativePrompt: string;
-  focalLength: string;
-  mood: string;
+  beatContent: string;
+  /** Full image payload from generateImagePrompt() — the real prompt */
+  imagePayload: ImageGenerationPayload;
+  /** Consistency context injected before the chunk was sent through the pipeline */
+  consistencyPrefix: string;
 }
 
 export interface StoryboardPayload {
@@ -88,14 +89,11 @@ export interface StoryboardPayload {
   model: "nano_banana";
   aspectRatio: "16:9";
   agentUsed: "storyboard";
-  templateUsed?: string;
-  palette: string;
   totalFrames: number;
   consistency: {
     environment: string;
     character: string;
     palette: string;
-    filmStock: string;
   };
 }
 

@@ -1,41 +1,87 @@
 # Storyboard Keyframe Artist
 
 ## Role
-Autonomous storyboard generation agent that transforms video scripts into visual keyframe sequences. Takes a video script (with labeled sections/beats) and generates a series of image prompts — one per keyframe — that together form a complete visual storyboard.
+Script chunker and image pipeline orchestrator. Takes a video script, breaks it into sections, and feeds each section through the existing image generation pipeline to produce a sequence of nano_banana keyframes.
+
+**This agent does NOT build its own prompts.** It delegates prompt construction to `generateImagePrompt()` — the same pipeline that produces great film-style images for every other agent. The storyboard agent's job is:
+1. Parse the script into chunks (flexible count — the script decides)
+2. Detect consistency anchors (palette, environment, character) from the full script
+3. Prepend consistency context to each chunk
+4. Feed each chunk through the image pipeline
+5. Return the sequence of image payloads as keyframes
 
 ## Domain
-Storyboard visualization, shot-by-shot image generation, visual narrative planning, pre-production art direction. Bridges the gap between written scripts and generated video by creating a visual blueprint.
+Script chunking, visual sequence orchestration, consistency enforcement across frames. Bridges scripts → image pipeline → keyframe sequences.
 
 ## Voice
-Cinematic, precise, shot-aware. Thinks in frames and transitions. Every keyframe must tell you what the camera sees, where the light falls, and what emotion the frame carries.
+The storyboard agent has no voice in the image prompts themselves — the image pipeline handles that. Its voice is in how it chunks: finding natural break points, inferring beat labels, and detecting the visual DNA that needs to stay consistent across frames.
 
 ## Model
-**nano_banana** (Gemini-powered) — chosen for its strength in creative/artistic interpretation, ability to handle varied visual styles within a single sequence, and fast generation for batch keyframe production.
+**nano_banana** — always. The storyboard agent locks this model for all keyframes.
 
-## Default Camera Profile
-- **Lens**: Varies per beat — wide establishing (24mm), medium dialogue (50mm), close-up emotion (85mm)
-- **Lighting**: Matches script mood — transitions across keyframes to show time/emotion progression
-- **Film Stock**: Consistent within a storyboard — set once based on overall project tone
-- **Post**: Light sketch/illustration aesthetic with photographic grounding
+## Flow
+
+```
+User Script
+    │
+    ▼
+┌─────────────────────────┐
+│   chunkScript()          │
+│   Parse into sections    │
+│   [HOOK] [STEP 1] [CTA] │
+│   or paragraphs/sentences│
+│   Flexible frame count   │
+└──────────┬──────────────┘
+           │
+    ▼ for each chunk
+┌─────────────────────────┐
+│   Prepend consistency    │
+│   prefix to chunk:       │
+│   "Scene: ...,           │
+│    Subject: ...,         │
+│    Color palette: ..."   │
+└──────────┬──────────────┘
+           │
+    ▼ per chunk
+┌─────────────────────────┐
+│   generateImagePrompt()  │
+│   (the real pipeline)    │
+│   → classification       │
+│   → template matching    │
+│   → style modifiers      │
+│   → camera profiles      │
+│   → entity injection     │
+│   → negative prompts     │
+└──────────┬──────────────┘
+           │
+    ▼
+┌─────────────────────────┐
+│   StoryboardPayload      │
+│   keyframes[]            │
+│   each with full         │
+│   ImageGenerationPayload │
+└─────────────────────────┘
+```
+
+## Chunking Strategies (tried in order)
+
+1. **Explicit markers**: `[HOOK]`, `[STEP 1]`, `[CTA]`, etc. — uses these as section boundaries
+2. **Numbered sections**: `1.` `2.` `3.` — splits on numbering
+3. **Paragraph breaks**: Double newlines — each paragraph becomes a chunk
+4. **Sentence grouping**: Groups sentences into chunks of ~15+ words each
+
+No minimum or maximum frame count forced. A 2-section script produces 2 keyframes. A 12-section script produces 12 keyframes. The script decides.
+
+## Consistency Anchors
+
+Before each chunk enters the image pipeline, it gets prefixed with:
+- **Scene**: Inferred environment (kitchen, bathroom, workspace, outdoor, etc.)
+- **Subject**: Inferred character description (same across all frames)
+- **Color palette**: Inferred from script mood keywords
+
+This prefix ensures the image pipeline produces visually coherent frames even though it classifies and processes each chunk independently.
 
 ## Routing Signals
 - "storyboard", "keyframe", "shot list", "scene breakdown", "visual plan"
-- "script to images", "pre-production", "shot by shot", "sequence"
-- "scene 1", "scene 2", "act", "beat"
+- "script to images", "pre-production", "shot by shot", "sequence", "frames"
 - Any input containing `[SECTION]` or `[SHOT]` markers
-
-## Special Behavior
-Unlike other image sub-agents that generate a single image, the Storyboard agent generates a **sequence** of images (typically 4-8 keyframes). It:
-1. Parses the input script into beats/sections
-2. Assigns a camera setup, lighting mood, and composition per beat
-3. Generates individual prompts for each keyframe
-4. Maintains visual consistency across the sequence (same color palette, same characters, same environment)
-5. Automatically calls `nano_banana` model for each keyframe in batch
-
-## Consistency Protocol
-To maintain visual coherence across keyframes:
-- **Lock the palette**: Define 3-4 dominant colors in frame 1, reference them in all subsequent frames
-- **Lock the environment**: If scene is "modern apartment", every frame uses that same environment description
-- **Lock the character**: If a person appears, use the exact same description (hair, clothing, skin tone) in every frame
-- **Progress the light**: Lighting can evolve (morning → midday → evening) but should transition smoothly
-- **Vary the lens**: Each keyframe should use a different focal length to create visual rhythm
