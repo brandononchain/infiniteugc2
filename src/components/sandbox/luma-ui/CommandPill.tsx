@@ -13,10 +13,14 @@ import {
   PencilSimple,
   User,
   BookOpen,
+  Lightning,
+  Robot,
+  CircleNotch,
 } from "@phosphor-icons/react";
 import { AnimatePresence, motion } from "framer-motion";
 import type { Avatar } from "./AvatarPicker";
 import ScriptSelector, { type Script } from "./ScriptSelector";
+import AgentScriptSelector, { type AgentScriptSelection } from "./AgentScriptSelector";
 
 const ENGINES = [
   "HeyGen",
@@ -43,6 +47,12 @@ interface CommandPillProps {
   onAvatarClick: () => void;
   selectedScript: Script | null;
   onSelectScript: (script: Script | null) => void;
+  agentMode: boolean;
+  onToggleAgentMode: () => void;
+  agentTemplate: AgentScriptSelection | null;
+  onSelectAgentTemplate: (selection: AgentScriptSelection | null) => void;
+  onGenerate: () => void;
+  generating: boolean;
 }
 
 export default function CommandPill({
@@ -60,12 +70,20 @@ export default function CommandPill({
   onAvatarClick,
   selectedScript,
   onSelectScript,
+  agentMode,
+  onToggleAgentMode,
+  agentTemplate,
+  onSelectAgentTemplate,
+  onGenerate,
+  generating,
 }: CommandPillProps) {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const engineRef = useRef<HTMLDivElement>(null);
   const scriptRef = useRef<HTMLDivElement>(null);
+  const agentScriptRef = useRef<HTMLDivElement>(null);
   const [showEngineMenu, setShowEngineMenu] = useState(false);
   const [showScriptMenu, setShowScriptMenu] = useState(false);
+  const [showAgentScriptMenu, setShowAgentScriptMenu] = useState(false);
 
   const handleInput = useCallback(
     (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -80,8 +98,21 @@ export default function CommandPill({
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
+      if (prompt.trim()) onGenerate();
     }
   };
+
+  // Click-outside for agent script menu
+  useEffect(() => {
+    if (!showAgentScriptMenu) return;
+    const handler = (e: MouseEvent) => {
+      if (agentScriptRef.current && !agentScriptRef.current.contains(e.target as Node)) {
+        setShowAgentScriptMenu(false);
+      }
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, [showAgentScriptMenu]);
 
   // Click-outside handlers
   useEffect(() => {
@@ -185,29 +216,70 @@ export default function CommandPill({
 
             <div className="w-px h-5 bg-white/[0.06] mx-2" />
 
-            {/* Script selector */}
-            <div ref={scriptRef} className="relative">
-              <button
-                onClick={() => setShowScriptMenu(!showScriptMenu)}
-                className={`p-2.5 rounded-lg transition-all duration-150 ${
-                  showScriptMenu || selectedScript
-                    ? "text-[#00A3FF] bg-[#00A3FF]/[0.08]"
-                    : "text-zinc-500 hover:text-zinc-300 hover:bg-white/[0.05]"
-                }`}
-                title="Script library"
-              >
-                <BookOpen size={20} />
-              </button>
-              <AnimatePresence>
-                {showScriptMenu && (
-                  <ScriptSelector
-                    selectedScript={selectedScript}
-                    onSelect={onSelectScript}
-                    onClose={() => setShowScriptMenu(false)}
-                  />
-                )}
-              </AnimatePresence>
-            </div>
+            {/* Agent mode toggle */}
+            <button
+              onClick={onToggleAgentMode}
+              className={`p-2.5 rounded-lg transition-all duration-150 ${
+                agentMode
+                  ? "text-fuchsia-400 bg-fuchsia-500/[0.08]"
+                  : "text-zinc-500 hover:text-zinc-300 hover:bg-white/[0.05]"
+              }`}
+              title={agentMode ? "Agent Mode ON" : "Agent Mode OFF"}
+            >
+              <Lightning size={18} weight={agentMode ? "fill" : "regular"} />
+            </button>
+
+            {/* Agent Script selector (when agent mode on) */}
+            {agentMode && (
+              <div ref={agentScriptRef} className="relative">
+                <button
+                  onClick={() => setShowAgentScriptMenu(!showAgentScriptMenu)}
+                  className={`p-2.5 rounded-lg transition-all duration-150 ${
+                    showAgentScriptMenu || agentTemplate
+                      ? "text-fuchsia-400 bg-fuchsia-500/[0.08]"
+                      : "text-zinc-500 hover:text-zinc-300 hover:bg-white/[0.05]"
+                  }`}
+                  title="Agent script templates"
+                >
+                  <Robot size={20} weight={agentTemplate ? "fill" : "regular"} />
+                </button>
+                <AnimatePresence>
+                  {showAgentScriptMenu && (
+                    <AgentScriptSelector
+                      selectedTemplate={agentTemplate}
+                      onSelect={onSelectAgentTemplate}
+                      onClose={() => setShowAgentScriptMenu(false)}
+                    />
+                  )}
+                </AnimatePresence>
+              </div>
+            )}
+
+            {/* Legacy script selector (when agent mode off) */}
+            {!agentMode && (
+              <div ref={scriptRef} className="relative">
+                <button
+                  onClick={() => setShowScriptMenu(!showScriptMenu)}
+                  className={`p-2.5 rounded-lg transition-all duration-150 ${
+                    showScriptMenu || selectedScript
+                      ? "text-[#00A3FF] bg-[#00A3FF]/[0.08]"
+                      : "text-zinc-500 hover:text-zinc-300 hover:bg-white/[0.05]"
+                  }`}
+                  title="Script library"
+                >
+                  <BookOpen size={20} />
+                </button>
+                <AnimatePresence>
+                  {showScriptMenu && (
+                    <ScriptSelector
+                      selectedScript={selectedScript}
+                      onSelect={onSelectScript}
+                      onClose={() => setShowScriptMenu(false)}
+                    />
+                  )}
+                </AnimatePresence>
+              </div>
+            )}
 
             {/* Settings */}
             <button
@@ -321,10 +393,19 @@ export default function CommandPill({
 
             {/* Generate */}
             <button
-              disabled={!prompt.trim()}
-              className="w-9 h-9 rounded-full bg-[#00A3FF] flex items-center justify-center flex-shrink-0 shadow-[0_0_16px_rgba(0,163,255,0.35)] hover:shadow-[0_0_24px_rgba(0,163,255,0.55)] hover:brightness-110 transition-all duration-200 disabled:opacity-20 disabled:shadow-none disabled:cursor-not-allowed"
+              onClick={onGenerate}
+              disabled={!prompt.trim() || generating}
+              className={`w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0 transition-all duration-200 disabled:opacity-20 disabled:shadow-none disabled:cursor-not-allowed ${
+                agentMode
+                  ? "bg-fuchsia-500 shadow-[0_0_16px_rgba(217,70,239,0.35)] hover:shadow-[0_0_24px_rgba(217,70,239,0.55)]"
+                  : "bg-[#00A3FF] shadow-[0_0_16px_rgba(0,163,255,0.35)] hover:shadow-[0_0_24px_rgba(0,163,255,0.55)]"
+              } hover:brightness-110`}
             >
-              <ArrowUp size={17} weight="bold" className="text-white" />
+              {generating ? (
+                <CircleNotch size={17} weight="bold" className="text-white animate-spin" />
+              ) : (
+                <ArrowUp size={17} weight="bold" className="text-white" />
+              )}
             </button>
           </div>
         </div>

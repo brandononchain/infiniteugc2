@@ -12,7 +12,8 @@ export type ImageAgentCategory =
   | "tech-gadgets"
   | "abstract-artistic"
   | "social-media"
-  | "brand-marketing";
+  | "brand-marketing"
+  | "storyboard";
 
 export type ImageStyle =
   | "photorealistic"
@@ -69,6 +70,33 @@ export interface ImageGenerationPayload {
   templateUsed?: string;
   confidence: number;
   needsClarification: boolean;
+}
+
+// ── Storyboard Types ─────────────────────────────────────────────────────────
+
+export interface StoryboardKeyframe {
+  index: number;
+  beatLabel: string;
+  prompt: string;
+  negativePrompt: string;
+  focalLength: string;
+  mood: string;
+}
+
+export interface StoryboardPayload {
+  keyframes: StoryboardKeyframe[];
+  model: "nano_banana";
+  aspectRatio: "16:9";
+  agentUsed: "storyboard";
+  templateUsed?: string;
+  palette: string;
+  totalFrames: number;
+  consistency: {
+    environment: string;
+    character: string;
+    palette: string;
+    filmStock: string;
+  };
 }
 
 // ── Video Generation Agent Types ─────────────────────────────────────────────
