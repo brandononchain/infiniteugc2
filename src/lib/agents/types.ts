@@ -13,6 +13,7 @@ export type ImageAgentCategory =
   | "abstract-artistic"
   | "social-media"
   | "brand-marketing"
+  | "b-roll"
   | "storyboard";
 
 export type ImageStyle =
@@ -70,6 +71,44 @@ export interface ImageGenerationPayload {
   templateUsed?: string;
   confidence: number;
   needsClarification: boolean;
+  /** Internal prompting chain — enrichments applied behind the scenes */
+  internalPrompts?: InternalPromptStep[];
+}
+
+// ── Internal Prompting System ────────────────────────────────────────────────
+// The internal prompting chain runs BEFORE the final prompt is assembled.
+// Each step enriches the prompt with domain knowledge without user interaction.
+
+export interface InternalPromptStep {
+  /** Which enrichment ran */
+  step: string;
+  /** What it added or changed */
+  applied: string;
+}
+
+export interface ProductContext {
+  /** Product name/type extracted or provided */
+  product?: string;
+  /** Brand name if detected */
+  brand?: string;
+  /** Product materials/textures */
+  materials?: string[];
+  /** Product colors */
+  colors?: string[];
+}
+
+export interface InternalPromptConfig {
+  /** Product to inject into the image */
+  productContext?: ProductContext;
+  /** Force a specific sub-agent (bypass classification) */
+  forceAgent?: ImageAgentCategory;
+  /** Additional context from the storyboard agent */
+  storyboardContext?: {
+    environment: string;
+    character: string;
+    palette: string;
+    beatLabel: string;
+  };
 }
 
 // ── Storyboard Types ─────────────────────────────────────────────────────────
@@ -77,10 +116,11 @@ export interface ImageGenerationPayload {
 export interface StoryboardKeyframe {
   index: number;
   beatLabel: string;
-  prompt: string;
-  negativePrompt: string;
-  focalLength: string;
-  mood: string;
+  beatContent: string;
+  /** Full image payload from generateImagePrompt() — the real prompt */
+  imagePayload: ImageGenerationPayload;
+  /** Consistency context injected before the chunk was sent through the pipeline */
+  consistencyPrefix: string;
 }
 
 export interface StoryboardPayload {
@@ -88,14 +128,11 @@ export interface StoryboardPayload {
   model: "nano_banana";
   aspectRatio: "16:9";
   agentUsed: "storyboard";
-  templateUsed?: string;
-  palette: string;
   totalFrames: number;
   consistency: {
     environment: string;
     character: string;
     palette: string;
-    filmStock: string;
   };
 }
 

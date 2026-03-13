@@ -15,6 +15,9 @@ import type {
   ImageGenerationPayload,
   StoryboardKeyframe,
   StoryboardPayload,
+  InternalPromptStep,
+  InternalPromptConfig,
+  ProductContext,
 } from "./types";
 
 // ── Routing Table (from Master Agent.md) ─────────────────────────────────────
@@ -28,6 +31,7 @@ const ROUTING_SIGNALS: Record<ImageAgentCategory, string[]> = {
   "abstract-artistic": ["abstract", "texture", "gradient", "pattern", "3d", "geometric", "art", "marble", "liquid", "fractal", "surreal", "void", "neon"],
   "social-media": ["social", "post", "story", "reel", "quote", "testimonial", "carousel", "background", "card", "overlay", "text-ready", "thumbnail"],
   "brand-marketing": ["brand", "campaign", "hero", "ad", "marketing", "launch", "premium", "commercial", "advertisement", "luxury", "editorial ad"],
+  "b-roll": ["b-roll", "b roll", "broll", "cutaway", "insert shot", "filler", "transition", "ambient", "establishing shot", "detail shot", "texture shot", "atmosphere shot", "environment shot"],
   "storyboard": ["storyboard", "keyframe", "shot list", "scene breakdown", "visual plan", "script to images", "pre-production", "shot by shot", "sequence", "scene 1", "scene 2", "frames"],
 };
 
@@ -67,6 +71,7 @@ const CATEGORY_NEGATIVES: Partial<Record<ImageAgentCategory, string>> = {
   "social-media": "complex composition, muddy colors, low contrast",
   "brand-marketing": "cluttered, amateur lighting, product obscured",
   "lifestyle": "sterile, cold, overcrowded, harsh artificial lighting",
+  "b-roll": "people as primary subject, text, branding, direct product focus, busy compositions",
 };
 
 // ── Sub-Agent Definitions ────────────────────────────────────────────────────
@@ -113,6 +118,78 @@ const PRODUCT_UGC_TEMPLATES: ImageAgentTemplate[] = [
     description: "Extreme close-up highlighting product materials",
     tags: ["macro", "texture", "detail", "close-up"],
     prompt: "Extreme macro close-up of product surface texture and material details, shallow depth of field with only the texture plane in focus, side lighting raking across the surface to reveal micro-details, material grain and finish clearly visible, abstract yet identifiable as the product, shot on 100mm macro lens f/4, color palette derived from the product itself",
+  },
+  // ── NEW: Selfie with Product ───────────────────────────────────────────────
+  {
+    id: "selfie-product",
+    name: "Selfie with Product",
+    description: "Front-camera selfie-style shot holding or showing a product",
+    tags: ["selfie", "ugc", "front-camera", "authentic"],
+    prompt: "Front-camera selfie perspective of a person holding a product up near their face, natural indoor lighting from a window, slightly wide-angle distortion typical of phone front camera, genuine happy expression, product label visible and well-lit, bathroom mirror or bedroom background softly blurred, warm skin tones, authentic phone selfie quality with UGC energy, casual and relatable, shot on 24mm equivalent front-facing camera",
+  },
+  // ── NEW: Mirror Shot ───────────────────────────────────────────────────────
+  {
+    id: "mirror-shot",
+    name: "Mirror Shot",
+    description: "Product shown in a mirror reflection — vanity, bathroom, or full-length",
+    tags: ["mirror", "reflection", "ugc", "selfie"],
+    prompt: "Mirror reflection shot showing a person holding or using a product, visible in a clean bathroom or vanity mirror, the phone or camera visible in their hands capturing the moment, ambient bathroom lighting with warm overhead and soft natural window light, mirror edges slightly visible framing the scene, steam or soft haze optional for skincare, authentic Instagram mirror selfie energy, relatable and casual, product clearly visible in the reflection",
+  },
+  // ── NEW: POV Shot ──────────────────────────────────────────────────────────
+  {
+    id: "pov-first-person",
+    name: "POV / First Person",
+    description: "Shot from the user's perspective — hands visible, looking down at product",
+    tags: ["pov", "first-person", "hands", "perspective"],
+    prompt: "First-person POV perspective looking down at hands holding or interacting with a product, the viewer's arms and hands visible in frame from their perspective, natural setting visible in the lower background — desk surface, lap, outdoor scene, soft natural overhead lighting, product details clearly visible from this intimate angle, creates an immersive you-are-there feeling, authentic and personal, shallow depth of field on the product, 24mm wide-angle first-person perspective",
+  },
+  // ── NEW: 3rd Person Lifestyle ──────────────────────────────────────────────
+  {
+    id: "third-person",
+    name: "3rd Person Lifestyle",
+    description: "Subject photographed naturally from outside — candid observer perspective",
+    tags: ["third-person", "candid", "lifestyle", "observer"],
+    prompt: "Candid third-person lifestyle shot of a person using a product naturally in their environment, shot from a respectful distance as if observed by a friend, the person is engaged with the product not looking at camera, soft natural lighting from the environment — window light in a kitchen or outdoor ambient, environmental context rich and detailed, product visible but integrated naturally into the scene, 50mm f/2.0 creating gentle subject separation from background, documentary-style authenticity, warm and relatable",
+  },
+  // ── NEW: Podcast Style ─────────────────────────────────────────────────────
+  {
+    id: "podcast-setup",
+    name: "Podcast / Interview Setup",
+    description: "Professional podcast or interview-style framing with product placement",
+    tags: ["podcast", "interview", "studio", "microphone"],
+    prompt: "Professional podcast or interview-style composition, person seated at a desk or table with a quality microphone visible, product placed naturally on the desk within arm's reach, warm studio-style lighting with soft key light from the side and gentle hair light, acoustic panels or bookshelves in soft focus background, professional but approachable atmosphere, product visible and well-lit on the desk surface, clean audio-studio aesthetic, 50mm f/2.0, warm neutral color palette with subtle brand accent",
+  },
+  // ── NEW: Clothing / Outfit Shot ────────────────────────────────────────────
+  {
+    id: "clothing-ootd",
+    name: "Clothing / Outfit Display",
+    description: "Clothing item styled on a person or as a flatlay",
+    tags: ["clothing", "fashion", "outfit", "apparel"],
+    prompt: "Clothing item displayed beautifully — either worn on a person in a natural setting or laid flat on a clean surface, fabric texture and quality clearly visible with side lighting revealing weave and material, if worn: shot from mid-thigh up showing the fit and drape naturally, if flatlay: carefully styled on linen or wood surface with minimal accessories, color accuracy is paramount, warm natural lighting preserving true fabric colors, 85mm f/2.0 for worn shots or 50mm f/4 for flatlays, fashion-forward but accessible UGC energy",
+  },
+  // ── NEW: Software iPhone/Mobile Screenshot ─────────────────────────────────
+  {
+    id: "software-mobile",
+    name: "Software / App Mobile Shot",
+    description: "iPhone or mobile device showing app UI in lifestyle context",
+    tags: ["software", "app", "mobile", "iphone", "screenshot"],
+    prompt: "Close-up lifestyle shot of a hand holding an iPhone or modern smartphone, screen clearly visible showing an app interface with clean readable UI, the device held at a natural viewing angle slightly tilted toward camera, soft natural background — cafe table, cozy couch, or modern desk, screen brightness balanced with ambient lighting so the UI is clearly visible without washing out, shallow depth of field on the device with soft background, warm skin tones on the hand, 85mm f/1.8, clean and aspirational tech-lifestyle feel",
+  },
+  // ── NEW: Software Web/Desktop Screenshot ───────────────────────────────────
+  {
+    id: "software-web",
+    name: "Software / Web Desktop Shot",
+    description: "Laptop or desktop screen showing web application or SaaS product",
+    tags: ["software", "web", "desktop", "saas", "laptop"],
+    prompt: "Modern laptop or desktop monitor displaying a web application interface, shot from a slight elevated angle showing both the screen content and the premium workspace surrounding it, screen content clearly visible and readable with clean UI design, MacBook or premium laptop on a minimal desk, soft ambient lighting with the screen as a secondary light source casting subtle glow, coffee cup and minimal props suggesting a productive workspace, 35mm f/2.8 capturing both screen and environment, clean modern aesthetic",
+  },
+  // ── NEW: Product-in-Context (add product to any scene) ─────────────────────
+  {
+    id: "product-in-scene",
+    name: "Product Placed in Scene",
+    description: "Any product naturally placed into a specific lifestyle environment",
+    tags: ["product", "context", "scene", "placement"],
+    prompt: "A product naturally placed and integrated into a lifestyle scene as if it belongs there, the product is clearly visible and well-lit but not staged-looking, surrounding environment tells a story about who uses this product and when, warm natural lighting from the environment, the product occupies about 15-25% of the frame — present but not overwhelming, complementary props and surfaces that make sense for the product's use case, authentic lived-in environment, 50mm f/2.0 with the product at the focal plane",
   },
 ];
 
@@ -290,6 +367,22 @@ const ABSTRACT_ARTISTIC_TEMPLATES: ImageAgentTemplate[] = [
     tags: ["bioluminescent", "glow", "organic", "dark"],
     prompt: "Bioluminescent organic forms glowing in deep underwater darkness, tendrils and filaments of living light in electric blue and warm amber, soft particle glow emanating from organic structures, deep bokeh creating depth in the dark water, microscopic detail on the luminous surfaces — cellular patterns and translucent membranes, mysterious and meditative atmosphere, macro photography aesthetic applied to a fantastical subject, rich contrast between absolute dark and intense luminous highlights",
   },
+  // ── NEW: 3D Vegetable / Food Art ───────────────────────────────────────────
+  {
+    id: "3d-vegetable",
+    name: "3D Vegetable / Food Art",
+    description: "Hyper-stylized 3D rendered vegetables and food with artistic treatment",
+    tags: ["3d", "vegetable", "food-art", "render", "stylized"],
+    prompt: "Hyper-stylized 3D render of vibrant fresh vegetables or fruits, each piece with slightly exaggerated proportions and impossible perfection — glossy surfaces with subsurface scattering showing the light passing through translucent flesh, droplets of water catching dramatic studio lighting, arranged on a clean infinite gradient surface, Pixar-quality rendering with photorealistic materials on cartoon-proportioned subjects, dramatic rim lighting creating glowing edges on the organic forms, rich saturated natural colors pushed 20% beyond real, Cinema 4D or Octane render aesthetic",
+  },
+  // ── NEW: 3D Animation Style ────────────────────────────────────────────────
+  {
+    id: "3d-animation",
+    name: "3D Animation / Pixar Style",
+    description: "Objects or scenes rendered in modern 3D animation style",
+    tags: ["3d", "animation", "pixar", "render", "cartoon"],
+    prompt: "Modern 3D animation-style render of a scene or object, Pixar or Dreamworks quality with clean smooth surfaces, soft global illumination creating beautiful bounced light, subsurface scattering on translucent materials, slightly stylized proportions — rounder softer friendlier than reality, rich saturated color palette with warm lighting, shallow depth of field creating cinematic bokeh, subtle ambient occlusion in crevices, the scene feels like a frame from a high-budget animated film, clean and inviting with remarkable material detail",
+  },
 ];
 
 const SOCIAL_MEDIA_TEMPLATES: ImageAgentTemplate[] = [
@@ -309,10 +402,24 @@ const SOCIAL_MEDIA_TEMPLATES: ImageAgentTemplate[] = [
   },
   {
     id: "before-after-split",
-    name: "Before/After Split",
-    description: "Split composition designed for transformation content",
+    name: "Before/After Split Background",
+    description: "Split composition background designed for transformation overlays",
     tags: ["social", "before-after", "split", "transformation"],
     prompt: "Split-composition background for a before and after comparison graphic, left side slightly darker muted and cooler tones representing before state, right side brighter warmer and more vibrant representing after state, subtle diagonal or clean vertical dividing line between the two zones, both sides have open space for overlay content, dramatic contrast between the two moods while maintaining visual cohesion, clean modern aesthetic",
+  },
+  {
+    id: "before-after-skincare",
+    name: "Before/After Skincare",
+    description: "Skincare transformation — dull skin to glowing radiant skin",
+    tags: ["before-after", "skincare", "transformation", "glow"],
+    prompt: "Side-by-side skincare transformation image, left side showing skin with visible texture and uneven tone under flat unflattering fluorescent-style lighting, right side showing the same skin area now glowing and radiant with dewy finish under warm flattering beauty lighting, close-up on skin texture so the difference is dramatic and visible, clean clinical comparison format, 85mm macro f/2.8, skin tones natural and realistic on both sides, the lighting change alone tells the story of transformation",
+  },
+  {
+    id: "before-after-space",
+    name: "Before/After Space Transformation",
+    description: "Room or space makeover — cluttered to organized, or old to new",
+    tags: ["before-after", "space", "room", "transformation"],
+    prompt: "Before and after room transformation composition, left half showing a slightly messy or dated space with cooler muted lighting, right half showing the same angle of a beautifully organized and styled space with warm inviting lighting, the architectural bones are the same on both sides creating a clear comparison, dramatic improvement in styling lighting and atmosphere, wide angle 24mm to capture the full space, interior design magazine quality on the after side",
   },
   {
     id: "story-atmosphere",
@@ -354,41 +461,77 @@ const BRAND_MARKETING_TEMPLATES: ImageAgentTemplate[] = [
   },
 ];
 
+// ── B-Roll Templates ─────────────────────────────────────────────────────────
+
+const BROLL_TEMPLATES: ImageAgentTemplate[] = [
+  {
+    id: "broll-texture-detail",
+    name: "Texture / Material Detail",
+    description: "Extreme close-up of a surface, material, or texture — abstract and cinematic",
+    tags: ["b-roll", "texture", "detail", "macro", "abstract"],
+    prompt: "Extreme macro close-up of a rich surface texture, side lighting raking across to reveal every micro-detail, shallow depth of field with only a thin plane in focus, the material fills the entire frame creating an abstract landscape — could be fabric weave, brushed metal, liquid surface, wood grain, or stone, warm amber or cool blue lighting depending on mood, cinematic 16:9 composition, no identifiable product or person, pure visual texture for editorial cutaway, 100mm macro f/4, film grain for analog warmth",
+  },
+  {
+    id: "broll-pour-drip",
+    name: "Liquid Pour / Drip",
+    description: "Slow-motion style liquid pouring, dripping, or splashing",
+    tags: ["b-roll", "liquid", "pour", "splash", "slow-motion"],
+    prompt: "Frozen moment of liquid in motion — a pour, drip, or splash captured at high speed, glossy liquid surface catching dramatic side lighting, individual droplets suspended in air with perfect focus, deep dark background isolating the liquid form, translucent material showing light passing through, caustic light patterns on the surface below, cinematic lighting with a single strong directional source, 100mm macro f/2.8, hyper-detailed commercial beverage or cosmetic quality, no product visible — just the pure beauty of liquid dynamics",
+  },
+  {
+    id: "broll-hands-action",
+    name: "Hands in Action",
+    description: "Close-up of hands performing a task — crafting, typing, cooking, applying",
+    tags: ["b-roll", "hands", "action", "close-up", "craft"],
+    prompt: "Cinematic close-up of hands performing an action — could be typing on a keyboard, kneading dough, applying skincare, arranging flowers, or crafting, warm natural side lighting illuminating the hands and the task, shallow depth of field isolating the hands from the environment, the background is a soft blur of the workspace, skin tones warm and natural with visible texture, the action frozen mid-movement suggesting graceful motion, 85mm f/1.8, cinematic 16:9 aspect, no face visible, just hands and their purposeful work",
+  },
+  {
+    id: "broll-establishing",
+    name: "Establishing / Environment Shot",
+    description: "Wide environmental shot setting the scene — city, nature, interior",
+    tags: ["b-roll", "establishing", "wide", "environment", "scene"],
+    prompt: "Wide cinematic establishing shot of an environment — could be a city skyline at golden hour, a misty mountain landscape, a modern office lobby, or a cozy neighborhood street, dramatic natural lighting creating long shadows and warm tones, depth created through atmospheric perspective with haze or fog, no people in primary focus — they may be tiny figures adding scale, 24mm wide-angle lens capturing the full scope, cinematic 2.39:1 or 16:9 composition, this is the first frame that sets the world of the story, film-quality color grading",
+  },
+  {
+    id: "broll-transition",
+    name: "Abstract Transition Frame",
+    description: "Abstract visual designed as a transition between scenes — light, motion, blur",
+    tags: ["b-roll", "transition", "abstract", "motion", "light"],
+    prompt: "Abstract transitional visual — could be light leaks streaming across the frame, motion blur of a moving scene, bokeh circles floating in darkness, or soft focus color fields shifting, designed to work as a visual bridge between two scenes, warm or cool depending on the transition mood, ethereal and non-representational, 16:9 cinematic composition, no identifiable subject — pure light and color and motion, soft film grain, the kind of frame you see between scenes in high-end brand films or documentaries",
+  },
+  {
+    id: "broll-overhead-workspace",
+    name: "Overhead Workspace / Process",
+    description: "Top-down bird's eye view of a workspace or process in progress",
+    tags: ["b-roll", "overhead", "workspace", "top-down", "process"],
+    prompt: "Perfectly overhead top-down view of a workspace mid-process, tools and materials arranged with working chaos — not staged but naturally paused mid-task, soft even overhead lighting creating minimal shadows, the surface tells a story of work in progress — paint swatches, ingredients, fabric samples, code printouts, or design tools, muted color palette with pops of color from materials, 35mm lens shot from directly above, occupies the full frame edge to edge, documentary-style authenticity, no person visible — just their workspace evidence",
+  },
+  {
+    id: "broll-product-ingredient",
+    name: "Product Ingredients / Components",
+    description: "Raw ingredients or components that make up a product — scattered artistically",
+    tags: ["b-roll", "ingredients", "components", "scattered", "deconstructed"],
+    prompt: "Artistically scattered raw ingredients or components of a product on a clean surface — herbs, minerals, extracts, mechanical parts, or fabric swatches depending on the product type, each element individually lit with soft directional light, slight overhead angle showing the collection, generous spacing between elements for a clean look, color palette derived from the actual materials, suggests quality and transparency about what goes into the product, 50mm f/4 for edge-to-edge sharpness, editorial still-life quality",
+  },
+  {
+    id: "broll-time-atmosphere",
+    name: "Time of Day / Atmosphere",
+    description: "Purely atmospheric shot capturing a specific time and mood",
+    tags: ["b-roll", "atmosphere", "mood", "time-of-day", "cinematic"],
+    prompt: "Pure atmospheric frame capturing a specific moment in time — early morning mist, golden hour warmth, blue hour twilight, or late night neon glow, no subject or story — just the quality of light and air at that moment, volumetric rays or haze visible, rich tonal depth from deep shadows to bright highlights, the image evokes a feeling more than a subject, cinematic 16:9 composition with natural leading lines, 35mm f/2.0 lens, film-quality color grading that defines the time period, editorial or documentary interstitial quality",
+  },
+];
+
+// Storyboard "templates" are NOT prescriptive frame prompts.
+// They're just hints the user can browse in the UI for script structure ideas.
+// The actual image prompts come from generateImagePrompt() per-chunk.
 const STORYBOARD_TEMPLATES: ImageAgentTemplate[] = [
   {
-    id: "ugc-ad-storyboard",
-    name: "UGC Ad Storyboard (5 frames)",
-    description: "Visual storyboard for a standard UGC product advertisement",
-    tags: ["storyboard", "ugc", "ad", "product", "sequence"],
-    prompt: "FRAME 1 [HOOK]: Wide shot of a person in a bright modern bathroom, looking at camera with expressive energy, natural window light, warm tones, 24mm || FRAME 2 [PROBLEM]: Medium shot of same person gesturing frustration, slightly dimmer lighting, same environment, 50mm || FRAME 3 [DISCOVERY]: Close-up of hands holding and presenting the product, soft focused background, rim light on product edges, 85mm || FRAME 4 [DEMO]: Medium-close shot actively using the product, visible satisfaction, bright warm lighting, 50mm || FRAME 5 [CTA]: Medium-wide shot holding product near face, direct eye contact, warm golden lighting, confident smile, 35mm",
-  },
-  {
-    id: "cinematic-hero-storyboard",
-    name: "Cinematic Product Launch Storyboard (6 frames)",
-    description: "Premium storyboard for a cinematic product reveal sequence",
-    tags: ["storyboard", "cinematic", "product", "launch", "premium"],
-    prompt: "FRAME 1 [ATMOSPHERE]: Ultra-wide dark environment, mist and volumetric light, mysterious, 24mm anamorphic || FRAME 2 [DETAIL]: Extreme macro of surface texture, side lighting, abstract, 100mm macro || FRAME 3 [REVEAL]: Medium shot product emerging from darkness, rim light silhouette, 50mm || FRAME 4 [HERO]: Full product beauty shot, orbiting light, glossy surface reflections, 70mm || FRAME 5 [CONTEXT]: Product in aspirational environment, hand reaching, 35mm || FRAME 6 [LOCKUP]: Clean brand frame, vast dark negative space, typography zone, 50mm",
-  },
-  {
-    id: "tutorial-storyboard",
-    name: "Tutorial/How-To Storyboard (5 frames)",
-    description: "Step-by-step tutorial storyboard with clear visual progression",
-    tags: ["storyboard", "tutorial", "how-to", "educational", "steps"],
-    prompt: "FRAME 1 [HOOK]: Medium shot of person at clean workspace, knowing expression, bright even lighting, 35mm || FRAME 2 [STEP 1]: Top-down overhead of hands performing first step, tools laid out, 50mm || FRAME 3 [STEP 2]: Close-up detail of key technique, shallow DOF, 85mm macro || FRAME 4 [STEP 3]: Medium 45-degree angle showing finishing step, result becoming visible, 50mm || FRAME 5 [RESULT]: Wide shot showing beautiful finished result, warm bright lighting, 24mm",
-  },
-  {
-    id: "testimonial-storyboard",
-    name: "Testimonial Journey Storyboard (6 frames)",
-    description: "Customer testimonial arc from skepticism to advocacy",
-    tags: ["storyboard", "testimonial", "journey", "emotional", "trust"],
-    prompt: "FRAME 1 [SKEPTIC]: Medium shot, casual home, skeptical expression, cool-neutral lighting, 50mm || FRAME 2 [RESEARCH]: Close-up hands holding phone, screen glow on face, 85mm || FRAME 3 [FIRST TRY]: Medium shot cautiously trying product, lighting warming slightly, 50mm || FRAME 4 [SURPRISE]: Close-up face showing genuine surprise, warm golden light, 85mm || FRAME 5 [RESULT]: Medium-wide confidently using product, bright warm lighting, 35mm || FRAME 6 [ADVOCATE]: Medium shot looking at camera with enthusiasm, product held up, 50mm",
-  },
-  {
-    id: "story-arc-storyboard",
-    name: "Story-Driven Narrative Storyboard (7 frames)",
-    description: "Full emotional narrative arc with cinematic progression",
-    tags: ["storyboard", "story", "narrative", "emotional", "arc"],
-    prompt: "FRAME 1 [ORDINARY WORLD]: Wide establishing, muted warm colors, everyday environment, 24mm || FRAME 2 [INCITING INCIDENT]: Medium shot of the change moment, dramatic lighting shift, 50mm || FRAME 3 [STRUGGLE]: Close-up showing effort, deeper shadows, cooling temperature, 85mm || FRAME 4 [DISCOVERY]: Medium shot finding the solution, warm light beam in darker scene, 50mm || FRAME 5 [TRANSFORMATION]: Dynamic medium-wide, dramatically warmer, saturating colors, 35mm || FRAME 6 [NEW WORLD]: Wide mirroring frame 1 but transformed, brighter and warmer, 24mm || FRAME 7 [RESOLUTION]: Clean medium shot at peace, warm golden light, 50mm",
+    id: "storyboard-any",
+    name: "Auto-Storyboard",
+    description: "Paste any script — frames auto-generated from your sections",
+    tags: ["storyboard", "auto", "flexible", "any-script"],
+    prompt: "storyboard keyframe sequence from script",
   },
 ];
 
@@ -548,22 +691,41 @@ export const IMAGE_SUB_AGENTS: ImageSubAgent[] = [
     templates: BRAND_MARKETING_TEMPLATES,
   },
   {
-    id: "storyboard",
-    name: "Storyboard Keyframe Artist",
-    description: "Transforms video scripts into visual keyframe sequences via nano_banana",
-    voice: "Cinematic, precise, shot-aware",
+    id: "b-roll",
+    name: "B-Roll Cinematographer",
+    description: "Cinematic cutaway, insert, and filler shots — textures, environments, details, transitions",
+    voice: "Cinematic, atmospheric, non-narrative — pure visual language",
     defaultCamera: {
-      lens: "Varies per beat — 24mm wide, 50mm medium, 85mm close",
-      lighting: "Evolves across sequence to match mood arc",
-      filmStock: "Cinematic illustration with photographic grounding",
-      post: "Consistent grade across all keyframes, light sketch aesthetic",
+      lens: "Varies — 100mm macro for details, 24mm for establishing, 85mm for hands",
+      lighting: "Dramatic directional, natural atmospheric, or abstract light play",
+      filmStock: "Cinematic digital with subtle film grain",
+      post: "Heavy color grading, crushed blacks or lifted shadows depending on mood",
     },
     rules: {
-      must: ["Generate 3-8 keyframes", "Always use nano_banana model", "Maintain character consistency", "Lock color palette across frames", "16:9 aspect ratio always", "Alternate shot scales"],
-      mustNot: ["Fewer than 3 frames", "More than 8 frames", "Inconsistent character descriptions", "Same focal length consecutively", "Forget beat labels"],
-      defaults: { keyframeCount: "5", aspectRatio: "16:9", model: "nano_banana", style: "Cinematic illustration", firstFrame: "Wide establishing 24mm", lastFrame: "Clean resolution shot" },
+      must: ["No primary human subject — hands okay, faces never the focus", "Pure visual storytelling through objects, textures, environments", "Cinematic 16:9 composition", "Strong lighting direction creating depth", "Each frame works as a standalone visual"],
+      mustNot: ["People as the subject", "Product branding or text visible", "Busy or cluttered compositions", "Flat lighting", "Direct-to-camera angles"],
+      defaults: { composition: "Cinematic 16:9", subject: "Environment, texture, or detail", lighting: "Dramatic single-source or natural atmospheric", style: "Documentary/editorial interstitial" },
     },
-    skills: ["Script-to-Visual Translation", "Sequential Composition", "Batch Prompt Engineering", "Mood Progression Mapping", "Automatic Model Routing"],
+    skills: ["Texture & Material Cinematography", "Environmental Atmosphere", "Abstract Motion Suggestion", "Transitional Visual Design", "Ingredient Deconstruction"],
+    templates: BROLL_TEMPLATES,
+  },
+  {
+    id: "storyboard",
+    name: "Storyboard Keyframe Artist",
+    description: "Chunks scripts into sections, feeds each through the image pipeline for nano_banana keyframes",
+    voice: "Cinematic, precise, shot-aware — but the image pipeline does the real prompt work",
+    defaultCamera: {
+      lens: "Determined by image pipeline per-chunk",
+      lighting: "Determined by image pipeline per-chunk",
+      filmStock: "Determined by image pipeline per-chunk",
+      post: "Determined by image pipeline per-chunk",
+    },
+    rules: {
+      must: ["Chunk script into sections", "Flow each chunk through generateImagePrompt()", "Prepend consistency anchors to each chunk", "Always use nano_banana model", "16:9 aspect ratio for all keyframes"],
+      mustNot: ["Build its own prompts — delegate to image pipeline", "Fix the frame count — let the script decide", "Override image pipeline template/style choices"],
+      defaults: { aspectRatio: "16:9", model: "nano_banana", style: "cinematic" },
+    },
+    skills: ["Script Chunking", "Consistency Anchor Detection", "Image Pipeline Orchestration"],
     templates: STORYBOARD_TEMPLATES,
   },
 ];
@@ -581,6 +743,7 @@ export function classifyImageIntent(userPrompt: string): ImageClassification {
     "abstract-artistic": 0,
     "social-media": 0,
     "brand-marketing": 0,
+    "b-roll": 0,
     "storyboard": 0,
   };
 
@@ -658,51 +821,99 @@ export function generateImagePrompt(
     style?: ImageStyle;
     aspectRatio?: string;
     templateId?: string;
+    /** Internal prompting config — used by agents calling other agents */
+    internal?: InternalPromptConfig;
   } = {}
 ): ImageGenerationPayload {
-  const classification = classifyImageIntent(userPrompt);
+  const internalSteps: InternalPromptStep[] = [];
+  let workingPrompt = userPrompt;
+
+  // ══════════════════════════════════════════════════════════════════════════
+  // INTERNAL PROMPTING CHAIN
+  // Runs before classification. Each step enriches the prompt behind the
+  // scenes without user interaction. This is how agents communicate
+  // internally — the storyboard agent passes context, the user passes
+  // product info, and it all gets woven into the prompt before the
+  // pipeline even starts.
+  // ══════════════════════════════════════════════════════════════════════════
+
+  // Step 1: Inject product context if provided
+  if (options.internal?.productContext) {
+    workingPrompt = internalInjectProduct(workingPrompt, options.internal.productContext, internalSteps);
+  }
+
+  // Step 2: Apply storyboard context if this is being called by the storyboard agent
+  if (options.internal?.storyboardContext) {
+    const ctx = options.internal.storyboardContext;
+    const storyPrefix = `Scene: ${ctx.environment}, Subject: ${ctx.character}, Color palette: ${ctx.palette}`;
+    workingPrompt = `${storyPrefix}. ${workingPrompt}`;
+    internalSteps.push({
+      step: "storyboard-context",
+      applied: `Injected storyboard consistency anchors: ${ctx.beatLabel} — ${ctx.environment}`,
+    });
+  }
+
+  // Step 3: Force agent if specified (bypass classification)
+  let classification = classifyImageIntent(workingPrompt);
+  if (options.internal?.forceAgent) {
+    classification = { ...classification, category: options.internal.forceAgent, confidence: 1 };
+    internalSteps.push({
+      step: "force-agent",
+      applied: `Forced to agent: ${options.internal.forceAgent}`,
+    });
+  }
+
   const style = options.style || "photorealistic";
 
   // Get the sub-agent
   const agent = IMAGE_SUB_AGENTS.find((a) => a.id === classification.category)!;
 
-  // Check if a specific template was requested
+  // Step 4: Auto-select template based on content signals
   let templatePrompt: string | undefined;
   let templateUsed: string | undefined;
   if (options.templateId) {
-    const template = agent.templates.find((t) => t.id === options.templateId);
+    // Explicit template requested — search across ALL agents
+    let template = agent.templates.find((t) => t.id === options.templateId);
+    if (!template) {
+      // Template might belong to a different agent — search all
+      for (const a of IMAGE_SUB_AGENTS) {
+        template = a.templates.find((t) => t.id === options.templateId);
+        if (template) break;
+      }
+    }
     if (template) {
       templatePrompt = template.prompt;
       templateUsed = template.id;
     }
   }
 
-  // Build the enhanced prompt
+  // Step 5: Build the enhanced prompt (existing logic)
   let prompt: string;
   if (templatePrompt) {
-    // Template mode: Use template as base, inject user entities
-    prompt = injectEntities(templatePrompt, userPrompt, classification.entities);
+    prompt = injectEntities(templatePrompt, workingPrompt, classification.entities);
   } else if (classification.complexity === "simple") {
-    // Simple input: Find the closest matching template and use it with entity injection
-    const bestTemplate = findBestTemplate(agent, userPrompt);
+    const bestTemplate = findBestTemplate(agent, workingPrompt);
     if (bestTemplate) {
-      prompt = injectEntities(bestTemplate.prompt, userPrompt, classification.entities);
+      prompt = injectEntities(bestTemplate.prompt, workingPrompt, classification.entities);
       templateUsed = bestTemplate.id;
+      internalSteps.push({
+        step: "auto-template",
+        applied: `Auto-matched template: ${bestTemplate.name} (${bestTemplate.id})`,
+      });
     } else {
-      prompt = expandSimplePrompt(userPrompt, agent, style);
+      prompt = expandSimplePrompt(workingPrompt, agent, style);
     }
   } else {
-    // Standard/Complex: Enhance the user's prompt with agent knowledge
-    prompt = enhancePrompt(userPrompt, agent, style, classification);
+    prompt = enhancePrompt(workingPrompt, agent, style, classification);
   }
 
-  // Apply style modifier
+  // Step 6: Apply style modifier
   const styleModifier = STYLE_MODIFIERS[style];
   if (!prompt.toLowerCase().includes(style)) {
     prompt = `${prompt}, ${styleModifier}`;
   }
 
-  // Apply aspect ratio hints
+  // Step 7: Apply aspect ratio hints
   if (options.aspectRatio && ASPECT_RATIO_HINTS[options.aspectRatio]) {
     prompt = `${prompt}, ${ASPECT_RATIO_HINTS[options.aspectRatio]}`;
   }
@@ -721,7 +932,50 @@ export function generateImagePrompt(
     templateUsed,
     confidence: classification.confidence,
     needsClarification: classification.confidence < 0.3 && classification.complexity === "simple",
+    internalPrompts: internalSteps.length > 0 ? internalSteps : undefined,
   };
+}
+
+// ── Internal Prompting: Product Injection ────────────────────────────────────
+// Weaves product details into the prompt naturally so the generated image
+// includes the product without it feeling forced.
+
+function internalInjectProduct(
+  prompt: string,
+  product: ProductContext,
+  steps: InternalPromptStep[]
+): string {
+  const additions: string[] = [];
+
+  if (product.product) {
+    // If the prompt doesn't already mention the product, add it
+    if (!prompt.toLowerCase().includes(product.product.toLowerCase())) {
+      additions.push(`featuring ${product.product}`);
+    }
+  }
+
+  if (product.brand) {
+    additions.push(`by ${product.brand}`);
+  }
+
+  if (product.materials && product.materials.length > 0) {
+    additions.push(`product material: ${product.materials.join(", ")}`);
+  }
+
+  if (product.colors && product.colors.length > 0) {
+    additions.push(`product colors: ${product.colors.join(", ")}`);
+  }
+
+  if (additions.length > 0) {
+    const injection = additions.join(", ");
+    steps.push({
+      step: "product-injection",
+      applied: `Added product context: ${injection}`,
+    });
+    return `${prompt}, ${injection}`;
+  }
+
+  return prompt;
 }
 
 function findBestTemplate(agent: ImageSubAgent, userPrompt: string): ImageAgentTemplate | null {
@@ -839,70 +1093,89 @@ export function getImageTemplates(category: ImageAgentCategory): ImageAgentTempl
   return IMAGE_SUB_AGENTS.find((a) => a.id === category)?.templates || [];
 }
 
-// ── Storyboard Agent: Batch Keyframe Generator ───────────────────────────────
+// ── Storyboard Agent: Script Chunker → Image Pipeline Flow-Through ───────────
+//
+// The storyboard agent does NOT build its own prompts. It:
+//   1. Takes a user's script
+//   2. Chunks it into sections (flexible count based on script length)
+//   3. Detects consistency anchors (palette, environment, character)
+//   4. Prefixes each chunk with consistency context
+//   5. Feeds each chunk through generateImagePrompt() — the REAL image pipeline
+//   6. Returns the array of ImageGenerationPayloads as keyframes
+//
+// This means every keyframe gets the full benefit of: agent classification,
+// template matching, style modifiers, camera profiles, entity injection,
+// negative prompts — all the intelligence that makes nano_banana images great.
+// The storyboard agent just orchestrates the sequence.
 
-const STORYBOARD_NEGATIVE = "text, watermark, blurry, inconsistent style, cartoon, anime, different characters between frames, different environments between frames, low quality";
-
-const FOCAL_LENGTHS = ["24mm", "35mm", "50mm", "70mm", "85mm", "100mm"];
+// (unused, keeping for reference)
+// const FOCAL_LENGTHS = ["24mm", "35mm", "50mm", "70mm", "85mm", "100mm"];
 
 /**
- * Generate a complete storyboard from a script or description.
- * Parses the input into beats, assigns camera setups, and returns
- * individual prompts for batch nano_banana generation.
+ * Generate a storyboard by chunking a script and flowing each chunk
+ * through the existing image generation pipeline (generateImagePrompt).
+ *
+ * Each chunk is prefixed with consistency anchors so the image pipeline
+ * produces visually coherent frames across the sequence.
+ *
+ * The storyboard agent does NOT build its own prompts — it delegates to
+ * the same pipeline that makes great nano_banana images. It just handles:
+ * chunking, consistency, and sequencing.
  */
 export function generateStoryboard(
-  input: string,
+  script: string,
   options: {
-    templateId?: string;
+    style?: ImageStyle;
     palette?: string;
     environment?: string;
     character?: string;
+    /** Product context to inject into every keyframe */
+    productContext?: ProductContext;
   } = {}
 ): StoryboardPayload {
-  const agent = IMAGE_SUB_AGENTS.find((a) => a.id === "storyboard")!;
+  // 1. Chunk the script into sections — flexible count based on the script
+  const chunks = chunkScript(script);
 
-  // If a template is specified, use it
-  if (options.templateId) {
-    const template = agent.templates.find((t) => t.id === options.templateId);
-    if (template) {
-      return parseTemplateIntoStoryboard(template, input, options);
-    }
-  }
+  // 2. Detect consistency anchors from the full script
+  const palette = options.palette || inferPalette(script);
+  const environment = options.environment || inferEnvironment(script);
+  const character = options.character || inferCharacter(script);
 
-  // Otherwise, parse the input into beats
-  const beats = parseScriptBeats(input);
-
-  // Detect consistency anchors
-  const palette = options.palette || detectPalette(input);
-  const environment = options.environment || detectEnvironment(input);
-  const character = options.character || detectCharacter(input);
-
-  const keyframes: StoryboardKeyframe[] = beats.map((beat, i) => {
-    // Alternate focal lengths for visual rhythm
-    const focalLength = FOCAL_LENGTHS[i % FOCAL_LENGTHS.length];
-    // Avoid same focal length as previous frame
-    const adjustedFocal =
-      i > 0 && focalLength === FOCAL_LENGTHS[(i - 1) % FOCAL_LENGTHS.length]
-        ? FOCAL_LENGTHS[(i + 1) % FOCAL_LENGTHS.length]
-        : focalLength;
-
-    const prompt = buildKeyframePrompt(beat, {
-      focalLength: adjustedFocal,
+  // 3. For each chunk, use the INTERNAL PROMPTING system to pass context
+  //    to generateImagePrompt(). No more manual prefix concatenation —
+  //    the internal config handles storyboard context, product injection,
+  //    and agent communication behind the scenes.
+  const keyframes: StoryboardKeyframe[] = chunks.map((chunk, i) => {
+    const consistencyPrefix = buildConsistencyPrefix({
       palette,
       environment,
       character,
-      isFirst: i === 0,
-      isLast: i === beats.length - 1,
-      mood: beat.mood || "neutral",
+      frameIndex: i,
+      totalFrames: chunks.length,
+    });
+
+    // Use the internal prompting system — this is how the storyboard
+    // agent communicates with the image agent internally
+    const imagePayload = generateImagePrompt(chunk.content, {
+      style: options.style || "cinematic",
+      aspectRatio: "16:9",
+      internal: {
+        storyboardContext: {
+          environment,
+          character,
+          palette,
+          beatLabel: chunk.label,
+        },
+        productContext: options.productContext,
+      },
     });
 
     return {
       index: i,
-      beatLabel: beat.label,
-      prompt,
-      negativePrompt: STORYBOARD_NEGATIVE,
-      focalLength: adjustedFocal,
-      mood: beat.mood || "neutral",
+      beatLabel: chunk.label,
+      beatContent: chunk.content,
+      imagePayload,
+      consistencyPrefix,
     };
   });
 
@@ -911,204 +1184,189 @@ export function generateStoryboard(
     model: "nano_banana",
     aspectRatio: "16:9",
     agentUsed: "storyboard",
-    templateUsed: undefined,
-    palette,
     totalFrames: keyframes.length,
-    consistency: {
-      environment,
-      character,
-      palette,
-      filmStock: "Cinematic illustration, consistent warm grade, light film grain",
-    },
+    consistency: { environment, character, palette },
   };
 }
 
-interface ScriptBeat {
+// ── Script Chunking ──────────────────────────────────────────────────────────
+
+interface ScriptChunk {
   label: string;
   content: string;
-  mood?: string;
 }
 
-function parseScriptBeats(input: string): ScriptBeat[] {
-  const beats: ScriptBeat[] = [];
+/**
+ * Chunk a script into sections. Handles multiple formats:
+ * - Explicit markers: [HOOK] content [PROBLEM] content ...
+ * - Numbered sections: 1. content 2. content ...
+ * - Paragraphs: double newline separated blocks
+ * - Sentences: falls back to grouping sentences for short scripts
+ *
+ * No fixed frame count — the script decides how many keyframes it needs.
+ */
+function chunkScript(script: string): ScriptChunk[] {
+  // Try explicit section markers first: [HOOK], [STEP 1], [CTA], etc.
+  const markerChunks = chunkByMarkers(script);
+  if (markerChunks.length >= 2) return markerChunks;
 
-  // Try to parse section markers like [HOOK], [STEP 1], [CTA], etc.
-  const sectionRegex = /\[([A-Z][A-Z0-9 _-]*)\][\s:]*([^\[]*)/g;
+  // Try numbered sections: "1." "2." etc.
+  const numberedChunks = chunkByNumbering(script);
+  if (numberedChunks.length >= 2) return numberedChunks;
+
+  // Try paragraph breaks (double newline)
+  const paragraphChunks = chunkByParagraphs(script);
+  if (paragraphChunks.length >= 2) return paragraphChunks;
+
+  // Fall back to sentence grouping
+  return chunkBySentences(script);
+}
+
+function chunkByMarkers(script: string): ScriptChunk[] {
+  const chunks: ScriptChunk[] = [];
+  const regex = /\[([A-Z][A-Z0-9 _-]*)\][\s:]*([^\[]*)/g;
   let match;
-  while ((match = sectionRegex.exec(input)) !== null) {
-    beats.push({
-      label: match[1].trim(),
-      content: match[2].trim(),
-      mood: detectBeatMood(match[2]),
+  while ((match = regex.exec(script)) !== null) {
+    const content = match[2].trim();
+    if (content.length > 5) {
+      chunks.push({ label: match[1].trim(), content });
+    }
+  }
+  return chunks;
+}
+
+function chunkByNumbering(script: string): ScriptChunk[] {
+  const chunks: ScriptChunk[] = [];
+  const regex = /(?:^|\n)\s*(\d+)[.)]\s+([^\n]+)/g;
+  let match;
+  while ((match = regex.exec(script)) !== null) {
+    const content = match[2].trim();
+    if (content.length > 5) {
+      chunks.push({ label: `SECTION ${match[1]}`, content });
+    }
+  }
+  return chunks;
+}
+
+function chunkByParagraphs(script: string): ScriptChunk[] {
+  const paragraphs = script
+    .split(/\n\s*\n/)
+    .map((p) => p.trim())
+    .filter((p) => p.length > 10);
+
+  return paragraphs.map((content, i) => ({
+    label: `BEAT ${i + 1}`,
+    content,
+  }));
+}
+
+function chunkBySentences(script: string): ScriptChunk[] {
+  const sentences = script
+    .split(/[.!?]+/)
+    .map((s) => s.trim())
+    .filter((s) => s.length > 10);
+
+  if (sentences.length === 0) {
+    return [{ label: "FRAME 1", content: script }];
+  }
+
+  // Group sentences so each chunk has enough substance (~15+ words).
+  // No fixed frame count — the script length decides.
+  const chunks: ScriptChunk[] = [];
+  let currentWords: string[] = [];
+  let currentSentences: string[] = [];
+
+  for (const sentence of sentences) {
+    currentSentences.push(sentence);
+    currentWords.push(...sentence.split(/\s+/));
+
+    if (currentWords.length >= 15) {
+      chunks.push({
+        label: `BEAT ${chunks.length + 1}`,
+        content: currentSentences.join(". "),
+      });
+      currentWords = [];
+      currentSentences = [];
+    }
+  }
+
+  // Don't drop remaining sentences — add as final chunk
+  if (currentSentences.length > 0) {
+    chunks.push({
+      label: `BEAT ${chunks.length + 1}`,
+      content: currentSentences.join(". "),
     });
   }
 
-  // If no section markers found, split by sentences/paragraphs
-  if (beats.length === 0) {
-    const sentences = input
-      .split(/[.!?\n]+/)
-      .map((s) => s.trim())
-      .filter((s) => s.length > 10);
-
-    // Group sentences into 3-6 beats
-    const targetBeats = Math.min(Math.max(3, Math.ceil(sentences.length / 2)), 6);
-    const beatsPerGroup = Math.ceil(sentences.length / targetBeats);
-    const defaultLabels = ["OPENING", "SETUP", "DEVELOPMENT", "CLIMAX", "RESOLUTION", "CLOSE"];
-
-    for (let i = 0; i < targetBeats; i++) {
-      const groupSentences = sentences.slice(
-        i * beatsPerGroup,
-        (i + 1) * beatsPerGroup
-      );
-      if (groupSentences.length > 0) {
-        beats.push({
-          label: defaultLabels[i] || `BEAT ${i + 1}`,
-          content: groupSentences.join(". "),
-          mood: detectBeatMood(groupSentences.join(" ")),
-        });
-      }
-    }
-  }
-
-  // Ensure at least 3 beats
-  if (beats.length < 3) {
-    while (beats.length < 3) {
-      beats.push({
-        label: beats.length === 1 ? "DEVELOPMENT" : "CLOSE",
-        content: input,
-        mood: "neutral",
-      });
-    }
-  }
-
-  // Cap at 8
-  return beats.slice(0, 8);
+  return chunks;
 }
 
-function detectBeatMood(text: string): string {
-  const lower = text.toLowerCase();
-  if (/struggle|problem|frustrat|fail|wrong|bad/.test(lower)) return "tense";
-  if (/discover|found|reveal|surprise/.test(lower)) return "hopeful";
-  if (/result|success|transform|amaz|love/.test(lower)) return "triumphant";
-  if (/begin|start|morning|first/.test(lower)) return "calm";
-  if (/end|final|close|last/.test(lower)) return "resolved";
-  return "neutral";
+// ── Consistency Anchors ──────────────────────────────────────────────────────
+//
+// Detect scene-level properties from the full script. These get prepended
+// to each chunk before it enters the image pipeline, so every keyframe
+// inherits the same visual DNA.
+
+function buildConsistencyPrefix(opts: {
+  palette: string;
+  environment: string;
+  character: string;
+  frameIndex: number;
+  totalFrames: number;
+}): string {
+  const parts = [
+    `Scene: ${opts.environment}`,
+    `Subject: ${opts.character}`,
+    `Color palette: ${opts.palette}`,
+  ];
+
+  if (opts.frameIndex === 0) {
+    parts.push("wide establishing shot to set the scene");
+  } else if (opts.frameIndex === opts.totalFrames - 1) {
+    parts.push("closing frame, resolution");
+  }
+
+  return parts.join(", ");
 }
 
-function detectPalette(text: string): string {
+function inferPalette(text: string): string {
   const lower = text.toLowerCase();
   if (/luxury|premium|gold|elegant/.test(lower)) return "deep blacks, warm gold, cream";
   if (/fresh|clean|natural|organic/.test(lower)) return "soft whites, sage green, natural wood";
   if (/tech|digital|modern|futur/.test(lower)) return "deep navy, cool gray, electric blue accent";
   if (/warm|cozy|comfort|home/.test(lower)) return "warm amber, terracotta, cream, soft brown";
   if (/bold|energy|vibrant|excit/.test(lower)) return "rich saturated tones, warm with pops of contrast";
-  return "warm neutrals with subtle accent, consistent earth tones";
+  if (/dark|moody|noir|mystery/.test(lower)) return "deep shadows, desaturated cool tones, single warm accent";
+  return "warm neutrals, consistent earth tones";
 }
 
-function detectEnvironment(text: string): string {
+function inferEnvironment(text: string): string {
   const lower = text.toLowerCase();
-  if (/kitchen|cook|food/.test(lower)) return "modern bright kitchen with natural materials";
-  if (/bathroom|skincare|beauty/.test(lower)) return "clean modern bathroom with natural light";
-  if (/office|work|desk/.test(lower)) return "minimal modern workspace";
-  if (/outdoor|garden|nature/.test(lower)) return "outdoor natural setting with greenery";
-  if (/studio|dark|product/.test(lower)) return "dark controlled studio environment";
-  return "modern lifestyle interior with natural light";
+  if (/kitchen|cook|food|recipe/.test(lower)) return "modern bright kitchen with natural materials";
+  if (/bathroom|skincare|beauty|vanity/.test(lower)) return "clean modern bathroom with soft natural light";
+  if (/office|work|desk|studio/.test(lower)) return "minimal modern workspace";
+  if (/outdoor|garden|nature|park/.test(lower)) return "outdoor natural setting with soft light";
+  if (/gym|fitness|workout/.test(lower)) return "clean modern gym or fitness space";
+  if (/bedroom|morning|routine/.test(lower)) return "sunlit bedroom with warm morning light";
+  if (/store|shop|retail/.test(lower)) return "clean retail environment with styled displays";
+  return "modern lifestyle interior with natural window light";
 }
 
-function detectCharacter(text: string): string {
-  // Default character description for consistency
-  return "same person throughout — natural appearance, warm skin tones, casual but styled clothing";
-}
+function inferCharacter(text: string): string {
+  const lower = text.toLowerCase();
 
-function buildKeyframePrompt(
-  beat: ScriptBeat,
-  opts: {
-    focalLength: string;
-    palette: string;
-    environment: string;
-    character: string;
-    isFirst: boolean;
-    isLast: boolean;
-    mood: string;
+  // Check for explicit person descriptions
+  const personMatch = text.match(/(?:person|woman|man|girl|guy|creator|influencer|host)[^,.]*(?:with|wearing|in)[^,.]+/i);
+  if (personMatch) {
+    return `same person throughout — ${personMatch[0].trim()}`;
   }
-): string {
-  const moodLighting: Record<string, string> = {
-    tense: "cooler lighting, deeper shadows, slightly desaturated",
-    hopeful: "warm light beginning to break through, side lighting",
-    triumphant: "bright warm golden light, high key, celebratory",
-    calm: "soft even lighting, gentle and neutral",
-    resolved: "warm soft light, peaceful and settled",
-    neutral: "natural balanced lighting",
-  };
 
-  const shotScale = opts.isFirst
-    ? "wide establishing shot"
-    : opts.isLast
-      ? "clean resolution shot"
-      : opts.focalLength === "85mm" || opts.focalLength === "100mm"
-        ? "close-up detail shot"
-        : opts.focalLength === "24mm" || opts.focalLength === "35mm"
-          ? "wide environmental shot"
-          : "medium shot";
+  if (/unbox|review|tutorial|demo/.test(lower)) {
+    return "same person throughout — a creator at their workspace, natural appearance, casual but styled clothing";
+  }
+  if (/testimonial|story|journey/.test(lower)) {
+    return "same person throughout — natural appearance, relatable, warm expression, casual clothing";
+  }
 
-  const parts = [
-    `${shotScale} of ${beat.content}`,
-    opts.environment,
-    opts.character,
-    moodLighting[opts.mood] || moodLighting.neutral,
-    `color palette: ${opts.palette}`,
-    `shot on ${opts.focalLength}`,
-    "cinematic illustration with photographic grounding",
-    "16:9 widescreen composition",
-  ];
-
-  return parts.join(", ");
-}
-
-function parseTemplateIntoStoryboard(
-  template: ImageAgentTemplate,
-  userInput: string,
-  options: { palette?: string; environment?: string; character?: string }
-): StoryboardPayload {
-  // Template prompts use "||" to separate frames
-  const frameTexts = template.prompt.split("||").map((f) => f.trim());
-  const palette = options.palette || detectPalette(userInput);
-  const environment = options.environment || detectEnvironment(userInput);
-  const character = options.character || detectCharacter(userInput);
-
-  const keyframes: StoryboardKeyframe[] = frameTexts.map((frameText, i) => {
-    // Extract beat label from "FRAME N [LABEL]:" pattern
-    const labelMatch = frameText.match(/FRAME\s*\d+\s*\[(\w[\w\s]*)\]:\s*(.*)/i);
-    const label = labelMatch ? labelMatch[1].trim() : `FRAME ${i + 1}`;
-    const content = labelMatch ? labelMatch[2].trim() : frameText;
-
-    // Extract focal length from the content
-    const focalMatch = content.match(/(\d+mm)/);
-    const focalLength = focalMatch ? focalMatch[1] : FOCAL_LENGTHS[i % FOCAL_LENGTHS.length];
-
-    return {
-      index: i,
-      beatLabel: label,
-      prompt: `${content}, ${environment}, ${character}, color palette: ${palette}, cinematic illustration, 16:9`,
-      negativePrompt: STORYBOARD_NEGATIVE,
-      focalLength,
-      mood: detectBeatMood(content),
-    };
-  });
-
-  return {
-    keyframes,
-    model: "nano_banana",
-    aspectRatio: "16:9",
-    agentUsed: "storyboard",
-    templateUsed: template.id,
-    palette,
-    totalFrames: keyframes.length,
-    consistency: {
-      environment,
-      character,
-      palette,
-      filmStock: "Cinematic illustration, consistent warm grade, light film grain",
-    },
-  };
+  return "same person throughout — natural appearance, warm skin tones, casual but styled clothing";
 }
