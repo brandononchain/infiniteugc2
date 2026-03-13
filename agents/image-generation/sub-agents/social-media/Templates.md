@@ -23,3 +23,15 @@
 **Description**: Full-bleed vertical atmospheric background for Stories
 **Tags**: social, story, vertical, atmospheric
 **Prompt**: Full-bleed vertical atmospheric background for social media Stories, dramatic gradient sky or abstract light patterns filling the 9:16 frame, depth created through layers of soft light and shadow, intentional clear zones at top-third and bottom-third for text and interactive elements, vibrant but not overwhelming color palette, slight organic movement feel — clouds, light rays, or bokeh particles, modern and eye-catching, optimized for mobile vertical viewing
+
+## template: before-after-skincare
+**Name**: Before/After Skincare
+**Description**: Skincare transformation — dull skin to glowing radiant skin
+**Tags**: before-after, skincare, transformation, glow
+**Prompt**: Side-by-side skincare transformation image, left side showing skin with visible texture and uneven tone under flat unflattering fluorescent-style lighting, right side showing the same skin area now glowing and radiant with dewy finish under warm flattering beauty lighting, close-up on skin texture so the difference is dramatic and visible, clean clinical comparison format, 85mm macro f/2.8, skin tones natural and realistic on both sides, the lighting change alone tells the story of transformation
+
+## template: before-after-space
+**Name**: Before/After Space Transformation
+**Description**: Room or space makeover — cluttered to organized, or old to new
+**Tags**: before-after, space, room, transformation
+**Prompt**: Before and after room transformation composition, left half showing a slightly messy or dated space with cooler muted lighting, right half showing the same angle of a beautifully organized and styled space with warm inviting lighting, the architectural bones are the same on both sides creating a clear comparison, dramatic improvement in styling lighting and atmosphere, wide angle 24mm to capture the full space, interior design magazine quality on the after side
