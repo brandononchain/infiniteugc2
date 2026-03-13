@@ -31,6 +31,10 @@ export type {
   ImageAgentTemplate,
   ImageClassification,
   ImageGenerationPayload,
+  // Internal prompting types
+  InternalPromptStep,
+  InternalPromptConfig,
+  ProductContext,
   // Storyboard types
   StoryboardKeyframe,
   StoryboardPayload,
