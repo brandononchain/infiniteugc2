@@ -5,6 +5,7 @@ import {
   useContext,
   useReducer,
   useCallback,
+  useState,
   type ReactNode,
   type Dispatch,
 } from "react";
@@ -95,7 +96,6 @@ function canvasReducer(state: CanvasState, action: CanvasAction): CanvasState {
       const { nodeType, data, position } = action.payload;
       const existing = state.nodes.find((n) => n.type === nodeType);
       if (existing) {
-        // Update existing node instead of adding duplicate
         return {
           ...state,
           nodes: state.nodes.map((n) =>
@@ -131,11 +131,7 @@ function canvasReducer(state: CanvasState, action: CanvasAction): CanvasState {
         ...state,
         nodes: state.nodes.map((n) =>
           n.id === nodeId
-            ? {
-                ...n,
-                data: { ...n.data, ...data } as NodeData,
-                status: "configured",
-              }
+            ? { ...n, data: { ...n.data, ...data } as NodeData, status: "configured" }
             : n
         ),
       };
@@ -166,29 +162,22 @@ function canvasReducer(state: CanvasState, action: CanvasAction): CanvasState {
 
     case "ADD_CONNECTION": {
       const { from, to } = action.payload;
-      const exists = state.connections.some(
-        (c) => c.from === from && c.to === to
-      );
+      const exists = state.connections.some((c) => c.from === from && c.to === to);
       if (exists) return state;
       return {
         ...state,
-        connections: [
-          ...state.connections,
-          { id: genConnectionId(), from, to },
-        ],
+        connections: [...state.connections, { id: genConnectionId(), from, to }],
       };
     }
 
     case "REMOVE_CONNECTION":
       return {
         ...state,
-        connections: state.connections.filter(
-          (c) => c.id !== action.payload.connectionId
-        ),
+        connections: state.connections.filter((c) => c.id !== action.payload.connectionId),
       };
 
     case "SET_ZOOM":
-      return { ...state, zoom: Math.max(0.3, Math.min(2, action.payload.zoom)) };
+      return { ...state, zoom: Math.max(0.25, Math.min(2.5, action.payload.zoom)) };
 
     case "SET_PAN":
       return { ...state, pan: action.payload.pan };
@@ -229,10 +218,7 @@ function canvasReducer(state: CanvasState, action: CanvasAction): CanvasState {
             if (targetNode) {
               newState = canvasReducer(newState, {
                 type: "UPDATE_NODE_DATA",
-                payload: {
-                  nodeId: targetNode.id,
-                  data: act.payload.data as Partial<NodeData>,
-                },
+                payload: { nodeId: targetNode.id, data: act.payload.data as Partial<NodeData> },
               });
             }
             break;
@@ -264,7 +250,7 @@ function canvasReducer(state: CanvasState, action: CanvasAction): CanvasState {
 }
 
 /* ═══════════════════════════════════════════════════════════
-   CoPilot State
+   CoPilot Reducer
    ═══════════════════════════════════════════════════════════ */
 
 interface CoPilotState {
@@ -272,12 +258,12 @@ interface CoPilotState {
   isThinking: boolean;
 }
 
-type CoPilotAction2 =
+type CoPilotReducerAction =
   | { type: "ADD_MESSAGE"; payload: CoPilotMessage }
   | { type: "SET_THINKING"; payload: boolean }
   | { type: "CLEAR_MESSAGES" };
 
-function copilotReducer(state: CoPilotState, action: CoPilotAction2): CoPilotState {
+function copilotReducer(state: CoPilotState, action: CoPilotReducerAction): CoPilotState {
   switch (action.type) {
     case "ADD_MESSAGE":
       return { ...state, messages: [...state.messages, action.payload] };
@@ -296,7 +282,7 @@ const initialCoPilotState: CoPilotState = {
       id: "welcome",
       role: "assistant",
       content:
-        "Hey! I'm your CoPilot. Tell me what you want to create and I'll build the entire workflow for you.\n\nTry something like:\n- \"Create a UGC video of a skincare product with a girl in a dorm room\"\n- \"Make a testimonial video for a fitness app\"\n- \"Generate a TikTok ad for sneakers with an energetic vibe\"",
+        "Tell me what you want to create and I'll build everything for you.\n\nTry:\n- \"UGC video of a skincare product, girl in a dorm room\"\n- \"Testimonial for a fitness app, professional tone\"\n- \"TikTok ad for sneakers, energetic and viral\"",
       timestamp: Date.now(),
     },
   ],
@@ -304,15 +290,30 @@ const initialCoPilotState: CoPilotState = {
 };
 
 /* ═══════════════════════════════════════════════════════════
+   Panel State (which floating panel is open)
+   ═══════════════════════════════════════════════════════════ */
+
+export type ActivePanel = "copilot" | "assets" | "nodeConfig" | "generate" | null;
+export type AssetTab = "avatars" | "voices" | "scripts";
+
+/* ═══════════════════════════════════════════════════════════
    Context
    ═══════════════════════════════════════════════════════════ */
 
 interface CanvasContextValue {
+  // Canvas state
   state: CanvasState;
   dispatch: Dispatch<CanvasAction>;
+  // CoPilot
   copilot: CoPilotState;
-  copilotDispatch: Dispatch<CoPilotAction2>;
-  // Convenience methods
+  copilotDispatch: Dispatch<CoPilotReducerAction>;
+  // Panel management
+  activePanel: ActivePanel;
+  setActivePanel: (panel: ActivePanel) => void;
+  togglePanel: (panel: ActivePanel) => void;
+  assetTab: AssetTab;
+  setAssetTab: (tab: AssetTab) => void;
+  // Convenience
   addNode: (type: WorkflowNodeType, data?: Partial<NodeData>) => void;
   removeNode: (nodeId: string) => void;
   updateNodeData: (nodeId: string, data: Partial<NodeData>) => void;
@@ -328,6 +329,12 @@ const CanvasContext = createContext<CanvasContextValue | null>(null);
 export function CanvasProvider({ children }: { children: ReactNode }) {
   const [state, dispatch] = useReducer(canvasReducer, initialState);
   const [copilot, copilotDispatch] = useReducer(copilotReducer, initialCoPilotState);
+  const [activePanel, setActivePanel] = useState<ActivePanel>("copilot");
+  const [assetTab, setAssetTab] = useState<AssetTab>("avatars");
+
+  const togglePanel = useCallback((panel: ActivePanel) => {
+    setActivePanel((prev) => (prev === panel ? null : panel));
+  }, []);
 
   const addNode = useCallback(
     (type: WorkflowNodeType, data?: Partial<NodeData>) => {
@@ -348,8 +355,10 @@ export function CanvasProvider({ children }: { children: ReactNode }) {
   );
 
   const selectNode = useCallback(
-    (nodeId: string | null) =>
-      dispatch({ type: "SELECT_NODE", payload: { nodeId } }),
+    (nodeId: string | null) => {
+      dispatch({ type: "SELECT_NODE", payload: { nodeId } });
+      if (nodeId) setActivePanel("nodeConfig");
+    },
     []
   );
 
@@ -382,6 +391,11 @@ export function CanvasProvider({ children }: { children: ReactNode }) {
         dispatch,
         copilot,
         copilotDispatch,
+        activePanel,
+        setActivePanel,
+        togglePanel,
+        assetTab,
+        setAssetTab,
         addNode,
         removeNode,
         updateNodeData,
