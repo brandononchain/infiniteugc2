@@ -1,32 +1,36 @@
 "use client";
 
-import { useRef, useState, useCallback, useEffect } from "react";
+import { useRef, useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useCanvas } from "@/lib/canvas/context";
 import { NODE_METADATA, type WorkflowNodeType } from "@/lib/canvas/types";
 import { WorkflowNodeCard } from "./WorkflowNodeCard";
-import { Plus, ZoomIn, ZoomOut, RotateCcw, Layout } from "lucide-react";
+import { Plus, ZoomIn, ZoomOut, Layout } from "lucide-react";
 
 /* ═══════════════════════════════════════════════════════════
-   WorkflowCanvas — Visual node-based workflow builder
+   WorkflowCanvas — Full-screen infinite canvas
+   This IS the entire app. No headers, no wrappers.
    ═══════════════════════════════════════════════════════════ */
 
 export function WorkflowCanvas() {
-  const { state, dispatch, selectNode, loadDefaultWorkflow, clearCanvas } = useCanvas();
+  const { state, dispatch, selectNode, loadDefaultWorkflow } = useCanvas();
   const canvasRef = useRef<HTMLDivElement>(null);
   const [isPanning, setIsPanning] = useState(false);
   const [panStart, setPanStart] = useState({ x: 0, y: 0 });
   const [showAddMenu, setShowAddMenu] = useState(false);
 
-  // Node dimensions for connection drawing
   const NODE_WIDTH = 220;
   const NODE_HEIGHT = 100;
 
-  /* ─── Pan handling ─── */
+  /* ─── Pan ─── */
   const handleMouseDown = useCallback(
     (e: React.MouseEvent) => {
-      if (e.target === canvasRef.current || (e.target as HTMLElement).classList.contains("canvas-grid")) {
+      if (
+        e.target === canvasRef.current ||
+        (e.target as HTMLElement).classList.contains("canvas-grid")
+      ) {
         selectNode(null);
+        setShowAddMenu(false);
         if (e.button === 0) {
           setIsPanning(true);
           setPanStart({ x: e.clientX - state.pan.x, y: e.clientY - state.pan.y });
@@ -54,15 +58,15 @@ export function WorkflowCanvas() {
   const handleWheel = useCallback(
     (e: React.WheelEvent) => {
       e.preventDefault();
-      const delta = e.deltaY > 0 ? -0.05 : 0.05;
+      const delta = e.deltaY > 0 ? -0.06 : 0.06;
       dispatch({ type: "SET_ZOOM", payload: { zoom: state.zoom + delta } });
     },
     [state.zoom, dispatch]
   );
 
-  /* ─── Draw connections as SVG bezier curves ─── */
-  const renderConnections = () => {
-    return state.connections.map((conn) => {
+  /* ─── Connections ─── */
+  const renderConnections = () =>
+    state.connections.map((conn) => {
       const fromNode = state.nodes.find((n) => n.id === conn.from);
       const toNode = state.nodes.find((n) => n.id === conn.to);
       if (!fromNode || !toNode) return null;
@@ -71,155 +75,155 @@ export function WorkflowCanvas() {
       const y1 = fromNode.position.y + NODE_HEIGHT / 2;
       const x2 = toNode.position.x;
       const y2 = toNode.position.y + NODE_HEIGHT / 2;
-
       const midX = (x1 + x2) / 2;
       const path = `M ${x1} ${y1} C ${midX} ${y1}, ${midX} ${y2}, ${x2} ${y2}`;
-
-      const fromMeta = NODE_METADATA[fromNode.type];
+      const meta = NODE_METADATA[fromNode.type];
 
       return (
         <g key={conn.id}>
-          {/* Glow */}
+          <path d={path} fill="none" stroke={meta.color} strokeWidth={3} opacity={0.1} filter="url(#glow)" />
           <path
             d={path}
             fill="none"
-            stroke={fromMeta.color}
-            strokeWidth={3}
-            opacity={0.15}
-            filter="url(#glow)"
-          />
-          {/* Line */}
-          <path
-            d={path}
-            fill="none"
-            stroke={fromMeta.color}
+            stroke={meta.color}
             strokeWidth={1.5}
-            opacity={0.5}
+            opacity={0.4}
             strokeDasharray={fromNode.status === "empty" ? "6 4" : "none"}
           />
-          {/* Animated dot */}
           {fromNode.status === "configured" && (
-            <circle r="3" fill={fromMeta.color} opacity={0.8}>
+            <circle r="2.5" fill={meta.color} opacity={0.7}>
               <animateMotion dur="3s" repeatCount="indefinite" path={path} />
             </circle>
           )}
         </g>
       );
     });
-  };
 
-  /* ─── Node add menu ─── */
-  const availableNodes = (
-    Object.keys(NODE_METADATA) as WorkflowNodeType[]
-  ).filter((type) => !state.nodes.some((n) => n.type === type));
-
-  const handleAddNode = (type: WorkflowNodeType) => {
-    dispatch({
-      type: "ADD_NODE",
-      payload: { nodeType: type },
-    });
-    setShowAddMenu(false);
-  };
+  /* ─── Add node menu ─── */
+  const available = (Object.keys(NODE_METADATA) as WorkflowNodeType[]).filter(
+    (t) => !state.nodes.some((n) => n.type === t)
+  );
 
   return (
-    <div className="relative flex-1 overflow-hidden rounded-2xl" style={{ background: "rgba(10, 10, 13, 0.6)" }}>
-      {/* ─── Toolbar ─── */}
-      <div className="absolute top-4 left-4 z-20 flex items-center gap-2">
-        <button
-          onClick={loadDefaultWorkflow}
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-white/60 hover:text-white/90 bg-white/5 hover:bg-white/10 border border-white/8 transition-all"
-          title="Load default workflow"
-        >
-          <Layout size={13} />
-          Template
-        </button>
-        <div className="relative">
+    <div
+      className="absolute inset-0 overflow-hidden cursor-grab active:cursor-grabbing"
+      style={{ background: "radial-gradient(ellipse at 50% 0%, rgba(0,188,255,0.03) 0%, transparent 60%)" }}
+    >
+      {/* ─── Bottom-left toolbar ─── */}
+      <div className="absolute bottom-4 left-4 z-30 flex items-center gap-2">
+        {/* Zoom */}
+        <div className="flex items-center gap-0.5 px-1.5 py-1 rounded-lg bg-black/40 border border-white/[0.06] backdrop-blur-md">
           <button
-            onClick={() => setShowAddMenu(!showAddMenu)}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-white/60 hover:text-white/90 bg-white/5 hover:bg-white/10 border border-white/8 transition-all"
+            onClick={() => dispatch({ type: "SET_ZOOM", payload: { zoom: state.zoom - 0.15 } })}
+            className="w-6 h-6 flex items-center justify-center rounded text-white/30 hover:text-white/70 transition-colors"
           >
-            <Plus size={13} />
-            Add Node
+            <ZoomOut size={13} />
           </button>
-          <AnimatePresence>
-            {showAddMenu && availableNodes.length > 0 && (
-              <motion.div
-                initial={{ opacity: 0, y: -8, scale: 0.95 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, y: -8, scale: 0.95 }}
-                className="absolute top-full mt-2 left-0 z-30 min-w-[200px] rounded-xl p-1.5 border border-white/8"
-                style={{ background: "rgba(20, 20, 23, 0.95)", backdropFilter: "blur(20px)" }}
-              >
-                {availableNodes.map((type) => {
-                  const meta = NODE_METADATA[type];
-                  return (
-                    <button
-                      key={type}
-                      onClick={() => handleAddNode(type)}
-                      className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm text-white/70 hover:text-white hover:bg-white/8 transition-all text-left"
-                    >
-                      <div
-                        className="w-6 h-6 rounded-md flex items-center justify-center text-[10px]"
-                        style={{ background: `${meta.color}20`, color: meta.color }}
-                      >
-                        {meta.label[0]}
-                      </div>
-                      <div>
-                        <div className="font-medium text-xs">{meta.label}</div>
-                        <div className="text-[10px] text-white/40">{meta.description}</div>
-                      </div>
-                    </button>
-                  );
-                })}
-              </motion.div>
-            )}
-          </AnimatePresence>
+          <span className="text-[9px] text-white/30 font-mono w-9 text-center select-none">
+            {Math.round(state.zoom * 100)}%
+          </span>
+          <button
+            onClick={() => dispatch({ type: "SET_ZOOM", payload: { zoom: state.zoom + 0.15 } })}
+            className="w-6 h-6 flex items-center justify-center rounded text-white/30 hover:text-white/70 transition-colors"
+          >
+            <ZoomIn size={13} />
+          </button>
         </div>
-        <button
-          onClick={clearCanvas}
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-white/40 hover:text-red-400 bg-white/5 hover:bg-red-500/10 border border-white/8 transition-all"
-          title="Clear canvas"
-        >
-          <RotateCcw size={13} />
-        </button>
+
+        {/* Template */}
+        {state.nodes.length === 0 && (
+          <button
+            onClick={loadDefaultWorkflow}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[11px] font-medium text-white/40 hover:text-white/70 bg-black/40 hover:bg-black/50 border border-white/[0.06] backdrop-blur-md transition-all"
+          >
+            <Layout size={12} />
+            Load Template
+          </button>
+        )}
+
+        {/* Add node */}
+        {available.length > 0 && state.nodes.length > 0 && (
+          <div className="relative">
+            <button
+              onClick={() => setShowAddMenu(!showAddMenu)}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[11px] font-medium text-white/40 hover:text-white/70 bg-black/40 hover:bg-black/50 border border-white/[0.06] backdrop-blur-md transition-all"
+            >
+              <Plus size={12} />
+              Add Node
+            </button>
+            <AnimatePresence>
+              {showAddMenu && (
+                <motion.div
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 8 }}
+                  className="absolute bottom-full mb-2 left-0 min-w-[180px] rounded-xl p-1.5 border border-white/[0.08] shadow-xl"
+                  style={{ background: "rgba(15, 15, 18, 0.95)", backdropFilter: "blur(20px)" }}
+                >
+                  {available.map((type) => {
+                    const meta = NODE_METADATA[type];
+                    return (
+                      <button
+                        key={type}
+                        onClick={() => {
+                          dispatch({ type: "ADD_NODE", payload: { nodeType: type } });
+                          setShowAddMenu(false);
+                        }}
+                        className="w-full flex items-center gap-2 px-2.5 py-1.5 rounded-lg text-[11px] text-white/50 hover:text-white/80 hover:bg-white/[0.06] transition-all"
+                      >
+                        <div
+                          className="w-5 h-5 rounded flex items-center justify-center text-[9px] font-bold"
+                          style={{ background: `${meta.color}15`, color: meta.color }}
+                        >
+                          {meta.label[0]}
+                        </div>
+                        {meta.label}
+                      </button>
+                    );
+                  })}
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+        )}
+
+        {/* Node status dots */}
+        {state.nodes.length > 0 && (
+          <div className="flex items-center gap-1 px-2 py-1.5 rounded-lg bg-black/30 border border-white/[0.04] backdrop-blur-md">
+            {state.nodes.map((n) => (
+              <div
+                key={n.id}
+                className="w-1.5 h-1.5 rounded-full transition-colors"
+                style={{
+                  background:
+                    n.status === "configured"
+                      ? "#22c55e"
+                      : n.status === "processing"
+                        ? "#00BCFF"
+                        : "rgba(255,255,255,0.12)",
+                }}
+                title={`${n.type}: ${n.status}`}
+              />
+            ))}
+          </div>
+        )}
       </div>
 
-      {/* ─── Zoom controls ─── */}
-      <div className="absolute bottom-4 left-4 z-20 flex items-center gap-1 px-1.5 py-1 rounded-lg bg-white/5 border border-white/8">
-        <button
-          onClick={() => dispatch({ type: "SET_ZOOM", payload: { zoom: state.zoom - 0.1 } })}
-          className="w-7 h-7 flex items-center justify-center rounded text-white/40 hover:text-white/80 transition-colors"
-        >
-          <ZoomOut size={14} />
-        </button>
-        <span className="text-[10px] text-white/40 font-mono w-10 text-center">
-          {Math.round(state.zoom * 100)}%
-        </span>
-        <button
-          onClick={() => dispatch({ type: "SET_ZOOM", payload: { zoom: state.zoom + 0.1 } })}
-          className="w-7 h-7 flex items-center justify-center rounded text-white/40 hover:text-white/80 transition-colors"
-        >
-          <ZoomIn size={14} />
-        </button>
-      </div>
-
-      {/* ─── Canvas area ─── */}
+      {/* ─── Canvas surface ─── */}
       <div
         ref={canvasRef}
-        className="w-full h-full cursor-grab active:cursor-grabbing"
+        className="w-full h-full"
         onMouseDown={handleMouseDown}
         onMouseMove={handleMouseMove}
         onMouseUp={handleMouseUp}
         onMouseLeave={handleMouseUp}
         onWheel={handleWheel}
       >
-        {/* Grid background */}
+        {/* Grid */}
         <div
           className="canvas-grid absolute inset-0"
           style={{
-            backgroundImage: `
-              radial-gradient(circle, rgba(255,255,255,0.03) 1px, transparent 1px)
-            `,
+            backgroundImage: "radial-gradient(circle, rgba(255,255,255,0.025) 1px, transparent 1px)",
             backgroundSize: `${24 * state.zoom}px ${24 * state.zoom}px`,
             backgroundPosition: `${state.pan.x}px ${state.pan.y}px`,
           }}
@@ -233,8 +237,7 @@ export function WorkflowCanvas() {
             transformOrigin: "0 0",
           }}
         >
-          {/* SVG connections */}
-          <svg className="absolute inset-0 w-[2000px] h-[1200px] pointer-events-none">
+          <svg className="absolute inset-0 w-[2400px] h-[1400px] pointer-events-none">
             <defs>
               <filter id="glow">
                 <feGaussianBlur stdDeviation="4" result="coloredBlur" />
@@ -247,23 +250,27 @@ export function WorkflowCanvas() {
             {renderConnections()}
           </svg>
 
-          {/* Nodes */}
-          {state.nodes.map((node) => (
-            <WorkflowNodeCard key={node.id} node={node} />
-          ))}
+          <AnimatePresence>
+            {state.nodes.map((node) => (
+              <WorkflowNodeCard key={node.id} node={node} />
+            ))}
+          </AnimatePresence>
         </div>
 
         {/* Empty state */}
         {state.nodes.length === 0 && (
           <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-            <div className="text-center">
-              <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-white/5 border border-white/8 flex items-center justify-center">
-                <Layout size={28} className="text-white/20" />
+            <div className="text-center max-w-md">
+              <div className="w-20 h-20 mx-auto mb-5 rounded-2xl bg-white/[0.03] border border-white/[0.06] flex items-center justify-center">
+                <svg width="32" height="18" viewBox="0 0 32 16" fill="rgba(255,255,255,0.08)" xmlns="http://www.w3.org/2000/svg">
+                  <path fillRule="evenodd" clipRule="evenodd" d="M8 0C3.6 0 0 3.6 0 8s3.6 8 8 8c3.5 0 5.5-2 8-5.5C18.5 14 20.5 16 24 16c4.4 0 8-3.6 8-8s-3.6-8-8-8c-3.5 0-5.5 2-8 5.5C13.5 2 11.5 0 8 0zm0 4c-2.2 0-4 1.8-4 4s1.8 4 4 4c1.5 0 2.8-1 4.5-3.2L13.2 8l-.7-.8C10.8 5 9.5 4 8 4zm16 0c-1.5 0-2.8 1-4.5 3.2L18.8 8l.7.8C21.2 11 22.5 12 24 12c2.2 0 4-1.8 4-4s-1.8-4-4-4z" />
+                </svg>
               </div>
-              <h3 className="text-lg font-semibold text-white/30 mb-1">Empty Canvas</h3>
-              <p className="text-sm text-white/20 max-w-xs">
-                Use CoPilot to describe what you want, or click{" "}
-                <span className="text-accent-400/60">Template</span> to start with a default workflow
+              <h2 className="text-xl font-bold text-white/20 mb-2">InfiniteUGC</h2>
+              <p className="text-sm text-white/12 leading-relaxed">
+                Open <span className="text-accent-400/40">CoPilot</span> and tell it what you want to create.
+                <br />
+                Or click <span className="text-white/25">Load Template</span> to start manually.
               </p>
             </div>
           </div>
