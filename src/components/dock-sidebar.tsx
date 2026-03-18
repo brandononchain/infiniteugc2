@@ -21,6 +21,7 @@ import {
   Clapperboard,
   Settings,
   Package,
+  LayoutDashboard,
   type LucideIcon,
 } from "lucide-react";
 
@@ -28,7 +29,10 @@ import {
 export const NAV_GROUPS = [
   {
     label: "Main",
-    items: [{ label: "Home", href: "/dashboard", icon: Home }],
+    items: [
+      { label: "Canvas", href: "/canvas", icon: LayoutDashboard },
+      { label: "Home", href: "/dashboard", icon: Home },
+    ],
   },
   {
     label: "Create",

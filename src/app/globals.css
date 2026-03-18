@@ -421,3 +421,35 @@ body::after {
   border: 1px solid rgba(0, 188, 255, 0.3);
   box-shadow: 0 2px 8px rgba(0, 188, 255, 0.2);
 }
+
+/* ─── CANVAS STYLES ─── */
+
+/* Canvas node pulse animation for processing nodes */
+@keyframes node-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(0, 188, 255, 0.2); }
+  50% { box-shadow: 0 0 0 8px rgba(0, 188, 255, 0); }
+}
+
+.node-processing {
+  animation: node-pulse 2s ease-in-out infinite;
+}
+
+/* Canvas connection flow animation */
+@keyframes flow {
+  0% { stroke-dashoffset: 20; }
+  100% { stroke-dashoffset: 0; }
+}
+
+.connection-flow {
+  animation: flow 1s linear infinite;
+}
+
+/* CoPilot message typing animation */
+@keyframes typing-dot {
+  0%, 60%, 100% { opacity: 0.2; }
+  30% { opacity: 1; }
+}
+
+.typing-dot:nth-child(1) { animation: typing-dot 1.4s infinite 0s; }
+.typing-dot:nth-child(2) { animation: typing-dot 1.4s infinite 0.2s; }
+.typing-dot:nth-child(3) { animation: typing-dot 1.4s infinite 0.4s; }
