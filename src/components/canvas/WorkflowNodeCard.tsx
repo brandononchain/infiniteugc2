@@ -154,10 +154,11 @@ export function WorkflowNodeCard({ node }: { node: WorkflowNode }) {
 
   return (
     <motion.div
+      data-workflow-node
       initial={{ opacity: 0, scale: 0.9 }}
       animate={{ opacity: 1, scale: 1 }}
       exit={{ opacity: 0, scale: 0.8 }}
-      className="absolute select-none"
+      className="absolute select-none pointer-events-auto"
       style={{
         left: node.position.x,
         top: node.position.y,
