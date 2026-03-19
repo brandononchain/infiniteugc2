@@ -1,0 +1,74 @@
+name: Deploy Backend (Self-Hosted + PM2)
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+env:
+  NODE_VERSION: "20"
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Create .env from secrets
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          INTERNAL_BRIDGE_SECRET: ${{ secrets.INTERNAL_BRIDGE_SECRET }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: ${{ secrets.AWS_REGION }}
+          AWS_SQS_QUEUE_URL: ${{ secrets.AWS_SQS_QUEUE_URL }}
+          BACKEND_URL: ${{ secrets.BACKEND_URL }}
+        run: |
+          {
+            echo "SUPABASE_URL=$SUPABASE_URL"
+            echo "SUPABASE_ANON_KEY=$SUPABASE_ANON_KEY"
+            echo "SUPABASE_SERVICE_ROLE_KEY=$SUPABASE_SERVICE_ROLE_KEY"
+            echo "INTERNAL_BRIDGE_SECRET=$INTERNAL_BRIDGE_SECRET"
+            echo "AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID"
+            echo "AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY"
+            echo "AWS_REGION=$AWS_REGION"
+            echo "AWS_SQS_QUEUE_URL=$AWS_SQS_QUEUE_URL"
+            echo "BACKEND_URL=$BACKEND_URL"
+            echo "PORT=${PORT:-3000}"
+            echo "CORS_ORIGIN=${CORS_ORIGIN:-http://localhost:3000}"
+          } > .env
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "npm"
+          cache-dependency-path: package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Install PM2 globally
+        run: npm install -g pm2
+
+      - name: Reload app with PM2
+        run: |
+          if pm2 describe ac-media-backend > /dev/null 2>&1; then
+            pm2 reload ecosystem.config.cjs --env production
+            echo "Backend reloaded."
+          else
+            pm2 start ecosystem.config.cjs --env production
+            pm2 save
+            echo "Backend started."
+          fi
+
+      - name: Save PM2 process list
+        run: pm2 save
