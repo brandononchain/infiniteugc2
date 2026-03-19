@@ -78,9 +78,15 @@ app.use(
   }
 );
 
-app.listen(env.port, () => {
-  console.log(`Backend server listening on port ${env.port}`);
+// Only listen when running directly (not on Vercel)
+if (!process.env.VERCEL) {
+  app.listen(env.port, () => {
+    console.log(`Backend server listening on port ${env.port}`);
 
-  // Start the queue poller — picks up stuck/queued jobs and auto-fails stale ones
-  startQueuePoller();
-});
+    // Start the queue poller — picks up stuck/queued jobs and auto-fails stale ones
+    startQueuePoller();
+  });
+}
+
+// Export for Vercel serverless
+export default app;
