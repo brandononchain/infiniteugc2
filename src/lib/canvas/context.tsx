@@ -201,6 +201,13 @@ function canvasReducer(state: CanvasState, action: CanvasAction): CanvasState {
 
     case "APPLY_COPILOT_ACTIONS": {
       let newState = state;
+      // Auto-load default workflow if canvas is empty and we're configuring nodes
+      const hasConfigOrAdd = action.payload.actions.some(
+        (a) => a.type === "add_node" || a.type === "configure_node"
+      );
+      if (newState.nodes.length === 0 && hasConfigOrAdd) {
+        newState = canvasReducer(newState, { type: "LOAD_DEFAULT_WORKFLOW" });
+      }
       for (const act of action.payload.actions) {
         switch (act.type) {
           case "add_node": {
@@ -379,7 +386,13 @@ export function CanvasProvider({ children }: { children: ReactNode }) {
 
   const isWorkflowReady = useCallback(() => {
     const hasAvatar = state.nodes.some((n) => n.type === "avatar" && n.status === "configured");
-    const hasScript = state.nodes.some((n) => n.type === "script" && n.status === "configured");
+    const hasScript = state.nodes.some((n) => {
+      if (n.type !== "script") return false;
+      if (n.status === "configured") return true;
+      // Also consider scripts with generatedContent as ready
+      const data = n.data as { generatedContent?: string; content?: string; scriptId?: string };
+      return !!(data.generatedContent || data.content || data.scriptId);
+    });
     const hasProvider = state.nodes.some((n) => n.type === "provider" && n.status === "configured");
     return hasAvatar && hasScript && hasProvider;
   }, [state.nodes]);

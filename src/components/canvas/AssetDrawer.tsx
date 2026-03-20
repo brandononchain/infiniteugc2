@@ -14,7 +14,7 @@ import { X, Check, Mic, UserCircle, FileText, Loader2 } from "lucide-react";
    ═══════════════════════════════════════════════════════════ */
 
 export function AssetDrawer() {
-  const { assetTab, setAssetTab, setActivePanel, state, updateNodeData, getNodeByType, loadDefaultWorkflow } = useCanvas();
+  const { assetTab, setAssetTab, setActivePanel, state, dispatch, updateNodeData, getNodeByType, loadDefaultWorkflow } = useCanvas();
   const [avatars, setAvatars] = useState<Avatar[]>([]);
   const [voices, setVoices] = useState<Voice[]>([]);
   const [scripts, setScripts] = useState<Script[]>([]);
@@ -34,26 +34,69 @@ export function AssetDrawer() {
     })();
   }, []);
 
-  const ensureWorkflow = () => {
-    if (state.nodes.length === 0) loadDefaultWorkflow();
-  };
-
+  // We use addNode instead of loadDefaultWorkflow for targeted asset selection.
+  // addNode auto-creates or updates the node of that type, so it always works
+  // even when the canvas is empty.
   const selectAvatar = (av: Avatar) => {
-    ensureWorkflow();
-    const node = getNodeByType("avatar");
-    if (node) updateNodeData(node.id, { avatarId: av.id, avatar: av } as AvatarNodeData);
+    if (state.nodes.length === 0) loadDefaultWorkflow();
+    // Use a timeout to let the state update if we just loaded the workflow
+    const apply = () => {
+      const node = getNodeByType("avatar");
+      if (node) {
+        updateNodeData(node.id, { avatarId: av.id, avatar: av } as AvatarNodeData);
+      } else {
+        // Dispatch directly — ADD_NODE will create the node with the data
+        dispatch({
+          type: "ADD_NODE",
+          payload: { nodeType: "avatar", data: { avatarId: av.id, avatar: av } },
+        });
+      }
+    };
+    if (state.nodes.length === 0) {
+      setTimeout(apply, 50);
+    } else {
+      apply();
+    }
   };
 
   const selectVoice = (v: Voice) => {
-    ensureWorkflow();
-    const node = getNodeByType("voice");
-    if (node) updateNodeData(node.id, { voiceId: v.id, voice: v } as VoiceNodeData);
+    if (state.nodes.length === 0) loadDefaultWorkflow();
+    const apply = () => {
+      const node = getNodeByType("voice");
+      if (node) {
+        updateNodeData(node.id, { voiceId: v.id, voice: v } as VoiceNodeData);
+      } else {
+        dispatch({
+          type: "ADD_NODE",
+          payload: { nodeType: "voice", data: { voiceId: v.id, voice: v } },
+        });
+      }
+    };
+    if (state.nodes.length === 0) {
+      setTimeout(apply, 50);
+    } else {
+      apply();
+    }
   };
 
   const selectScript = (s: Script) => {
-    ensureWorkflow();
-    const node = getNodeByType("script");
-    if (node) updateNodeData(node.id, { scriptId: s.id, script: s, content: s.content } as ScriptNodeData);
+    if (state.nodes.length === 0) loadDefaultWorkflow();
+    const apply = () => {
+      const node = getNodeByType("script");
+      if (node) {
+        updateNodeData(node.id, { scriptId: s.id, script: s, content: s.content } as ScriptNodeData);
+      } else {
+        dispatch({
+          type: "ADD_NODE",
+          payload: { nodeType: "script", data: { scriptId: s.id, script: s, content: s.content } },
+        });
+      }
+    };
+    if (state.nodes.length === 0) {
+      setTimeout(apply, 50);
+    } else {
+      apply();
+    }
   };
 
   const avatarNode = getNodeByType("avatar");

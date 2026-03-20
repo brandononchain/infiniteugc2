@@ -58,9 +58,10 @@ export function WorkflowNodeCard({ node }: { node: WorkflowNode }) {
     (e: React.MouseEvent) => {
       e.stopPropagation();
       isDragging.current = true;
+      // Account for both zoom and pan when calculating drag offset
       dragStart.current = {
-        x: e.clientX / state.zoom - node.position.x,
-        y: e.clientY / state.zoom - node.position.y,
+        x: (e.clientX - state.pan.x) / state.zoom - node.position.x,
+        y: (e.clientY - state.pan.y) / state.zoom - node.position.y,
       };
 
       const handleMove = (me: MouseEvent) => {
@@ -70,8 +71,8 @@ export function WorkflowNodeCard({ node }: { node: WorkflowNode }) {
           payload: {
             nodeId: node.id,
             position: {
-              x: me.clientX / state.zoom - dragStart.current.x,
-              y: me.clientY / state.zoom - dragStart.current.y,
+              x: (me.clientX - state.pan.x) / state.zoom - dragStart.current.x,
+              y: (me.clientY - state.pan.y) / state.zoom - dragStart.current.y,
             },
           },
         });
@@ -86,7 +87,7 @@ export function WorkflowNodeCard({ node }: { node: WorkflowNode }) {
       window.addEventListener("mousemove", handleMove);
       window.addEventListener("mouseup", handleUp);
     },
-    [node.id, node.position, state.zoom, dispatch]
+    [node.id, node.position, state.zoom, state.pan, dispatch]
   );
 
   const handleClick = useCallback(

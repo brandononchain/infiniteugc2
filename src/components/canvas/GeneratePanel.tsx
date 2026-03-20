@@ -12,8 +12,9 @@ import {
   type OutputNodeData,
   type CaptionsNodeData,
 } from "@/lib/canvas/types";
-import { campaigns } from "@/lib/api";
-import { X, Zap, Check, AlertTriangle, Loader2, Play, ChevronRight } from "lucide-react";
+import { campaigns, supabaseQueries } from "@/lib/api";
+import type { VoiceNodeData } from "@/lib/canvas/types";
+import { X, Zap, Check, AlertTriangle, Loader2 } from "lucide-react";
 
 /* ═══════════════════════════════════════════════════════════
    GeneratePanel — Floating panel to review & launch generation
@@ -74,10 +75,30 @@ export function GeneratePanel() {
     setResult(null);
 
     try {
+      // If we have a CoPilot-generated script but no scriptId, save it first
+      let scriptId = scriptData?.scriptId;
+      const scriptContent = scriptData?.content || scriptData?.generatedContent;
+      if (!scriptId && scriptContent) {
+        const savedScript = await supabaseQueries.createScript(
+          outputData?.campaignName || "CoPilot Script",
+          scriptContent
+        );
+        if (savedScript) {
+          scriptId = savedScript.id;
+          // Update the node with the saved script ID
+          if (scriptNode) {
+            dispatch({
+              type: "UPDATE_NODE_DATA",
+              payload: { nodeId: scriptNode.id, data: { scriptId: savedScript.id, script: savedScript } },
+            });
+          }
+        }
+      }
+
       const campaign = await campaigns.create({
         campaign_name: outputData?.campaignName || "Canvas Campaign",
         avatar_id: avatarData?.avatarId,
-        script_id: scriptData?.scriptId || undefined,
+        script_id: scriptId || undefined,
         video_provider: providerData?.provider,
         caption_enabled: captionsData?.enabled ?? true,
         text_overlays: outputData?.overlays || [],
@@ -85,8 +106,12 @@ export function GeneratePanel() {
 
       const runResult = await campaigns.run(campaign.id);
 
+      // Update node statuses
       if (outputNode) {
         dispatch({ type: "UPDATE_NODE_STATUS", payload: { nodeId: outputNode.id, status: "processing" } });
+      }
+      if (providerNode) {
+        dispatch({ type: "UPDATE_NODE_STATUS", payload: { nodeId: providerNode.id, status: "processing" } });
       }
 
       setResult({
