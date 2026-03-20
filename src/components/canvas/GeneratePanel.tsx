@@ -21,7 +21,7 @@ import { X, Zap, Check, AlertTriangle, Loader2 } from "lucide-react";
    ═══════════════════════════════════════════════════════════ */
 
 export function GeneratePanel() {
-  const { state, setActivePanel, isWorkflowReady, getNodeByType, dispatch } = useCanvas();
+  const { state, setActivePanel, isWorkflowReady, getNodeByType, dispatch, trackJob, activeJobs } = useCanvas();
   const [generating, setGenerating] = useState(false);
   const [result, setResult] = useState<{ success: boolean; message: string } | null>(null);
 
@@ -107,12 +107,18 @@ export function GeneratePanel() {
       const runResult = await campaigns.run(campaign.id);
 
       // Update node statuses
+      const trackedNodeIds: string[] = [];
       if (outputNode) {
         dispatch({ type: "UPDATE_NODE_STATUS", payload: { nodeId: outputNode.id, status: "processing" } });
+        trackedNodeIds.push(outputNode.id);
       }
       if (providerNode) {
         dispatch({ type: "UPDATE_NODE_STATUS", payload: { nodeId: providerNode.id, status: "processing" } });
+        trackedNodeIds.push(providerNode.id);
       }
+
+      // Start polling for job status updates
+      trackJob(runResult.job_id, campaign.id, trackedNodeIds);
 
       setResult({
         success: true,
@@ -192,6 +198,16 @@ export function GeneratePanel() {
         }`}>
           {result.success ? <Check size={12} /> : <AlertTriangle size={12} />}
           {result.message}
+        </div>
+      )}
+
+      {/* Active jobs indicator */}
+      {activeJobs.length > 0 && (
+        <div className="mx-4 mt-2 px-3 py-2 rounded-lg bg-accent-400/5 border border-accent-400/10">
+          <div className="flex items-center gap-2 text-[11px] text-accent-400/80">
+            <Loader2 size={11} className="animate-spin" />
+            <span>{activeJobs.length} job{activeJobs.length > 1 ? "s" : ""} in progress</span>
+          </div>
         </div>
       )}
 

@@ -23,6 +23,10 @@ import {
   DEFAULT_NODE_POSITIONS,
   DEFAULT_CONNECTIONS,
 } from "./types";
+import { validateConnection } from "./connection-rules";
+import { useWorkflowPersistence } from "./use-workflow-persistence";
+import { useJobPoller } from "./use-job-poller";
+import type { Job } from "@/types";
 
 /* ═══════════════════════════════════════════════════════════
    Canvas Reducer
@@ -41,6 +45,7 @@ type CanvasAction =
   | { type: "SET_PAN"; payload: { pan: { x: number; y: number } } }
   | { type: "CLEAR_CANVAS" }
   | { type: "LOAD_DEFAULT_WORKFLOW" }
+  | { type: "RESTORE_STATE"; payload: { nodes: WorkflowNode[]; connections: Connection[]; zoom: number; pan: { x: number; y: number } } }
   | { type: "APPLY_COPILOT_ACTIONS"; payload: { actions: CoPilotAction[] } };
 
 let nodeCounter = 0;
@@ -162,8 +167,15 @@ function canvasReducer(state: CanvasState, action: CanvasAction): CanvasState {
 
     case "ADD_CONNECTION": {
       const { from, to } = action.payload;
-      const exists = state.connections.some((c) => c.from === from && c.to === to);
-      if (exists) return state;
+
+      // Validate the connection using rules
+      const fromNode = state.nodes.find((n) => n.id === from);
+      const toNode = state.nodes.find((n) => n.id === to);
+      if (!fromNode || !toNode) return state;
+
+      const validation = validateConnection(fromNode, toNode, state.connections);
+      if (!validation.valid) return state;
+
       return {
         ...state,
         connections: [...state.connections, { id: genConnectionId(), from, to }],
@@ -184,6 +196,16 @@ function canvasReducer(state: CanvasState, action: CanvasAction): CanvasState {
 
     case "CLEAR_CANVAS":
       return { ...initialState };
+
+    case "RESTORE_STATE":
+      return {
+        ...state,
+        nodes: action.payload.nodes,
+        connections: action.payload.connections,
+        zoom: action.payload.zoom,
+        pan: action.payload.pan,
+        selectedNodeId: null,
+      };
 
     case "LOAD_DEFAULT_WORKFLOW": {
       const nodes: WorkflowNode[] = (
@@ -297,6 +319,16 @@ const initialCoPilotState: CoPilotState = {
 };
 
 /* ═══════════════════════════════════════════════════════════
+   Active Jobs State (for polling)
+   ═══════════════════════════════════════════════════════════ */
+
+interface ActiveJobEntry {
+  jobId: string;
+  campaignId: string;
+  nodeIds: string[];
+}
+
+/* ═══════════════════════════════════════════════════════════
    Panel State (which floating panel is open)
    ═══════════════════════════════════════════════════════════ */
 
@@ -329,6 +361,10 @@ interface CanvasContextValue {
   clearCanvas: () => void;
   getNodeByType: (type: WorkflowNodeType) => WorkflowNode | undefined;
   isWorkflowReady: () => boolean;
+  // Job tracking
+  trackJob: (jobId: string, campaignId: string, nodeIds: string[]) => void;
+  activeJobs: ActiveJobEntry[];
+  completedJobs: Job[];
 }
 
 const CanvasContext = createContext<CanvasContextValue | null>(null);
@@ -338,6 +374,49 @@ export function CanvasProvider({ children }: { children: ReactNode }) {
   const [copilot, copilotDispatch] = useReducer(copilotReducer, initialCoPilotState);
   const [activePanel, setActivePanel] = useState<ActivePanel>("copilot");
   const [assetTab, setAssetTab] = useState<AssetTab>("avatars");
+  const [activeJobs, setActiveJobs] = useState<ActiveJobEntry[]>([]);
+  const [completedJobs, setCompletedJobs] = useState<Job[]>([]);
+
+  /* ─── Workflow Persistence ─── */
+  useWorkflowPersistence(state, (saved) => {
+    dispatch({
+      type: "RESTORE_STATE",
+      payload: saved,
+    });
+  });
+
+  /* ─── Job Polling ─── */
+  useJobPoller(
+    activeJobs,
+    (changes) => {
+      for (const change of changes) {
+        for (const nodeId of change.nodeIds) {
+          dispatch({
+            type: "UPDATE_NODE_STATUS",
+            payload: { nodeId, status: change.nodeStatus },
+          });
+        }
+        // Remove from active jobs if terminal
+        if (change.nodeStatus === "complete" || change.nodeStatus === "error") {
+          setActiveJobs((prev) => prev.filter((j) => j.jobId !== change.jobId));
+        }
+      }
+    },
+    (job) => {
+      setCompletedJobs((prev) => [job, ...prev].slice(0, 50));
+    }
+  );
+
+  const trackJob = useCallback(
+    (jobId: string, campaignId: string, nodeIds: string[]) => {
+      setActiveJobs((prev) => {
+        // Don't add duplicates
+        if (prev.some((j) => j.jobId === jobId)) return prev;
+        return [...prev, { jobId, campaignId, nodeIds }];
+      });
+    },
+    []
+  );
 
   const togglePanel = useCallback((panel: ActivePanel) => {
     setActivePanel((prev) => (prev === panel ? null : panel));
@@ -417,6 +496,9 @@ export function CanvasProvider({ children }: { children: ReactNode }) {
         clearCanvas,
         getNodeByType,
         isWorkflowReady,
+        trackJob,
+        activeJobs,
+        completedJobs,
       }}
     >
       {children}

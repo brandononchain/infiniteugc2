@@ -312,19 +312,30 @@ export const supabaseQueries = {
     return error ? null : (data as Profile);
   },
 
-  /** List user's avatars */
-  getAvatars: async (): Promise<Avatar[]> => {
+  /** List user's avatars with pagination */
+  getAvatars: async (options?: { page?: number; pageSize?: number }): Promise<{ data: Avatar[]; total: number }> => {
     const supabase = getSupabaseBrowserClient();
     const { data: { user } } = await supabase.auth.getUser();
-    if (!user) return [];
+    if (!user) return { data: [], total: 0 };
+
+    const page = options?.page ?? 0;
+    const pageSize = options?.pageSize ?? 20;
+    const from = page * pageSize;
+    const to = from + pageSize - 1;
+
+    const { count } = await supabase
+      .from("avatars")
+      .select("*", { count: "exact", head: true })
+      .eq("user_id", user.id);
 
     const { data } = await supabase
       .from("avatars")
       .select("*")
       .eq("user_id", user.id)
-      .order("created_at", { ascending: false });
+      .order("created_at", { ascending: false })
+      .range(from, to);
 
-    return (data as Avatar[]) || [];
+    return { data: (data as Avatar[]) || [], total: count ?? 0 };
   },
 
   /** Create avatar */
@@ -349,34 +360,56 @@ export const supabaseQueries = {
     return !error;
   },
 
-  /** List user's voices */
-  getVoices: async (): Promise<Voice[]> => {
+  /** List user's voices with pagination */
+  getVoices: async (options?: { page?: number; pageSize?: number }): Promise<{ data: Voice[]; total: number }> => {
     const supabase = getSupabaseBrowserClient();
     const { data: { user } } = await supabase.auth.getUser();
-    if (!user) return [];
+    if (!user) return { data: [], total: 0 };
+
+    const page = options?.page ?? 0;
+    const pageSize = options?.pageSize ?? 20;
+    const from = page * pageSize;
+    const to = from + pageSize - 1;
+
+    const { count } = await supabase
+      .from("voices")
+      .select("*", { count: "exact", head: true })
+      .eq("user_id", user.id);
 
     const { data } = await supabase
       .from("voices")
       .select("*")
       .eq("user_id", user.id)
-      .order("created_at", { ascending: false });
+      .order("created_at", { ascending: false })
+      .range(from, to);
 
-    return (data as Voice[]) || [];
+    return { data: (data as Voice[]) || [], total: count ?? 0 };
   },
 
-  /** List user's scripts */
-  getScripts: async (): Promise<Script[]> => {
+  /** List user's scripts with pagination */
+  getScripts: async (options?: { page?: number; pageSize?: number }): Promise<{ data: Script[]; total: number }> => {
     const supabase = getSupabaseBrowserClient();
     const { data: { user } } = await supabase.auth.getUser();
-    if (!user) return [];
+    if (!user) return { data: [], total: 0 };
+
+    const page = options?.page ?? 0;
+    const pageSize = options?.pageSize ?? 20;
+    const from = page * pageSize;
+    const to = from + pageSize - 1;
+
+    const { count } = await supabase
+      .from("scripts")
+      .select("*", { count: "exact", head: true })
+      .eq("user_id", user.id);
 
     const { data } = await supabase
       .from("scripts")
       .select("*")
       .eq("user_id", user.id)
-      .order("created_at", { ascending: false });
+      .order("created_at", { ascending: false })
+      .range(from, to);
 
-    return (data as Script[]) || [];
+    return { data: (data as Script[]) || [], total: count ?? 0 };
   },
 
   /** Create script */

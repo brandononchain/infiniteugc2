@@ -49,17 +49,26 @@ export function useProfile() {
 
 /* ─── Avatars ─── */
 export function useAvatars() {
-  return useQuery<Avatar[]>(supabaseQueries.getAvatars);
+  return useQuery<Avatar[]>(async () => {
+    const result = await supabaseQueries.getAvatars();
+    return result.data;
+  });
 }
 
 /* ─── Voices ─── */
 export function useVoices() {
-  return useQuery<Voice[]>(supabaseQueries.getVoices);
+  return useQuery<Voice[]>(async () => {
+    const result = await supabaseQueries.getVoices();
+    return result.data;
+  });
 }
 
 /* ─── Scripts ─── */
 export function useScripts() {
-  return useQuery<Script[]>(supabaseQueries.getScripts);
+  return useQuery<Script[]>(async () => {
+    const result = await supabaseQueries.getScripts();
+    return result.data;
+  });
 }
 
 /* ─── Script Groups ─── */
