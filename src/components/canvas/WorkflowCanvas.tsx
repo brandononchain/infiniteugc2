@@ -214,8 +214,10 @@ export function WorkflowCanvas() {
                 className="w-1.5 h-1.5 rounded-full transition-colors"
                 style={{
                   background:
-                    n.status === "configured" ? "#22c55e"
+                    n.status === "complete" ? "#22c55e"
+                    : n.status === "configured" ? "#a3e635"
                     : n.status === "processing" ? "#00BCFF"
+                    : n.status === "error" ? "#ef4444"
                     : "rgba(255,255,255,0.1)",
                 }}
                 title={`${n.type}: ${n.status}`}

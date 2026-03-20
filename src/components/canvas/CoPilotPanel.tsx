@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useCanvas } from "@/lib/canvas/context";
-import type { CoPilotMessage, CoPilotAction } from "@/lib/canvas/types";
+import type { CoPilotMessage } from "@/lib/canvas/types";
 import {
   Sparkles,
   Send,
@@ -23,7 +23,6 @@ export function CoPilotPanel() {
     dispatch,
     copilot,
     copilotDispatch,
-    loadDefaultWorkflow,
     setActivePanel,
   } = useCanvas();
   const [input, setInput] = useState("");
@@ -77,13 +76,7 @@ export function CoPilotPanel() {
       const data = await res.json();
 
       if (data.actions && data.actions.length > 0) {
-        const hasConfigActions = data.actions.some(
-          (a: CoPilotAction) => a.type === "add_node" || a.type === "configure_node"
-        );
-        if (state.nodes.length === 0 && hasConfigActions) {
-          loadDefaultWorkflow();
-          await new Promise((r) => setTimeout(r, 150));
-        }
+        // The reducer auto-loads the default workflow if canvas is empty
         dispatch({ type: "APPLY_COPILOT_ACTIONS", payload: { actions: data.actions } });
       }
 

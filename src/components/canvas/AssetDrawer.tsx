@@ -1,59 +1,179 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
 import { useCanvas, type AssetTab } from "@/lib/canvas/context";
 import { supabaseQueries } from "@/lib/api";
 import type { Avatar, Voice, Script } from "@/types";
 import type { AvatarNodeData, VoiceNodeData, ScriptNodeData } from "@/lib/canvas/types";
-import { X, Check, Mic, UserCircle, FileText, Loader2 } from "lucide-react";
+import { X, Check, Mic, UserCircle, FileText, Loader2, ChevronDown } from "lucide-react";
 
 /* ═══════════════════════════════════════════════════════════
    AssetDrawer — Floating panel for selecting assets
    Avatars / Voices / Scripts — each configures its canvas node
+
+   Production-grade pagination:
+   - Page-based loading (20 items per page)
+   - "Load more" button with total count display
+   - Maintains selection state across page loads
+   - Error handling with retry
    ═══════════════════════════════════════════════════════════ */
 
-export function AssetDrawer() {
-  const { assetTab, setAssetTab, setActivePanel, state, updateNodeData, getNodeByType, loadDefaultWorkflow } = useCanvas();
-  const [avatars, setAvatars] = useState<Avatar[]>([]);
-  const [voices, setVoices] = useState<Voice[]>([]);
-  const [scripts, setScripts] = useState<Script[]>([]);
-  const [loading, setLoading] = useState(true);
+const PAGE_SIZE = 20;
 
-  useEffect(() => {
-    (async () => {
-      const [a, v, s] = await Promise.all([
-        supabaseQueries.getAvatars(),
-        supabaseQueries.getVoices(),
-        supabaseQueries.getScripts(),
-      ]);
-      setAvatars(a);
-      setVoices(v);
-      setScripts(s);
-      setLoading(false);
-    })();
+interface PaginatedState<T> {
+  items: T[];
+  total: number;
+  page: number;
+  loading: boolean;
+  error: string | null;
+  hasMore: boolean;
+}
+
+function createInitialPaginatedState<T>(): PaginatedState<T> {
+  return { items: [], total: 0, page: 0, loading: false, error: null, hasMore: true };
+}
+
+export function AssetDrawer() {
+  const { assetTab, setAssetTab, setActivePanel, state, dispatch, updateNodeData, getNodeByType, loadDefaultWorkflow } = useCanvas();
+
+  const [avatars, setAvatars] = useState<PaginatedState<Avatar>>(createInitialPaginatedState);
+  const [voices, setVoices] = useState<PaginatedState<Voice>>(createInitialPaginatedState);
+  const [scripts, setScripts] = useState<PaginatedState<Script>>(createInitialPaginatedState);
+  const [initialLoading, setInitialLoading] = useState(true);
+
+  /* ─── Fetch helpers ─── */
+  const fetchAvatars = useCallback(async (page: number, append: boolean) => {
+    setAvatars((prev) => ({ ...prev, loading: true, error: null }));
+    try {
+      const result = await supabaseQueries.getAvatars({ page, pageSize: PAGE_SIZE });
+      setAvatars((prev) => ({
+        items: append ? [...prev.items, ...result.data] : result.data,
+        total: result.total,
+        page,
+        loading: false,
+        error: null,
+        hasMore: (page + 1) * PAGE_SIZE < result.total,
+      }));
+    } catch (err) {
+      setAvatars((prev) => ({
+        ...prev,
+        loading: false,
+        error: err instanceof Error ? err.message : "Failed to load avatars",
+      }));
+    }
   }, []);
 
-  const ensureWorkflow = () => {
-    if (state.nodes.length === 0) loadDefaultWorkflow();
-  };
+  const fetchVoices = useCallback(async (page: number, append: boolean) => {
+    setVoices((prev) => ({ ...prev, loading: true, error: null }));
+    try {
+      const result = await supabaseQueries.getVoices({ page, pageSize: PAGE_SIZE });
+      setVoices((prev) => ({
+        items: append ? [...prev.items, ...result.data] : result.data,
+        total: result.total,
+        page,
+        loading: false,
+        error: null,
+        hasMore: (page + 1) * PAGE_SIZE < result.total,
+      }));
+    } catch (err) {
+      setVoices((prev) => ({
+        ...prev,
+        loading: false,
+        error: err instanceof Error ? err.message : "Failed to load voices",
+      }));
+    }
+  }, []);
 
+  const fetchScripts = useCallback(async (page: number, append: boolean) => {
+    setScripts((prev) => ({ ...prev, loading: true, error: null }));
+    try {
+      const result = await supabaseQueries.getScripts({ page, pageSize: PAGE_SIZE });
+      setScripts((prev) => ({
+        items: append ? [...prev.items, ...result.data] : result.data,
+        total: result.total,
+        page,
+        loading: false,
+        error: null,
+        hasMore: (page + 1) * PAGE_SIZE < result.total,
+      }));
+    } catch (err) {
+      setScripts((prev) => ({
+        ...prev,
+        loading: false,
+        error: err instanceof Error ? err.message : "Failed to load scripts",
+      }));
+    }
+  }, []);
+
+  /* ─── Initial load ─── */
+  useEffect(() => {
+    Promise.all([
+      fetchAvatars(0, false),
+      fetchVoices(0, false),
+      fetchScripts(0, false),
+    ]).finally(() => setInitialLoading(false));
+  }, [fetchAvatars, fetchVoices, fetchScripts]);
+
+  /* ─── Selection handlers ─── */
   const selectAvatar = (av: Avatar) => {
-    ensureWorkflow();
-    const node = getNodeByType("avatar");
-    if (node) updateNodeData(node.id, { avatarId: av.id, avatar: av } as AvatarNodeData);
+    if (state.nodes.length === 0) loadDefaultWorkflow();
+    const apply = () => {
+      const node = getNodeByType("avatar");
+      if (node) {
+        updateNodeData(node.id, { avatarId: av.id, avatar: av } as AvatarNodeData);
+      } else {
+        dispatch({
+          type: "ADD_NODE",
+          payload: { nodeType: "avatar", data: { avatarId: av.id, avatar: av } },
+        });
+      }
+    };
+    if (state.nodes.length === 0) {
+      setTimeout(apply, 50);
+    } else {
+      apply();
+    }
   };
 
   const selectVoice = (v: Voice) => {
-    ensureWorkflow();
-    const node = getNodeByType("voice");
-    if (node) updateNodeData(node.id, { voiceId: v.id, voice: v } as VoiceNodeData);
+    if (state.nodes.length === 0) loadDefaultWorkflow();
+    const apply = () => {
+      const node = getNodeByType("voice");
+      if (node) {
+        updateNodeData(node.id, { voiceId: v.id, voice: v } as VoiceNodeData);
+      } else {
+        dispatch({
+          type: "ADD_NODE",
+          payload: { nodeType: "voice", data: { voiceId: v.id, voice: v } },
+        });
+      }
+    };
+    if (state.nodes.length === 0) {
+      setTimeout(apply, 50);
+    } else {
+      apply();
+    }
   };
 
   const selectScript = (s: Script) => {
-    ensureWorkflow();
-    const node = getNodeByType("script");
-    if (node) updateNodeData(node.id, { scriptId: s.id, script: s, content: s.content } as ScriptNodeData);
+    if (state.nodes.length === 0) loadDefaultWorkflow();
+    const apply = () => {
+      const node = getNodeByType("script");
+      if (node) {
+        updateNodeData(node.id, { scriptId: s.id, script: s, content: s.content } as ScriptNodeData);
+      } else {
+        dispatch({
+          type: "ADD_NODE",
+          payload: { nodeType: "script", data: { scriptId: s.id, script: s, content: s.content } },
+        });
+      }
+    };
+    if (state.nodes.length === 0) {
+      setTimeout(apply, 50);
+    } else {
+      apply();
+    }
   };
 
   const avatarNode = getNodeByType("avatar");
@@ -64,9 +184,9 @@ export function AssetDrawer() {
   const selectedScriptId = (scriptNode?.data as ScriptNodeData)?.scriptId;
 
   const tabs: { id: AssetTab; label: string; icon: typeof UserCircle; count: number }[] = [
-    { id: "avatars", label: "Avatars", icon: UserCircle, count: avatars.length },
-    { id: "voices", label: "Voices", icon: Mic, count: voices.length },
-    { id: "scripts", label: "Scripts", icon: FileText, count: scripts.length },
+    { id: "avatars", label: "Avatars", icon: UserCircle, count: avatars.total },
+    { id: "voices", label: "Voices", icon: Mic, count: voices.total },
+    { id: "scripts", label: "Scripts", icon: FileText, count: scripts.total },
   ];
 
   return (
@@ -113,102 +233,180 @@ export function AssetDrawer() {
 
       {/* Content */}
       <div className="flex-1 overflow-y-auto px-3 py-2 min-h-0">
-        {loading ? (
+        {initialLoading ? (
           <div className="flex items-center justify-center py-12">
             <Loader2 size={18} className="text-white/20 animate-spin" />
           </div>
         ) : assetTab === "avatars" ? (
-          <div className="grid grid-cols-2 gap-2">
-            {avatars.length === 0 ? (
-              <div className="col-span-2 py-8 text-center text-[11px] text-white/25">No avatars yet</div>
-            ) : (
-              avatars.map((av) => (
-                <button
-                  key={av.id}
-                  onClick={() => selectAvatar(av)}
-                  className={`relative rounded-xl overflow-hidden border transition-all ${
-                    selectedAvatarId === av.id
-                      ? "border-purple-500/40 ring-1 ring-purple-500/20"
-                      : "border-white/[0.06] hover:border-white/12"
-                  }`}
-                >
-                  <div className="aspect-square bg-white/[0.02]">
-                    {av.image_url ? (
-                      <img src={av.image_url} alt={av.name} className="w-full h-full object-cover" />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center text-white/15 text-lg font-bold">
-                        {av.name[0]}
+          <div>
+            <div className="grid grid-cols-2 gap-2">
+              {avatars.items.length === 0 ? (
+                <div className="col-span-2 py-8 text-center text-[11px] text-white/25">No avatars yet</div>
+              ) : (
+                avatars.items.map((av) => (
+                  <button
+                    key={av.id}
+                    onClick={() => selectAvatar(av)}
+                    className={`relative rounded-xl overflow-hidden border transition-all ${
+                      selectedAvatarId === av.id
+                        ? "border-purple-500/40 ring-1 ring-purple-500/20"
+                        : "border-white/[0.06] hover:border-white/12"
+                    }`}
+                  >
+                    <div className="aspect-square bg-white/[0.02]">
+                      {av.image_url ? (
+                        <img src={av.image_url} alt={av.name} className="w-full h-full object-cover" />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center text-white/15 text-lg font-bold">
+                          {av.name[0]}
+                        </div>
+                      )}
+                    </div>
+                    <div className="px-2 py-1.5 text-[10px] font-medium text-white/50 truncate text-center">{av.name}</div>
+                    {selectedAvatarId === av.id && (
+                      <div className="absolute top-1.5 right-1.5 w-5 h-5 rounded-full bg-purple-500 flex items-center justify-center">
+                        <Check size={10} className="text-white" />
                       </div>
                     )}
-                  </div>
-                  <div className="px-2 py-1.5 text-[10px] font-medium text-white/50 truncate text-center">{av.name}</div>
-                  {selectedAvatarId === av.id && (
-                    <div className="absolute top-1.5 right-1.5 w-5 h-5 rounded-full bg-purple-500 flex items-center justify-center">
-                      <Check size={10} className="text-white" />
-                    </div>
-                  )}
-                </button>
-              ))
+                  </button>
+                ))
+              )}
+            </div>
+            {avatars.error && <ErrorMessage message={avatars.error} onRetry={() => fetchAvatars(avatars.page, false)} />}
+            {avatars.hasMore && (
+              <LoadMoreButton
+                loading={avatars.loading}
+                loaded={avatars.items.length}
+                total={avatars.total}
+                onClick={() => fetchAvatars(avatars.page + 1, true)}
+              />
             )}
           </div>
         ) : assetTab === "voices" ? (
-          <div className="space-y-1.5">
-            {voices.length === 0 ? (
-              <div className="py-8 text-center text-[11px] text-white/25">No voices yet</div>
-            ) : (
-              voices.map((v) => (
-                <button
-                  key={v.id}
-                  onClick={() => selectVoice(v)}
-                  className={`w-full flex items-center gap-2.5 rounded-xl px-3 py-2.5 border transition-all ${
-                    selectedVoiceId === v.id
-                      ? "border-pink-500/40 bg-pink-500/8"
-                      : "border-white/[0.05] hover:border-white/10 bg-white/[0.02]"
-                  }`}
-                >
-                  <div
-                    className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 text-[10px] font-bold"
-                    style={{
-                      background: selectedVoiceId === v.id ? "rgba(236,72,153,0.15)" : "rgba(255,255,255,0.04)",
-                      color: selectedVoiceId === v.id ? "#ec4899" : "rgba(255,255,255,0.25)",
-                    }}
+          <div>
+            <div className="space-y-1.5">
+              {voices.items.length === 0 ? (
+                <div className="py-8 text-center text-[11px] text-white/25">No voices yet</div>
+              ) : (
+                voices.items.map((v) => (
+                  <button
+                    key={v.id}
+                    onClick={() => selectVoice(v)}
+                    className={`w-full flex items-center gap-2.5 rounded-xl px-3 py-2.5 border transition-all ${
+                      selectedVoiceId === v.id
+                        ? "border-pink-500/40 bg-pink-500/8"
+                        : "border-white/[0.05] hover:border-white/10 bg-white/[0.02]"
+                    }`}
                   >
-                    {v.name[0]}
-                  </div>
-                  <span className="text-[12px] font-medium text-white/70 truncate">{v.name}</span>
-                  {selectedVoiceId === v.id && <Check size={13} className="ml-auto text-pink-400 shrink-0" />}
-                </button>
-              ))
+                    <div
+                      className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 text-[10px] font-bold"
+                      style={{
+                        background: selectedVoiceId === v.id ? "rgba(236,72,153,0.15)" : "rgba(255,255,255,0.04)",
+                        color: selectedVoiceId === v.id ? "#ec4899" : "rgba(255,255,255,0.25)",
+                      }}
+                    >
+                      {v.name[0]}
+                    </div>
+                    <span className="text-[12px] font-medium text-white/70 truncate">{v.name}</span>
+                    {selectedVoiceId === v.id && <Check size={13} className="ml-auto text-pink-400 shrink-0" />}
+                  </button>
+                ))
+              )}
+            </div>
+            {voices.error && <ErrorMessage message={voices.error} onRetry={() => fetchVoices(voices.page, false)} />}
+            {voices.hasMore && (
+              <LoadMoreButton
+                loading={voices.loading}
+                loaded={voices.items.length}
+                total={voices.total}
+                onClick={() => fetchVoices(voices.page + 1, true)}
+              />
             )}
           </div>
         ) : (
-          <div className="space-y-1.5">
-            {scripts.length === 0 ? (
-              <div className="py-8 text-center text-[11px] text-white/25">No scripts yet</div>
-            ) : (
-              scripts.map((s) => (
-                <button
-                  key={s.id}
-                  onClick={() => selectScript(s)}
-                  className={`w-full text-left rounded-xl px-3 py-2.5 border transition-all ${
-                    selectedScriptId === s.id
-                      ? "border-emerald-500/40 bg-emerald-500/8"
-                      : "border-white/[0.05] hover:border-white/10 bg-white/[0.02]"
-                  }`}
-                >
-                  <div className="text-[11px] font-medium text-white/70 truncate">{s.name}</div>
-                  <div className="text-[10px] text-white/30 truncate mt-0.5">{s.content}</div>
-                  {selectedScriptId === s.id && (
-                    <div className="flex items-center gap-1 mt-1 text-[9px] text-emerald-400/70">
-                      <Check size={9} /> Selected
-                    </div>
-                  )}
-                </button>
-              ))
+          <div>
+            <div className="space-y-1.5">
+              {scripts.items.length === 0 ? (
+                <div className="py-8 text-center text-[11px] text-white/25">No scripts yet</div>
+              ) : (
+                scripts.items.map((s) => (
+                  <button
+                    key={s.id}
+                    onClick={() => selectScript(s)}
+                    className={`w-full text-left rounded-xl px-3 py-2.5 border transition-all ${
+                      selectedScriptId === s.id
+                        ? "border-emerald-500/40 bg-emerald-500/8"
+                        : "border-white/[0.05] hover:border-white/10 bg-white/[0.02]"
+                    }`}
+                  >
+                    <div className="text-[11px] font-medium text-white/70 truncate">{s.name}</div>
+                    <div className="text-[10px] text-white/30 truncate mt-0.5">{s.content}</div>
+                    {selectedScriptId === s.id && (
+                      <div className="flex items-center gap-1 mt-1 text-[9px] text-emerald-400/70">
+                        <Check size={9} /> Selected
+                      </div>
+                    )}
+                  </button>
+                ))
+              )}
+            </div>
+            {scripts.error && <ErrorMessage message={scripts.error} onRetry={() => fetchScripts(scripts.page, false)} />}
+            {scripts.hasMore && (
+              <LoadMoreButton
+                loading={scripts.loading}
+                loaded={scripts.items.length}
+                total={scripts.total}
+                onClick={() => fetchScripts(scripts.page + 1, true)}
+              />
             )}
           </div>
         )}
       </div>
     </motion.div>
+  );
+}
+
+/* ─── Shared sub-components ─── */
+
+function LoadMoreButton({
+  loading,
+  loaded,
+  total,
+  onClick,
+}: {
+  loading: boolean;
+  loaded: number;
+  total: number;
+  onClick: () => void;
+}) {
+  return (
+    <button
+      onClick={onClick}
+      disabled={loading}
+      className="w-full flex items-center justify-center gap-1.5 py-2.5 mt-2 rounded-xl border border-white/[0.05] bg-white/[0.02] text-[11px] text-white/40 hover:text-white/60 hover:bg-white/[0.04] transition-all disabled:opacity-50"
+    >
+      {loading ? (
+        <Loader2 size={12} className="animate-spin" />
+      ) : (
+        <>
+          <ChevronDown size={12} />
+          Load more ({loaded} of {total})
+        </>
+      )}
+    </button>
+  );
+}
+
+function ErrorMessage({ message, onRetry }: { message: string; onRetry: () => void }) {
+  return (
+    <div className="flex items-center justify-between px-3 py-2 mt-2 rounded-lg bg-red-500/8 border border-red-500/15">
+      <span className="text-[10px] text-red-400/80 truncate">{message}</span>
+      <button
+        onClick={onRetry}
+        className="text-[10px] text-red-400 hover:text-red-300 font-medium shrink-0 ml-2"
+      >
+        Retry
+      </button>
+    </div>
   );
 }

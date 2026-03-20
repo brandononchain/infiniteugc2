@@ -1,18 +1,6 @@
 import type { Metadata } from "next";
-import { Outfit, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { AuthProviderClient } from "@/components/auth-provider-client";
-
-const outfit = Outfit({
-  variable: "--font-outfit",
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700", "800"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
 
 export const metadata: Metadata = {
   title: "InfiniteUGC | AI Video Content at Scale",
@@ -40,9 +28,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="scroll-smooth">
-      <body
-        className={`${outfit.variable} ${geistMono.variable} antialiased`}
-      >
+      <body className="antialiased">
         <AuthProviderWrapper>{children}</AuthProviderWrapper>
       </body>
     </html>
@@ -51,7 +37,5 @@ export default function RootLayout({
 
 /* Client wrapper so layout.tsx stays a Server Component for metadata */
 function AuthProviderWrapper({ children }: { children: React.ReactNode }) {
-  // AuthProvider is a client component imported dynamically
-  // to keep the root layout as a server component
   return <AuthProviderClient>{children}</AuthProviderClient>;
 }
