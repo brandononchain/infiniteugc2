@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import path from "path";
 
 const nextConfig: NextConfig = {
   images: {
@@ -9,12 +10,21 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-  // Exclude backend-only files from Next.js compilation
+  // Ensure @/ path alias resolves to src/ in all build environments
+  turbopack: {
+    resolveAlias: {
+      "@": path.resolve(process.cwd(), "src"),
+    },
+  },
   webpack: (config) => {
     config.externals = config.externals || [];
+    config.resolve = config.resolve || {};
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      "@": path.resolve(process.cwd(), "src"),
+    };
     return config;
   },
-  // Ignore TypeScript errors from Express backend files during Next.js build
   typescript: {
     ignoreBuildErrors: false,
   },
