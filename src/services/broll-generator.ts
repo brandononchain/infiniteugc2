@@ -96,7 +96,7 @@ async function createKlingTask(
     throw new Error(`[BROLL-KLING] Create task failed (${response.status}): ${errorText}`);
   }
 
-  const result = await response.json();
+  const result: any = await response.json();
 
   if (result.code !== 0 || !result.data?.task_id) {
     throw new Error(`[BROLL-KLING] Create task failed: ${result.message || "No task ID returned"}`);
@@ -126,7 +126,7 @@ async function pollKlingTask(
       throw new Error(`[BROLL-KLING] Get task status failed (${response.status}): ${errorText}`);
     }
 
-    const result = await response.json();
+    const result: any = await response.json();
 
     if (result.code !== 0) {
       throw new Error(`[BROLL-KLING] Get task status error: ${result.message || "Unknown error"}`);

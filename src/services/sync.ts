@@ -107,7 +107,7 @@ export async function createSyncGeneration(
     );
   }
 
-  const result: GenerationResponse = await response.json();
+  const result = await response.json() as GenerationResponse;
   console.log(`[SYNC] Generation created: id=${result.id}, status=${result.status}`);
   return { id: result.id, status: result.status };
 }
@@ -132,7 +132,7 @@ export async function getSyncGenerationStatus(
     );
   }
 
-  return response.json();
+  return await response.json() as GenerationResponse;
 }
 
 /**

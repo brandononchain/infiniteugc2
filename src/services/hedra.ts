@@ -79,7 +79,7 @@ export async function createAssetRecord(
     throw new Error(`[HEDRA] Create asset failed (${response.status}): ${text}`);
   }
 
-  const data: HedraAssetResponse = await response.json();
+  const data: HedraAssetResponse = (await response.json()) as HedraAssetResponse;
   console.log(`[HEDRA] Asset record created: ${data.id}`);
   return data;
 }
@@ -216,7 +216,7 @@ export async function createHedraGeneration(options: {
     throw new Error(`[HEDRA] Create generation failed (${response.status}): ${text}`);
   }
 
-  const data: HedraGenerationResponse = await response.json();
+  const data: HedraGenerationResponse = (await response.json()) as HedraGenerationResponse;
 
   if (!data.id) {
     throw new Error("[HEDRA] No generation ID returned");
@@ -247,7 +247,7 @@ export async function getGenerationStatus(
     throw new Error(`[HEDRA] Get status failed (${response.status}): ${text}`);
   }
 
-  return response.json();
+  return (await response.json()) as HedraStatusResponse;
 }
 
 /**
@@ -307,7 +307,7 @@ export async function listHedraVoices(apiKey: string): Promise<HedraVoice[]> {
     throw new Error(`[HEDRA] List voices failed (${response.status}): ${text}`);
   }
 
-  return response.json();
+  return (await response.json()) as HedraVoice[];
 }
 
 /**

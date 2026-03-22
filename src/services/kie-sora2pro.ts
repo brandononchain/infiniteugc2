@@ -129,7 +129,7 @@ async function createSoraProTask(
     );
   }
 
-  const result: CreateTaskResponse = await response.json();
+  const result: CreateTaskResponse = (await response.json()) as CreateTaskResponse;
 
   if (result.code !== 200 || !result.data?.taskId) {
     throw new Error(
@@ -166,7 +166,7 @@ async function getTaskStatus(
     );
   }
 
-  const result: TaskStatusResponse = await response.json();
+  const result: TaskStatusResponse = (await response.json()) as TaskStatusResponse;
 
   if (result.code !== 200) {
     throw new Error(
