@@ -6,29 +6,60 @@ import type { WorkflowNodeType, WorkflowNode, Connection } from "./types";
    Defines the valid directed edges in the workflow graph.
    Each key maps to the set of node types it can connect TO.
 
-   Valid flow:
-   product  → script
-   avatar   → provider
-   script   → provider
-   voice    → provider
-   provider → captions, output
-   captions → output
+   Core pipeline:
+   product    → script, clone
+   avatar     → provider, motion_control
+   script     → provider, premium_video, mass_batch
+   voice      → provider, motion_control, lipsync, dubbing
+   provider   → captions, output
+   captions   → output
+   voice_clone → voice
+
+   Creative:
+   storyboard    → script
+   image_gen     → broll, motion_control, provider
+
+   Post-production (output feeds into):
+   output        → hooks, dubbing, lipsync, clone
+
+   Standalone production nodes:
+   premium_video → hooks, dubbing, clone
+   mass_batch    → hooks, dubbing, clone
+   motion_control → output, hooks, dubbing
+   broll          → output
 
    Rules:
    - No self-connections
    - No duplicate connections
-   - No cycles (output has no outgoing edges)
-   - Max 1 connection from any source to any target
+   - Terminal nodes have no outgoing edges
    ═══════════════════════════════════════════════════════════ */
 
 const ALLOWED_CONNECTIONS: Record<WorkflowNodeType, WorkflowNodeType[]> = {
-  product:  ["script"],
-  avatar:   ["provider"],
-  script:   ["provider"],
-  voice:    ["provider"],
-  provider: ["captions", "output"],
-  captions: ["output"],
-  output:   [], // terminal node — no outgoing connections
+  // Core pipeline
+  product:         ["script", "clone"],
+  avatar:          ["provider", "motion_control"],
+  script:          ["provider", "premium_video", "mass_batch"],
+  voice:           ["provider", "motion_control", "lipsync", "dubbing"],
+  provider:        ["captions", "output"],
+  captions:        ["output"],
+  output:          ["hooks", "dubbing", "lipsync", "clone"],
+
+  // Creative / Input
+  storyboard:      ["script"],
+  image_gen:       ["broll", "motion_control", "provider"],
+  voice_clone:     ["voice"],
+
+  // Production
+  premium_video:   ["hooks", "dubbing", "clone"],
+  mass_batch:      ["hooks", "dubbing", "clone"],
+  motion_control:  ["output", "hooks", "dubbing"],
+  broll:           ["output"],
+
+  // Post-production (terminal or chain)
+  hooks:           [],
+  dubbing:         [],
+  lipsync:         [],
+  clone:           ["hooks", "dubbing"],
 };
 
 export interface ConnectionValidationResult {

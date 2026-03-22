@@ -5,6 +5,8 @@ import { motion } from "framer-motion";
 import { useCanvas } from "@/lib/canvas/context";
 import {
   NODE_METADATA,
+  VIDEO_PROVIDERS,
+  BROLL_MODELS,
   type WorkflowNode,
   type ProductNodeData,
   type AvatarNodeData,
@@ -13,7 +15,17 @@ import {
   type ProviderNodeData,
   type CaptionsNodeData,
   type OutputNodeData,
-  VIDEO_PROVIDERS,
+  type ImageGenNodeData,
+  type VoiceCloneNodeData,
+  type StoryboardNodeData,
+  type PremiumVideoNodeData,
+  type MassBatchNodeData,
+  type MotionControlNodeData,
+  type BRollNodeData,
+  type HooksNodeData,
+  type DubbingNodeData,
+  type LipsyncNodeData,
+  type CloneNodeData,
 } from "@/lib/canvas/types";
 import {
   Package,
@@ -27,17 +39,30 @@ import {
   AlertCircle,
   Loader2,
   X,
+  ImagePlus,
+  AudioLines,
+  LayoutPanelTop,
+  Crown,
+  Layers,
+  Move3d,
+  Film,
+  Zap,
+  Globe,
+  Speech,
+  Copy,
 } from "lucide-react";
 
 const ICON_MAP = {
-  Package,
-  UserCircle,
-  FileText,
-  Mic,
-  Cpu,
-  Subtitles,
-  Play,
+  Package, UserCircle, FileText, Mic, Cpu, Subtitles, Play,
+  ImagePlus, AudioLines, LayoutPanelTop, Crown, Layers, Move3d,
+  Film, Zap, Globe, Speech, Copy,
 } as const;
+
+/* ─── Nodes that have NO input port (source-only) ─── */
+const NO_INPUT_PORT = new Set(["product", "avatar", "storyboard", "image_gen", "voice_clone"]);
+
+/* ─── Nodes that have NO output port (terminal) ─── */
+const NO_OUTPUT_PORT = new Set(["hooks", "dubbing", "lipsync"]);
 
 /* ═══════════════════════════════════════════════════════════
    WorkflowNodeCard — Individual draggable node on canvas
@@ -58,7 +83,6 @@ export function WorkflowNodeCard({ node }: { node: WorkflowNode }) {
     (e: React.MouseEvent) => {
       e.stopPropagation();
       isDragging.current = true;
-      // Account for both zoom and pan when calculating drag offset
       dragStart.current = {
         x: (e.clientX - state.pan.x) / state.zoom - node.position.x,
         y: (e.clientY - state.pan.y) / state.zoom - node.position.y,
@@ -148,6 +172,60 @@ export function WorkflowNodeCard({ node }: { node: WorkflowNode }) {
         const d = node.data as OutputNodeData;
         return d.campaignName || "Ready to generate";
       }
+      case "image_gen": {
+        const d = node.data as ImageGenNodeData;
+        if (d.generatedImageUrl) return "Image generated";
+        if (d.prompt) return d.prompt.slice(0, 35) + "...";
+        return "Set prompt to generate";
+      }
+      case "voice_clone": {
+        const d = node.data as VoiceCloneNodeData;
+        return d.clonedVoiceId ? `Cloned: ${d.name}` : d.name || "Upload audio to clone";
+      }
+      case "storyboard": {
+        const d = node.data as StoryboardNodeData;
+        return d.scenes && d.scenes.length > 0 ? `${d.scenes.length} scene${d.scenes.length > 1 ? "s" : ""} planned` : "Plan your scenes";
+      }
+      case "premium_video": {
+        const d = node.data as PremiumVideoNodeData;
+        if (d.estimatedChunks) return `${d.estimatedChunks} chunks, ~${d.estimatedCredits} cr`;
+        return d.videoProvider === "veo3" ? "VEO 3 Premium" : d.videoProvider || "Configure script";
+      }
+      case "mass_batch": {
+        const d = node.data as MassBatchNodeData;
+        if (d.scriptCount) return `${d.scriptCount} scripts queued`;
+        return d.campaignName || "Set script group";
+      }
+      case "motion_control": {
+        const d = node.data as MotionControlNodeData;
+        if (d.presetMotion) return d.presetMotion;
+        return d.imageUrl ? "Image set" : "Set image & motion";
+      }
+      case "broll": {
+        const d = node.data as BRollNodeData;
+        if (d.prompt) return d.prompt.slice(0, 35) + "...";
+        return d.model ? BROLL_MODELS[d.model]?.label || d.model : "Set prompt & image";
+      }
+      case "hooks": {
+        const d = node.data as HooksNodeData;
+        return d.sourceId ? "Source video set" : "Connect completed video";
+      }
+      case "dubbing": {
+        const d = node.data as DubbingNodeData;
+        if (d.languages && d.languages.length > 0) {
+          return `${d.languages.length} language${d.languages.length > 1 ? "s" : ""}`;
+        }
+        return "Select target languages";
+      }
+      case "lipsync": {
+        const d = node.data as LipsyncNodeData;
+        return d.script ? `Script set (${d.model})` : "Set script & voice";
+      }
+      case "clone": {
+        const d = node.data as CloneNodeData;
+        if (d.mode === "advanced" && d.productName) return `Advanced: ${d.productName}`;
+        return d.userPrompt ? d.userPrompt.slice(0, 35) + "..." : "Set source & prompt";
+      }
       default:
         return "Not configured";
     }
@@ -228,7 +306,7 @@ export function WorkflowNodeCard({ node }: { node: WorkflowNode }) {
 
         {/* Connection ports */}
         {/* Left (input) port */}
-        {node.type !== "product" && node.type !== "avatar" && (
+        {!NO_INPUT_PORT.has(node.type) && (
           <div
             className="absolute left-0 top-1/2 -translate-x-1/2 -translate-y-1/2 w-3 h-3 rounded-full border-2"
             style={{
@@ -238,7 +316,7 @@ export function WorkflowNodeCard({ node }: { node: WorkflowNode }) {
           />
         )}
         {/* Right (output) port */}
-        {node.type !== "output" && (
+        {!NO_OUTPUT_PORT.has(node.type) && (
           <div
             className="absolute right-0 top-1/2 translate-x-1/2 -translate-y-1/2 w-3 h-3 rounded-full border-2"
             style={{

@@ -92,6 +92,28 @@ function getDefaultNodeData(type: WorkflowNodeType): NodeData {
       return { enabled: true };
     case "output":
       return {};
+    case "image_gen":
+      return { model: "seedream_4_5", aspectRatio: "1:1", count: 1 };
+    case "voice_clone":
+      return { sourceType: "upload" };
+    case "storyboard":
+      return { scenes: [], totalScenes: 0 };
+    case "premium_video":
+      return { videoProvider: "veo3" };
+    case "mass_batch":
+      return { videoProvider: "hedra_avatar", captionEnabled: true };
+    case "motion_control":
+      return { lipsyncModel: "lipsync-2", voiceSource: "clone_from_video" };
+    case "broll":
+      return { model: "kling-2.6", duration: 5 };
+    case "hooks":
+      return { sourceType: "job" };
+    case "dubbing":
+      return { mode: "quality", captionEnabled: false, languages: [] };
+    case "lipsync":
+      return { model: "lipsync-2" };
+    case "clone":
+      return { mode: "standard", preferredModel: "veo3" };
   }
 }
 
