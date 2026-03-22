@@ -84,7 +84,7 @@ export async function listSupportedLanguages(
       return FALLBACK_LANGUAGES;
     }
 
-    const result = await response.json();
+    const result: any = await response.json();
     console.log("[DUBBING] Raw languages response:", JSON.stringify(result).slice(0, 2000));
 
     // Normalize response — HeyGen may return various structures

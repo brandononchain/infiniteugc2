@@ -187,7 +187,7 @@ async function pollSeedreamTask(
       continue;
     }
 
-    const data = await response.json();
+    const data: any = await response.json();
 
     if (data.status === "succeeded" || data.status === "completed") {
       // Look for image URL in results

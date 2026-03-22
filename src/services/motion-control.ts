@@ -146,7 +146,7 @@ async function createMotionControlTask(
     throw new Error(`[MOTION-CTRL] Create task failed (${response.status}): ${errorText}`);
   }
 
-  const result = await response.json();
+  const result: any = await response.json();
 
   if (result.code !== 0 || !result.data?.task_id) {
     throw new Error(
@@ -180,7 +180,7 @@ async function pollMotionControlTask(
       );
     }
 
-    const result = await response.json();
+    const result: any = await response.json();
 
     if (result.code !== 0) {
       throw new Error(

@@ -93,7 +93,7 @@ export async function createSora2Task(
     );
   }
 
-  const result: CreateTaskResponse = await response.json();
+  const result = await response.json() as CreateTaskResponse;
 
   if (result.code !== 200 || !result.data?.taskId) {
     throw new Error(
@@ -132,7 +132,7 @@ export async function getSora2TaskStatus(
     );
   }
 
-  const result: RecordInfoResponse = await response.json();
+  const result = await response.json() as RecordInfoResponse;
 
   if (result.code !== 200) {
     throw new Error(

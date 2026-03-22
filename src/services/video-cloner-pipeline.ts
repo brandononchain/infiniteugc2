@@ -307,7 +307,7 @@ async function regenerateWithKlingMC(
       throw new Error(`Kling MC create failed (${response.status}): ${errorText}`);
     }
 
-    const result = await response.json();
+    const result: any = await response.json();
     if (result.code !== 0 || !result.data?.task_id) {
       throw new Error(`Kling MC task creation failed: ${result.message || "No task ID"}`);
     }
@@ -326,7 +326,7 @@ async function regenerateWithKlingMC(
         throw new Error(`Kling MC poll failed: ${statusResponse.status}`);
       }
 
-      const statusResult = await statusResponse.json();
+      const statusResult: any = await statusResponse.json();
       const status = statusResult.data?.task_status || statusResult.data?.status;
 
       if (attempt % 10 === 0) {

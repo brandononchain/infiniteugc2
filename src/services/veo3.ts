@@ -129,7 +129,7 @@ async function uploadReferenceImage(imageUrl: string): Promise<string> {
     }),
   });
 
-  const body: KieFileUploadResponse = await res.json();
+  const body = await res.json() as KieFileUploadResponse;
 
   if (!body.success || body.code !== 200 || !body.data?.downloadUrl) {
     console.warn(`[VEO3] File upload failed: ${body.msg}`);
@@ -187,7 +187,7 @@ export async function generateVideo(
     body: JSON.stringify(payload),
   });
 
-  const body: KieGenerateResponse = await res.json();
+  const body = await res.json() as KieGenerateResponse;
 
   if (body.code !== 200 || !body.data?.taskId) {
     const msg = body.msg || `HTTP ${res.status}`;
@@ -226,7 +226,7 @@ async function getTaskStatus(taskId: string): Promise<KieRecordInfoResponse> {
     }
   );
 
-  return res.json();
+  return await res.json() as KieRecordInfoResponse;
 }
 
 export async function waitForVideoCompletion(

@@ -215,7 +215,7 @@ async function makeSignedRequest(
     );
   }
 
-  const data = await response.json();
+  const data: any = await response.json();
 
   console.log(
     `[OMNIHUMAN] Response:`,
