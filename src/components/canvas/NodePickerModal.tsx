@@ -13,10 +13,20 @@ import {
   Subtitles,
   Play,
   Sparkles,
-  Image,
   Video,
-  Wand2,
   Layout,
+  ImagePlus,
+  AudioLines,
+  LayoutPanelTop,
+  Crown,
+  Layers,
+  Move3d,
+  Film,
+  Zap,
+  Globe,
+  Speech,
+  Copy,
+  Scissors,
 } from "lucide-react";
 
 /* ═══════════════════════════════════════════════════════════
@@ -26,6 +36,8 @@ import {
 
 const ICON_MAP: Record<string, typeof Package> = {
   Package, UserCircle, FileText, Mic, Cpu, Subtitles, Play,
+  ImagePlus, AudioLines, LayoutPanelTop, Crown, Layers, Move3d,
+  Film, Zap, Globe, Speech, Copy,
 };
 
 interface NodeCategory {
@@ -40,19 +52,25 @@ const CATEGORIES: NodeCategory[] = [
     label: "Input",
     description: "Define what you're creating",
     icon: Package,
-    nodes: ["product"],
+    nodes: ["product", "storyboard"],
   },
   {
     label: "Creative",
-    description: "Avatar, script, and voice",
+    description: "Avatar, script, voice, images",
     icon: UserCircle,
-    nodes: ["avatar", "script", "voice"],
+    nodes: ["avatar", "script", "voice", "voice_clone", "image_gen"],
   },
   {
     label: "Production",
-    description: "Video engine and captions",
+    description: "Video engines and generation",
     icon: Video,
-    nodes: ["provider", "captions"],
+    nodes: ["provider", "captions", "premium_video", "mass_batch", "motion_control", "broll"],
+  },
+  {
+    label: "Post-Production",
+    description: "Hooks, dubbing, clone & more",
+    icon: Scissors,
+    nodes: ["hooks", "dubbing", "lipsync", "clone"],
   },
   {
     label: "Output",
@@ -93,7 +111,7 @@ export function NodePickerModal({ onClose }: { onClose: () => void }) {
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.95, y: 10 }}
         transition={{ type: "spring", stiffness: 400, damping: 30 }}
-        className="relative w-full max-w-[560px] rounded-2xl border border-white/[0.08] overflow-hidden shadow-2xl"
+        className="relative w-full max-w-[640px] rounded-2xl border border-white/[0.08] overflow-hidden shadow-2xl"
         style={{ background: "rgba(16, 16, 19, 0.97)", backdropFilter: "blur(40px)" }}
       >
         {/* Header */}
@@ -117,7 +135,7 @@ export function NodePickerModal({ onClose }: { onClose: () => void }) {
             className="flex items-center gap-2 px-3 py-2 rounded-xl text-[11px] font-medium text-accent-400/80 bg-accent-400/8 hover:bg-accent-400/12 border border-accent-400/15 transition-all"
           >
             <Layout size={13} />
-            Add Full Template
+            Add Standard Template
           </button>
           <button
             onClick={onClose}
@@ -129,11 +147,9 @@ export function NodePickerModal({ onClose }: { onClose: () => void }) {
         </div>
 
         {/* Categories */}
-        <div className="px-6 py-4 space-y-5 max-h-[400px] overflow-y-auto">
+        <div className="px-6 py-4 space-y-5 max-h-[480px] overflow-y-auto">
           {CATEGORIES.map((cat) => {
             const CatIcon = cat.icon;
-            const availableNodes = cat.nodes.filter((n) => !existingTypes.has(n));
-            const allAdded = availableNodes.length === 0;
 
             return (
               <div key={cat.label}>

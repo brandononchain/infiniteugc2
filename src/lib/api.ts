@@ -285,6 +285,171 @@ export const premiumJobs = {
 };
 
 /* ═══════════════════════════════════════════════════════════
+   DUBBING
+   ═══════════════════════════════════════════════════════════ */
+
+export interface GenerateDubbingParams {
+  source_type: "job" | "premium_job" | "mass_job" | "upload";
+  source_id?: string;
+  video_url?: string;
+  languages: Array<{ code: string; label: string }>;
+  mode?: "fast" | "quality";
+  caption_enabled?: boolean;
+  caption_style?: Record<string, unknown>;
+  caption_position?: { x: number; y: number };
+}
+
+export const dubbing = {
+  generate: (params: GenerateDubbingParams) =>
+    apiFetch<{ dubbing_job_ids: string[]; credits_remaining: number }>("/dubbing/generate", {
+      method: "POST",
+      body: JSON.stringify(params),
+    }),
+
+  list: () => apiFetch<{ dubbing_jobs: unknown[]; total: number }>("/dubbing"),
+
+  get: (id: string) => apiFetch<unknown>(`/dubbing/${id}`),
+
+  getLanguages: () => apiFetch<{ languages: Array<{ code: string; label: string }> }>("/dubbing/languages"),
+};
+
+/* ═══════════════════════════════════════════════════════════
+   MOTION CONTROL
+   ═══════════════════════════════════════════════════════════ */
+
+export interface GenerateMotionControlParams {
+  name?: string;
+  image_url: string;
+  video_url?: string;
+  preset_motion?: string;
+  script: string;
+  voice_source?: "clone_from_video" | "existing";
+  voice_id?: string;
+  lipsync_model?: "lipsync-2" | "lipsync-2-pro";
+  config?: {
+    duration?: number;
+    mode?: string;
+  };
+}
+
+export const motionControl = {
+  generate: (params: GenerateMotionControlParams) =>
+    apiFetch<{ success: boolean; job_id: string; credits_remaining: number }>("/motion-control/generate", {
+      method: "POST",
+      body: JSON.stringify(params),
+    }),
+
+  listJobs: () => apiFetch<{ jobs: unknown[]; total: number }>("/motion-control/jobs"),
+
+  getJob: (id: string) => apiFetch<unknown>(`/motion-control/jobs/${id}`),
+
+  getPresets: () => apiFetch<{ presets: string[] }>("/motion-control/preset-motions"),
+};
+
+/* ═══════════════════════════════════════════════════════════
+   B-ROLL
+   ═══════════════════════════════════════════════════════════ */
+
+export interface GenerateBRollParams {
+  name?: string;
+  prompt: string;
+  image_url: string;
+  model?: "kling-2.6" | "kling-3.0" | "seeddance-1.0-fast" | "seeddance-1.5-pro";
+  config?: {
+    duration?: number;
+    aspect_ratio?: string;
+  };
+}
+
+export const broll = {
+  generate: (params: GenerateBRollParams) =>
+    apiFetch<{ success: boolean; job_id: string; credits_remaining: number }>("/broll/generate", {
+      method: "POST",
+      body: JSON.stringify(params),
+    }),
+
+  listJobs: () => apiFetch<{ jobs: unknown[]; total: number }>("/broll/jobs"),
+
+  getJob: (id: string) => apiFetch<unknown>(`/broll/jobs/${id}`),
+};
+
+/* ═══════════════════════════════════════════════════════════
+   CLONE / KATORIP
+   ═══════════════════════════════════════════════════════════ */
+
+export interface GenerateCloneParams {
+  source_type: "job" | "premium_job" | "mass_job";
+  source_id: string;
+  user_prompt: string;
+}
+
+export interface GenerateAdvancedCloneParams {
+  source_video_url: string;
+  product_name: string;
+  product_description: string;
+  product_image_url?: string;
+  new_script?: string;
+  avatar_image_url?: string;
+  voice_id?: string;
+  clone_voice_from_source?: boolean;
+  preferred_model?: "sora2pro" | "veo3";
+}
+
+export const clone = {
+  generate: (params: GenerateCloneParams) =>
+    apiFetch<{ clone_job_id: string; credits_remaining: number }>("/clone/generate", {
+      method: "POST",
+      body: JSON.stringify(params),
+    }),
+
+  generateFromUrl: (source_video_url: string, user_prompt: string) =>
+    apiFetch<{ clone_job_id: string; credits_remaining: number }>("/clone/generate-url", {
+      method: "POST",
+      body: JSON.stringify({ source_video_url, user_prompt }),
+    }),
+
+  advanced: (params: GenerateAdvancedCloneParams) =>
+    apiFetch<{ clone_job_id: string; credits_remaining: number }>("/clone/advanced", {
+      method: "POST",
+      body: JSON.stringify(params),
+    }),
+
+  list: () => apiFetch<{ clone_jobs: unknown[]; total: number }>("/clone"),
+
+  get: (id: string) => apiFetch<unknown>(`/clone/${id}`),
+
+  preview: (source_video_url: string, user_prompt: string) =>
+    apiFetch<unknown>("/clone/preview", {
+      method: "POST",
+      body: JSON.stringify({ source_video_url, user_prompt }),
+    }),
+};
+
+/* ═══════════════════════════════════════════════════════════
+   LIP SYNC
+   ═══════════════════════════════════════════════════════════ */
+
+export interface GenerateSyncParams {
+  project_id: string;
+  media_id: string;
+  script: string;
+  voice_id?: string;
+  model: "lipsync-2" | "lipsync-2-pro" | "react-1";
+}
+
+export const sync = {
+  generate: (params: GenerateSyncParams) =>
+    apiFetch<{ success: boolean; job_id: string }>("/sync/generate", {
+      method: "POST",
+      body: JSON.stringify(params),
+    }),
+
+  listJobs: () => apiFetch<{ jobs: unknown[]; total: number }>("/sync/jobs"),
+
+  getJob: (id: string) => apiFetch<unknown>(`/sync/jobs/${id}`),
+};
+
+/* ═══════════════════════════════════════════════════════════
    ADMIN
    ═══════════════════════════════════════════════════════════ */
 
